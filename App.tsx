@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View } from 'react-native';
-import InputC from './src/components/input/input';
 
 export default function App() {
     return (
@@ -12,7 +11,7 @@ export default function App() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#000',
+        backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
     },

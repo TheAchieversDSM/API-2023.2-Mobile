@@ -8,6 +8,7 @@ export default function Input(props: IInput) {
             rightIcon={{ type: 'font-awesome', name: props.iconR, color: props.color || '#DE0300' }}
             leftIcon={{ type: 'font-awesome', name: props.iconL, color: props.color || '#DE0300' }}
             value={props.value}
+            color={props.textColor}
             errorMessage={props.errorMsg}
             secureTextEntry={props.password}
             onChangeText={props.onChange}

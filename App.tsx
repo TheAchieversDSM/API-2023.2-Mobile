@@ -1,7 +1,12 @@
+import { AuthProvider } from './src/hooks/auth';
 import { Routes } from './src/routes';
 
+
 export default function App() {
+
   return (
-    <Routes/>
+    <AuthProvider>
+      <Routes />
+    </AuthProvider>
   );
 }

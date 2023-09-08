@@ -1,4 +1,5 @@
 declare module "@env" {
-  const ENV_VAR: string;
-  export {ENV_VAR};
+  const URL_API: string;
+  const APP_SECRET: string;
+  export {URL_API, APP_SECRET};
 }

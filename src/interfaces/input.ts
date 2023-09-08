@@ -7,5 +7,6 @@ export interface IInput {
     iconL?: string;
     errorMsg?: string;
     password?: boolean;
+    textColor?: "#fff" | "#000";
     onChange: (e: string) => void;
 }

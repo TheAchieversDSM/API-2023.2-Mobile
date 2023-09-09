@@ -1,9 +1,8 @@
-import React from 'react';
 import { Container, ErrorMessage, InputsContainer, LoginContainer, Logo, TabsContainer } from './styled';
 import oracleLogo from "../../assets/oracle.png"
 import { Button } from '../../components/button/button';
 import Input from '../../components/input/input';
-import { useState } from "react"
+import React, { useState } from "react"
 
 
 export default function Login() {

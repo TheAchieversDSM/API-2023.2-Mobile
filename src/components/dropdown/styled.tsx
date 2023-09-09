@@ -2,14 +2,15 @@ import { StyleSheet, View, Text } from 'react-native';
 
 export const styles = StyleSheet.create({
     dropdown: {
-        margin: 16,
-        width: 300,
+        marginBottom: 40,
+        width: 335,
         height: 50,
+        shadowColor: 'transparent',
         backgroundColor: 'transparent',
-        borderBottomWidth: 1,
+        borderBottomWidth: 0.6,
         borderBottomColor: '#000',
         borderRadius: 12,
-        padding: 12,
+        paddingHorizontal: 12,
 
         elevation: 2,
     },
@@ -34,8 +35,8 @@ export const styles = StyleSheet.create({
         fontSize: 18,
     },
     iconStyle: {
-        width: 20,
-        height: 20,
+        width: 30,
+        height: 30,
     },
     inputSearchStyle: {
         height: 40,

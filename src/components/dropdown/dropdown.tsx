@@ -31,7 +31,7 @@ export const DropdownComponent = (props: IDropdown) => {
 
     return (
         <Dropdown
-            style={[styles.dropdown, {width: props.width || 300, backgroundColor: props.backgroundColor || 'transparent', borderBottomColor: props.borderColor || '#000'}]}
+            style={[styles.dropdown, {width: props.width || 330, backgroundColor: props.backgroundColor || 'transparent', borderBottomColor: props.borderColor || '#000'}]}
             placeholderStyle={[styles.placeholderStyle, {fontSize: props.fontSize || 18, color: props.color || 'black'}]}
             selectedTextStyle={[styles.selectedTextStyle, {fontSize: props.fontSize || 18, color: props.color || 'black'}]}
             inputSearchStyle={[styles.inputSearchStyle, {fontSize: props.fontSize}]}
@@ -53,7 +53,7 @@ export const DropdownComponent = (props: IDropdown) => {
                     style={styles.icon} 
                     color={props.iconColor || 'black'} 
                     name={props.iconName || 'Safety'} 
-                    size={props.fontSize || 20} 
+                    size={props.iconSize || 25} 
                 />
             )}
             renderItem={renderItem}

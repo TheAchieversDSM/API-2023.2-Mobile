@@ -1,14 +1,14 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 export interface IDropdown {
-    data: { label: string, value: string }[],
+    data: IItem [],
     onChange: (e: string) => void,
     onChangeText: (e: string) => void,
     search?: boolean,
-    value?: { label: string, value: string },
+    value?: IItem,
     fontSize?: number,
     placeholder: string,
-    searchPlaceholder: string,
+    searchPlaceholder?: string,
     disabled?: boolean,
     iconName?: keyof typeof AntDesign.glyphMap,
     iconSize?: number,

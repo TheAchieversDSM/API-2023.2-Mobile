@@ -11,7 +11,8 @@ export const InputC = styled(Input).attrs<IInput>((props) => ({
         paddingLeft: 10,
     },
     inputContainerStyle: {
-        marginHorizontal: 30
+        marginHorizontal: 30,
+        marginBottom: 15,
     },
     placeholderTextColor: props.color || 'white',
 }))``

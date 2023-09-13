@@ -1,15 +1,18 @@
-import { Container, ErrorMessage, InputsContainer, LoginContainer, Logo, TabsContainer } from './styled';
+import { ButtonContainer, Container, ErrorMessage, InputsContainer, LoginContainer, Logo, Scroll, TabsContainer } from './styled';
 import oracleLogo from "../../assets/oracle.png"
 import { Button } from '../../components/button/button';
 import Input from '../../components/input/input';
 import React, { useState } from "react"
 import { useAuth } from '../../hooks/auth';
 import { AuthPropsLogin } from '../../interfaces/auth';
+import { useNavigation } from '@react-navigation/native';
 
 
 export default function Login() {
 
     const { signIn } = useAuth()
+
+    const navigate = useNavigation()
 
     const [values, setValues] = useState({
         email: '',
@@ -51,57 +54,61 @@ export default function Login() {
     }
 
     return (
-        <Container>
-            <Logo source={oracleLogo} resizeMode='contain' />
-            <TabsContainer>
-                <Button
-                    title='Log In'
-                    type='clear'
-                    color='red'
-                    borderColor='transparent'
-                    onPress={() => { console.log('LogIn') }}
-                />
-                <Button
-                    title='Sign Up'
-                    type='clear'
-                    borderColor='transparent'
-                    onPress={() => { console.log('LogIn') }}
-                />
-            </TabsContainer>
-            <LoginContainer>
-                <InputsContainer>
-                    <Input
-                        iconL='envelope'
-                        errorMsg={
-                            errorStatus.email ? "Email is required" : ""
-                        }
-                        placeholder='Email'
-                        onChange={(e) =>
-                            setValues({ ...values, email: e })
-                        }
-                        textColor='#000'
+        <Scroll>
+            <Container>
+                <Logo source={oracleLogo} />
+                <TabsContainer>
+                    <Button
+                        title='Log In'
+                        type='clear'
+                        color='red'
+                        borderColor='transparent'
+                        onPress={() => { }}
                     />
-                    <Input
-                        iconL='envelope'
-                        errorMsg={
-                            errorStatus.password ? 'Password is required' : ''
-                        }
-                        password={true}
-                        placeholder='Password'
-                        onChange={(e) =>
-                            setValues({ ...values, password: e })
-                        } textColor='#000'
+                    <Button
+                        title='Sign Up'
+                        type='clear'
+                        borderColor='transparent'
+                        onPress={() => { navigate.navigate("SignUp") }}
                     />
-                </InputsContainer>
-                {errorMessage ? <ErrorMessage>{errorMessage}</ErrorMessage> : null}
-                <Button
-                    title='Log In'
-                    type='solid'
-                    borderColor='red'
-                    backgroundColor='red'
-                    onPress={handleSubmit}
-                />
-            </LoginContainer>
-        </Container>
+                </TabsContainer>
+                <LoginContainer>
+                    <InputsContainer>
+                        <Input
+                            iconL='envelope'
+                            errorMsg={
+                                errorStatus.email ? "Email is required" : ""
+                            }
+                            placeholder='Email'
+                            onChange={(e) =>
+                                setValues({ ...values, email: e.nativeEvent.text })
+                            }
+                            textColor='#000'
+                        />
+                        <Input
+                            iconL='lock'
+                            errorMsg={
+                                errorStatus.password ? 'Password is required' : ''
+                            }
+                            password={true}
+                            placeholder='Password'
+                            onChange={(e) =>
+                                setValues({ ...values, password: e.nativeEvent.text })
+                            } textColor='#000'
+                        />
+                    </InputsContainer>
+                    {errorMessage ? <ErrorMessage>{errorMessage}</ErrorMessage> : null}
+                    <ButtonContainer>
+                        <Button
+                            title='Log In'
+                            type='solid'
+                            borderColor='red'
+                            backgroundColor='red'
+                            onPress={handleSubmit}
+                        />
+                    </ButtonContainer>
+                </LoginContainer>
+            </Container>
+        </Scroll>
     );
 }

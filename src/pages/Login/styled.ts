@@ -1,35 +1,32 @@
 import {styled} from "styled-components/native";
-import {SafeAreaView, Image, View, Text} from "react-native";
+import {SafeAreaView, Image, View, Text, ScrollView} from "react-native";
+import Input from "../../components/input/input";
+import {Button} from "../../components/button/button";
 
 export const Container = styled(SafeAreaView)`
-  flex: 1;
   background-color: #393939;
   justify-content: center;
   align-items: center;
   width: 100%;
+  height: 100%;
 `;
 
 export const TabsContainer = styled(View)`
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  margin-bottom: 10px;
+  margin: 5px 0;
 `;
 
 export const LoginContainer = styled(View)`
-  height: 250px;
   width: 85%;
   background-color: #e7e7e7;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
   border-radius: 5px;
 `;
 
 export const InputsContainer = styled(View)`
   width: 100%;
-  margin-top: 15px;
 `;
 
 export const ErrorMessage = styled(Text)`
@@ -38,8 +35,24 @@ export const ErrorMessage = styled(Text)`
   color: red;
 `;
 
-export const Logo = styled(Image)`
-  height: 50px;
+export const Logo = styled(Image).attrs({
+  resizeMode: "stretch",
+})`
+  width: 80%;
+  height: 10%;
+`;
+
+export const ButtonContainer = styled(View)`
   width: 100%;
+  display: flex;
+  align-items: center;
   margin: 15px;
+`;
+
+export const Scroll = styled(ScrollView).attrs({
+  contentContainerStyle: {
+    flexGrow: 1,
+  },
+})`
+  flex: 1;
 `;

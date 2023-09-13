@@ -20,7 +20,7 @@ export function StackRoutes() {
             }}
         >
             {/* <Screen name="Home" component={Home} /> */}
-            <Screen name="Criar Tarefa" component={CreateTask} />
+            <Screen name="CreateTask" component={CreateTask} />
         </Navigator>
     )
 }

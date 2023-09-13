@@ -12,6 +12,7 @@ export const InputC = styled(Input).attrs<IInput>((props) => ({
     },
     inputContainerStyle: {
         marginHorizontal: 30,
+        /* @REVIEW - Deixar fixo ou deixar alguma props */
         marginBottom: 15,
     },
     placeholderTextColor: props.color || 'white',

@@ -1,6 +1,7 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 
-export interface IInput {
+export interface IInput{
     placeholder: string;
     width?: number;
     color?: string;
@@ -10,5 +11,5 @@ export interface IInput {
     errorMsg?: string;
     password?: boolean;
     textColor?: "#fff" | "#000";
-    onChange: (e: string) => void;
+    onChange: (e: NativeSyntheticEvent<TextInputChangeEventData>) => void;   
 }

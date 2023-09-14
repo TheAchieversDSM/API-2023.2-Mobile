@@ -9,6 +9,7 @@ export const InputC = styled(Input).attrs<IInput>((props) => ({
     inputStyle: {
         color: props.color || 'white',
         paddingLeft: 10,
+        fontFamily: 'Poppins_400Regular',
     },
     inputContainerStyle: {
         marginHorizontal: 30,

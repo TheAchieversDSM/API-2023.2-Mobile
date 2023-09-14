@@ -1,12 +1,12 @@
-import { Button } from '../../components/button/button';
 import { DropdownComponent } from '../../components/dropdown/dropdown';
-import Input from '../../components/input/input';
+import { Button } from '../../components/button/button';
 import { ButtonContainer, Container } from './styled';
+import Input from '../../components/input/input';
 
 const priority = [
-    { label: 'Alta', value: '1' },
-    { label: 'Média', value: '2' },
-    { label: 'Baixa', value: '3' }
+    { label: 'Alta', value: 'high' },
+    { label: 'Média', value: 'medium' },
+    { label: 'Baixa', value: 'low' }
 ];
 
 export default function CreateTask() {
@@ -15,7 +15,7 @@ export default function CreateTask() {
             <Input
                 placeholder='Insira o nome da tarefa'
                 onChange={() => console.log('oi')}
-                color='white'
+                color='#C74634'
                 textColor='#fff'
                 iconL='list-ul'
             />
@@ -23,7 +23,7 @@ export default function CreateTask() {
             <Input
                 placeholder='Insira a descrição da tarefa'
                 onChange={() => console.log('oi')}
-                color='white'
+                color='#C74634'
                 textColor='#fff'
                 iconL='file-text-o'
             />
@@ -35,16 +35,33 @@ export default function CreateTask() {
                 onChangeText={() => console.log('oi')}
                 borderColor='#9a9999'
                 color='#fff'
-                iconName='star'
-                iconColor='white'
+                iconName='staro'
+                iconColor='#C74634'
                 iconSize={25}
                 width={335}
             />
 
             <Input
+                placeholder='Insira o prazo da tarefa'
+                onChange={() => console.log('oi')}
+                color='#C74634'
+                textColor='#fff'
+                iconL='calendar-o'
+            />
+
+            {/* Datepicker  */}
+            {/* <Input
+                placeholder='Insira o prazo da tarefa'
+                onChange={() => console.log('oi')}
+                color='#C74634'
+                textColor='#fff'
+                iconL='hourglass-o'
+            /> */}
+
+            {/* <Input
                 placeholder='Insira a recorrência da tarefa'
                 onChange={() => console.log('oi')}
-                color='white'
+                color='#C74634'
                 textColor='#fff'
                 iconL='refresh'
             />
@@ -52,16 +69,16 @@ export default function CreateTask() {
             <Input
                 placeholder='Insira com quem compartilhar'
                 onChange={() => console.log('oi')}
-                color='white'
+                color='#C74634'
                 textColor='#fff'
                 iconL='user-o'
-            />
+            /> */}
 
             <ButtonContainer>
                 <Button
                     title='Criar tarefa'
-                    borderColor='#DE0300'
-                    backgroundColor='#DE0300'
+                    borderColor='#C74634'
+                    backgroundColor='#C74634'
                     type='solid'
                     onPress={() => console.log('oi')}
                 />

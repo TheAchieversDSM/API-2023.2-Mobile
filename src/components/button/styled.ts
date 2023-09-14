@@ -17,6 +17,7 @@ export const Btn = styled(Button).attrs<IButton>((props) => ({
         width: props.width || 170,
     },
     titleStyle: {
-        color: props.color || 'white'
+        color: props.color || 'white',
+        fontFamily: 'Poppins_400Regular'
     }
 }))``

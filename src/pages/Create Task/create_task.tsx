@@ -1,7 +1,9 @@
 import { DropdownComponent } from '../../components/dropdown/dropdown';
 import { Button } from '../../components/button/button';
 import { ButtonContainer, Container } from './styled';
+import { CreateTask } from '../../interfaces/task';
 import Input from '../../components/input/input';
+import React, { useState } from 'react';
 
 const priority = [
     { label: 'Alta', value: 'high' },
@@ -10,6 +12,13 @@ const priority = [
 ];
 
 export default function CreateTask() {
+    const [data, setData] = useState<CreateTask>({
+        name: '',
+        description: '',
+        priority: 'low',
+        deadline: new Date(),
+    })
+
     return (
         <Container>
             <Input
@@ -17,7 +26,7 @@ export default function CreateTask() {
                 onChange={() => console.log('oi')}
                 color='#C74634'
                 textColor='#fff'
-                iconL='list-ul'
+                iconL='file-text-o'
             />
 
             <Input
@@ -25,7 +34,7 @@ export default function CreateTask() {
                 onChange={() => console.log('oi')}
                 color='#C74634'
                 textColor='#fff'
-                iconL='file-text-o'
+                iconL='pencil-square-o'
             />
 
             <DropdownComponent
@@ -37,10 +46,11 @@ export default function CreateTask() {
                 color='#fff'
                 iconName='staro'
                 iconColor='#C74634'
-                iconSize={25}
+                iconSize={28}
                 width={335}
             />
 
+            {/* Datepicker  */}
             <Input
                 placeholder='Insira o prazo da tarefa'
                 onChange={() => console.log('oi')}
@@ -48,15 +58,6 @@ export default function CreateTask() {
                 textColor='#fff'
                 iconL='calendar-o'
             />
-
-            {/* Datepicker  */}
-            {/* <Input
-                placeholder='Insira o prazo da tarefa'
-                onChange={() => console.log('oi')}
-                color='#C74634'
-                textColor='#fff'
-                iconL='hourglass-o'
-            /> */}
 
             {/* <Input
                 placeholder='Insira a recorrência da tarefa'

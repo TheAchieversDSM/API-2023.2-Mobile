@@ -1,5 +1,6 @@
 import * as SecureStore from 'expo-secure-store'
-import { APP_SECRET }from "@env"
+import { APP_SECRET } from "@env"
+import { ICreateUser } from '../interfaces/user'
 
 export async function getItem(key: string): Promise<string | null> {
   const value = await SecureStore.getItemAsync(key)
@@ -16,3 +17,21 @@ export async function removeItem(key: string): Promise<void> {
 export const getToken = () => getItem(APP_SECRET)
 export const removeToken = () => removeItem(APP_SECRET)
 export const setToken = (value: string) => setItem(APP_SECRET, value)
+
+
+export const verifyPasswordMatch = ({ password, rPassword }: ICreateUser) => {
+  if (password === rPassword) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+
+export const formatDate = (date: Date): string => {
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear().toString();
+
+  return `${day}/${month}/${year}`;
+}

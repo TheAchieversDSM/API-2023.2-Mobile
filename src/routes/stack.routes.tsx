@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import CreateTask from "../pages/Create Task/create_task";
+import CreateTask from "../pages/CreateTask/create_task";
 import Home from "../pages/Home/home";
 import Login from "../pages/Login";
 

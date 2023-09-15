@@ -1,7 +1,7 @@
 import { DropdownComponent } from '../../components/dropdown/dropdown';
 import { Button } from '../../components/button/button';
 import { ButtonContainer, Container } from './styled';
-import { CreateTask } from '../../interfaces/task';
+import { CreateTasks } from '../../interfaces/task';
 import Input from '../../components/input/input';
 import React, { useState } from 'react';
 
@@ -12,7 +12,7 @@ const priority = [
 ];
 
 export default function CreateTask() {
-    const [data, setData] = useState<CreateTask>({
+    const [data, setData] = useState<CreateTasks>({
         name: '',
         description: '',
         priority: 'low',

@@ -1,7 +1,5 @@
 import {styled} from "styled-components/native";
 import {SafeAreaView, Image, View, Text, ScrollView} from "react-native";
-import Input from "../../components/input/input";
-import {Button} from "../../components/button/button";
 
 export const Container = styled(SafeAreaView)`
   background-color: #393939;
@@ -26,6 +24,7 @@ export const LoginContainer = styled(View)`
 `;
 
 export const InputsContainer = styled(View)`
+  padding-top: 30;
   width: 100%;
 `;
 

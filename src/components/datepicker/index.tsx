@@ -39,11 +39,12 @@ export const DatePicker = (props: IDatePicker) => {
 
     return (
         <SafeAreaView>
-            <TouchableOpacity onPress={showMode}>
+            <TouchableOpacity onPress={showMode} style={props.style}>
                 <DataPicker
-                    leftIcon={{ type: 'font-awesome', name: props.iconNameL, color: props.iconColor || '#DE0300', size: props.iconSize || 25 }}
-                    rightIcon={{ type: 'font-awesome', name: props.iconNameR, color: props.iconColor || '#DE0300', size: props.iconSize || 25 }}
-                    placeholder={props.title} value={selected ? props.value : ""}
+                    leftIcon={{ type: 'font-awesome', name: props.iconNameL, color: props.iconColorL || '#DE0300', size: props.iconSize || 25 }}
+                    rightIcon={{ type: 'font-awesome', name: props.iconNameR, color: props.iconColorR || '#DE0300', size: props.iconSize || 25 }}
+                    placeholder={props.title} 
+                    value={selected ? props.value : ""}
                     onChange={() => props.value}
                     errorMessage={props.errorMessage}
                     disabled

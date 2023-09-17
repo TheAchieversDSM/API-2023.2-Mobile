@@ -21,7 +21,7 @@ export const DropdownComponent = (props: IDropdown) => {
                     <AntDesign
                         style={styles.icon}
                         color={props.iconColor || 'black'}
-                        name={props.iconName || 'Safety'}
+                        name={props.iconSelectedName || 'Safety'}
                         size={props.fontSize || 20}
                     />
                 )}

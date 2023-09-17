@@ -18,7 +18,7 @@ export const TabsContainer = styled(View)`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-bottom: 10px;
+  margin-top: -40px;
 `;
 
 export const SignUpContainer = styled(View)`
@@ -33,6 +33,7 @@ export const SignUpContainer = styled(View)`
 `;
 
 export const InputsContainer = styled(View)`
+  margin-top: 30;
   width: 100%;
 `;
 

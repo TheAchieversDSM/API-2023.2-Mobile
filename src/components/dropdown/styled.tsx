@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
         borderBottomColor: '#000',
         borderRadius: 12,
         paddingHorizontal: 12,
+        fontFamily: 'Poppins_400Regular',
 
         elevation: 2,
     },
@@ -27,12 +28,15 @@ export const styles = StyleSheet.create({
     textItem: {
         flex: 1,
         fontSize: 18,
+        fontFamily: 'Poppins_400Regular',
     },
     placeholderStyle: {
         fontSize: 18,
+        fontFamily: 'Poppins_400Regular',
     },
     selectedTextStyle: {
         fontSize: 18,
+        fontFamily: 'Poppins_400Regular',
     },
     iconStyle: {
         width: 30,
@@ -41,5 +45,6 @@ export const styles = StyleSheet.create({
     inputSearchStyle: {
         height: 40,
         fontSize: 18,
+        fontFamily: 'Poppins_400Regular',
     },
 });

@@ -74,13 +74,15 @@ export function SignUp() {
                         type='clear'
                         borderColor='transparent'
                         onPress={() => { navigate.navigate("Login") }}
+                        fontSize={20}
                     />
                     <Button
                         title='Sign Up'
                         type='clear'
-                        color='red'
+                        color='#DE0300'
                         borderColor='transparent'
                         onPress={() => { }}
+                        fontSize={20}
                     />
                 </TabsContainer>
                 <SignUpContainer>
@@ -91,6 +93,8 @@ export function SignUp() {
                             iconL="user"
                             errorMsg={errorStatus.name ? "Name is required" : ""}
                             onChange={(e) => setData({ ...data, name: e.nativeEvent.text })}
+                            marginTop={20}
+                            color="#DE0300"
                         />
                         <Input
                             placeholder={"E-mail"}
@@ -101,6 +105,7 @@ export function SignUp() {
                                     errorMessage.email : "Email is required"
                                 : errorMessage.email}
                             onChange={(e) => setData({ ...data, email: e.nativeEvent.text })}
+                            color="#DE0300"
                         />
                         <Input
                             placeholder={"Password"}
@@ -112,6 +117,7 @@ export function SignUp() {
                                 : errorMessage.password}
                             onChange={(e) => setData({ ...data, password: e.nativeEvent.text })}
                             iconL={"lock"}
+                            color="#DE0300"
                         />
                         <Input
                             placeholder={"Repeat Password"}
@@ -123,14 +129,16 @@ export function SignUp() {
                                 : errorMessage.password}
                             onChange={(e) => setData({ ...data, rPassword: e.nativeEvent.text })}
                             iconL={"lock"}
+                            marginBottom={-5}
+                            color="#DE0300"
                         />
                     </InputsContainer>
                     <ButtonContainer>
                         <Button
                             title='Sign Up'
                             type='solid'
-                            borderColor='red'
-                            backgroundColor='red'
+                            borderColor='#DE0300'
+                            backgroundColor='#DE0300'
                             onPress={() => handleSubmit(data)}
                         />
                     </ButtonContainer>

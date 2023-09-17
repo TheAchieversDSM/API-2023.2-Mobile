@@ -13,6 +13,7 @@ export const Button = (props: IButton) => {
                 borderColor={props.borderColor}
                 color={props.color}
                 type={props.type}
+                fontSize={props.fontSize}
             />
         </View>
     )

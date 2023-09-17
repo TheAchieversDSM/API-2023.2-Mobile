@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import CreateTask from "../pages/Create Task/create_task";
+import CreateTask from "../pages/CreateTask/index";
 import Home from "../pages/Home/home";
 import Login from "../pages/Login";
 
@@ -19,7 +19,7 @@ export function StackRoutes() {
                 },
             }}
         >
-            {/* <Screen name="Home" component={Home} /> */}
+            <Screen name="Home" component={Home} />
             <Screen name="CreateTask" component={CreateTask} />
         </Navigator>
     )

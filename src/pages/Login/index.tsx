@@ -61,15 +61,17 @@ export default function Login() {
                     <Button
                         title='Log In'
                         type='clear'
-                        color='red'
+                        color='#DE0300'
                         borderColor='transparent'
                         onPress={() => { }}
+                        fontSize={20}
                     />
                     <Button
                         title='Sign Up'
                         type='clear'
                         borderColor='transparent'
                         onPress={() => { navigate.navigate("SignUp") }}
+                        fontSize={20}
                     />
                 </TabsContainer>
                 <LoginContainer>
@@ -84,6 +86,7 @@ export default function Login() {
                                 setValues({ ...values, email: e.nativeEvent.text })
                             }
                             textColor='#000'
+                            color='#DE0300'
                         />
                         <Input
                             iconL='lock'
@@ -94,7 +97,10 @@ export default function Login() {
                             placeholder='Password'
                             onChange={(e) =>
                                 setValues({ ...values, password: e.nativeEvent.text })
-                            } textColor='#000'
+                            } 
+                            textColor='#000'
+                            color='#DE0300'
+                            marginBottom={-5}
                         />
                     </InputsContainer>
                     {errorMessage ? <ErrorMessage>{errorMessage}</ErrorMessage> : null}
@@ -102,8 +108,8 @@ export default function Login() {
                         <Button
                             title='Log In'
                             type='solid'
-                            borderColor='red'
-                            backgroundColor='red'
+                            borderColor='#DE0300'
+                            backgroundColor='#DE0300'
                             onPress={handleSubmit}
                         />
                     </ButtonContainer>

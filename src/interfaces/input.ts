@@ -3,6 +3,8 @@ import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 
 export interface IInput{
     placeholder: string;
+    marginTop?: number;
+    marginBottom?: number;
     width?: number;
     color?: string;
     value?: string;

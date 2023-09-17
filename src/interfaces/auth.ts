@@ -24,6 +24,8 @@ export interface AuthPropsLogin {
 }
 
 export interface JsonWebToken {
+  id: number;
+  email: string;
   exp: number;
   iat: number;
 }

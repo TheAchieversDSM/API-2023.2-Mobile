@@ -5,6 +5,7 @@ export declare global {
       SignUp: undefined;
       Home: undefined;
       CreateTask: undefined;
+      ToDo: undefined;
     }
   }
 }

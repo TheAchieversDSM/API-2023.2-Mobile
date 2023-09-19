@@ -24,7 +24,7 @@ export const LoginContainer = styled(View)`
 `;
 
 export const InputsContainer = styled(View)`
-  padding-top: 30;
+  padding-top: 30px;
   width: 100%;
 `;
 

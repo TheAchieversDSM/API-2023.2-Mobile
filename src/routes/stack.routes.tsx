@@ -9,7 +9,7 @@ const { Screen, Navigator } = createNativeStackNavigator();
 export function StackRoutes() {
     return (
         <Navigator
-            initialRouteName="Home"
+            initialRouteName="ToDo"
             screenOptions={{
                 headerStyle: {
                     backgroundColor: '#393939'
@@ -20,9 +20,9 @@ export function StackRoutes() {
                 },
             }}
         >
+            <Screen name="ToDo" component={ToDo} />
             <Screen name="Home" component={Home} />
-            <Screen name="CreateTask" component={CreateTask} />
-            <Screen name="To Do" component={ToDo} />
+            <Screen name="CreateTask" component={CreateTask} />  
         </Navigator>
     )
 }

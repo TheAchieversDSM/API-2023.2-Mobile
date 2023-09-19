@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Container, TextStatus1, TextStatus2, TextStatus3 } from "./styled";
 import { Cards } from "../../components/cards/cards";
-import { SpeedDial } from "@rneui/themed";
 
 export default function ToDo() {
   const [open, setOpen] = useState(false);

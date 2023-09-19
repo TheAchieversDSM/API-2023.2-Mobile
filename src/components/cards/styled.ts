@@ -6,42 +6,42 @@ export const CardTask = styled(View)`
   height: 15px;
   background-color: #fff;
   height: 50px;
-  borderRadius: 10px;
-  marginTop: 10px;
-  marginBottom: 10px;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `
 
 export const StatusColor = styled(View)`
   height: 8px;
-  borderTopLeftRadius: 10px;
-  borderTopRightRadius: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 `
 
 export const TaskName = styled(Text)`
-  marginTop: 8px;
-  marginLeft: 10px;
-  fontSize: 16px;
-  fontWeight: 600;
+  margin-top: 8px;
+  margin-left: 10px;
+  font-size: 16px;
+  font-weight: 600;
   color: #393939;
 `
 
 export const TaskTitle = styled(Text)`
-  fontSize: 22px;
-  fontWeight: 700;
-  marginBottom: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 10px;
   color: #393939;
 `
 
 export const TaskDesc = styled(Text)`
-  fontSize: 16px;
-  marginBottom: 10px;
+  font-size: 16px;
+  margin-bottom: 10px;
   color: #393939;
 `
 
 export const TaskDescT = styled(Text)`
-  fontSize: 18px;
-  marginBottom: 5px;
-  fontWeight: 600;
+  font-size: 18px;
+  margin-bottom: 5px;
+  font-weight: 600;
   color: #393939;
 `
 
@@ -50,15 +50,15 @@ export const Modal = styled(Overlay)`
 `
 
 export const ViewIcons = styled(View)`
-  justifyContent: flex-end;
-  flexDirection: row;
+  justify-content: flex-end;
+  flex-direction: row;
   width: 160px;
 `
 
 export const ViewCard = styled(View)`
-  flexDirection: row;
+  flex-direction: row;
 `
 
 export const ViewData = styled(View)`
-  marginBottom: 5px
+  margin-bottom: 5px
 `

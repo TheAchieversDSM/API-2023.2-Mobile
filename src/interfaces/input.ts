@@ -13,5 +13,8 @@ export interface IInput{
     errorMsg?: string;
     password?: boolean;
     textColor?: "#fff" | "#000";
+    numberLines?: number;
+    multiline?: boolean;
+    height?: number;
     onChange: (e: NativeSyntheticEvent<TextInputChangeEventData>) => void;   
 }

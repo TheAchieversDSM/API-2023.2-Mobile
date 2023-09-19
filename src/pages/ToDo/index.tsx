@@ -8,7 +8,7 @@ export default function ToDo() {
       return (
         <Container>
           <TextStatus1>DONE</TextStatus1>
-          <Cards task="Tarefa 3473985" descricao="Lorem ipsum dolor sit amet dfreg fgreg dgds" status='warning' value='DONE' statusColor="#ebae11"/>
+          <Cards task="Tarefa 3473985" descricao="Lorem ipsum dolor sit amet dfreg fgreg dgds" status='success' value='DONE' statusColor="#67d207" priority="High" deadline="2023-12-23"/>
           
           <TextStatus2>DOING</TextStatus2>
           

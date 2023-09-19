@@ -41,12 +41,14 @@ export const DatePicker = (props: IDatePicker) => {
         <SafeAreaView>
             <TouchableOpacity onPress={showMode} style={props.style}>
                 <DataPicker
+                    placeholderTextColor={'#DE0300'}
                     leftIcon={{ type: 'font-awesome', name: props.iconNameL, color: props.iconColorL || '#DE0300', size: props.iconSize || 25 }}
                     rightIcon={{ type: 'font-awesome', name: props.iconNameR, color: props.iconColorR || '#DE0300', size: props.iconSize || 25 }}
                     placeholder={props.title} 
                     value={selected ? props.value : ""}
                     onChange={() => props.value}
                     errorMessage={props.errorMessage}
+                    style={{ color: props.color || 'white' }}
                     disabled
                 />
                 {show && (

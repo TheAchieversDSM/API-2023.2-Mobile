@@ -1,7 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CreateTask from "../pages/CreateTask/index";
-import Home from "../pages/Home/home";
+import Home from "../pages/Home";
 import Login from "../pages/Login";
+import ToDo from "../pages/ToDo";
 
 const { Screen, Navigator } = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ export function StackRoutes() {
         >
             <Screen name="Home" component={Home} />
             <Screen name="CreateTask" component={CreateTask} />
+            <Screen name="To Do" component={ToDo} />
         </Navigator>
     )
 }

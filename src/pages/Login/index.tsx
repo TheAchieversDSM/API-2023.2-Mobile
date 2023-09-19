@@ -44,6 +44,7 @@ export default function Login() {
         try {
             if (checkFields(values)) {
                 return
+                navigate.navigate("Home");
             } else {
                 const error = await signIn(values);
                 if (error) setErrorMessage(String(error));

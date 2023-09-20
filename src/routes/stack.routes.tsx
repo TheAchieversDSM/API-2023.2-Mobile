@@ -9,7 +9,7 @@ const { Screen, Navigator } = createNativeStackNavigator();
 export function StackRoutes() {
     return (
         <Navigator
-            initialRouteName="ToDo"
+            initialRouteName="Home"
             screenOptions={{
                 headerStyle: {
                     backgroundColor: '#393939'

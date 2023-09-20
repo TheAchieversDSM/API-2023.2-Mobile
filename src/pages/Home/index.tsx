@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Container, SubTextTitle, TextTitle, ViewContainer } from './styled';
 import {
   ScrollView,
 } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { Checkbox } from '../../components/checkbox/checkbox';
+import { ListItem } from '@rneui/themed';
+import { useAuth } from '../../hooks/auth';
+import { decodeJsonWebToken } from '../../utils/utils';
+import { IGetTasksUserResp } from '../../interfaces/task';
+import serviceTask from '../../service/task';
+import day from 'react-native-calendars/src/calendar/day';
 
 LocaleConfig.defaultLocale = 'br';
 
@@ -26,13 +32,37 @@ LocaleConfig.locales['br'] = {
 
 export default function Home() {
   const [selected, setSelected] = useState('');
+  const [selectedDay, setSelectedDay] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [dateTasks, setDateTasks] = useState<IGetTasksUserResp[]>();
+  const {userToken} = useAuth()
+  const {id} = decodeJsonWebToken(String(userToken))
+
+  useEffect(() => {
+    async function fetchUserDateTasks() {
+      try {
+        const response = await serviceTask.getTaskUserDate({ userId: id, deadline: String(selected) });
+        if (response) {
+          setDateTasks(response.data.data);
+        } else {
+          console.error("Erro ao buscar tarefas do usuário");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchUserDateTasks();
+  }, []);
+  console.log(dateTasks)
+
     return (
       <>
         <Container>
             <Calendar 
               onDayPress={day => {
                 setSelected(day.dateString);
-                console.log('selected day', day);
+                console.log('selected day', day.day);
               }}
 
               markedDates={{
@@ -42,32 +72,38 @@ export default function Home() {
               theme={{
                 backgroundColor: '#393939',
                 calendarBackground: '#393939',
-                textSectionTitleColor: '#c74634',
-                selectedDayBackgroundColor: '#c74634',
+                textSectionTitleColor: '#de0300',
+                selectedDayBackgroundColor: '#de0300',
                 selectedDayTextColor: '#e7e7e7',
-                todayTextColor: '#c74634',
+                todayTextColor: '#de0300',
                 dayTextColor: '#E7E7E7',
                 textDisabledColor: '#808080',
-                monthTextColor: '#c74634',
+                monthTextColor: '#de0300',
                 arrowColor: '#E7E7E7',
               }}
 
               style = {{
                 marginTop: 10,
-                marginBottom: 10
+                marginBottom: 10,
               }}
             />
 
             <ViewContainer>
               <ScrollView>
                 <Box>
-                  <TextTitle>Hoje</TextTitle>
-                  <SubTextTitle>Tasks diárias</SubTextTitle>
-                  <Checkbox label= "Tarefa 1"/>
-                  <Checkbox label= "Tarefa 1"/>
-                  <SubTextTitle>Tasks semanais</SubTextTitle>
-                  <Checkbox label= "Tarefa 2"/>
-                  <Checkbox label= "Tarefa 2"/>
+                  <TextTitle>Expira dia {selected}</TextTitle>
+                  {dateTasks?.map((task, index) => (
+                    task.deadline === String(selected) && (
+                    <ListItem key={index}>
+                      <ListItem.Title>{task.name}</ListItem.Title>
+                    </ListItem>
+                    )
+                    
+                  ))}
+                  
+
+                  {/* TODO: Checkbox task com repetição para a próxima sprint */}
+                  {/* <Checkbox label= "Tarefa 1"/> */}
                 </Box>
               </ScrollView>
             </ViewContainer>

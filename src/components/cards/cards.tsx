@@ -28,7 +28,7 @@ export const Cards = (props: ICards) => {
                         <Badge
                             status={props.status}
                             value={props.value}
-                            containerStyle={{ position: 'absolute', top: 6, left: 170 }}
+                            containerStyle={{ position: 'absolute', top: 6, right: -90 }}
                         />
                     </View>
                     
@@ -48,7 +48,7 @@ export const Cards = (props: ICards) => {
                 
                 <ViewData>
                     <Text style={{fontSize: 15, color: '#808080'}}>Expira em</Text>
-                    <Text style={{fontSize: 16}}>15/09</Text>
+                    <Text style={{fontSize: 16}}>{props.date}</Text>
                 </ViewData>
                 
                 <TaskDescT>Descrição</TaskDescT>

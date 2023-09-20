@@ -94,6 +94,9 @@ export default function CreateTask() {
                 color='#C74634'
                 textColor='#fff'
                 iconL='pencil-square-o'
+                multiline={true}
+                numberLines={4}
+                height={100}
             />
 
             <DropdownComponent

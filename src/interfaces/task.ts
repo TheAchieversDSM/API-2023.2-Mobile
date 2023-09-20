@@ -19,3 +19,8 @@ export interface IGetTasksUserResp {
     name: string;
     description: string;
 }
+
+export interface IGetTasksUserDate {
+    userId: number;
+    deadline: string;
+}

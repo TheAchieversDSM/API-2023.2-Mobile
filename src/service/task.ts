@@ -1,5 +1,5 @@
 import { AxiosError, AxiosResponse } from "axios";
-import { ICreateTasks, IGetTasksUser } from "../interfaces/task";
+import { ICreateTasks, IGetTasksUser, IGetTasksUserDate } from "../interfaces/task";
 import { api } from "./api";
 
 class Task {
@@ -33,12 +33,16 @@ class Task {
     async getTaskUser(data: IGetTasksUser){
         try {
             const response = await api.get(`/task/getByUserId/${data.userId}`);
-            // if (response.status === 200) {
-            //     console.log("erehtrthjytrew")
-            //     // A resposta da API deve conter as tarefas do usuário
-            //     const tasks = response.data; // Substitua 'tasks' pelo nome correto do campo nas respostas da API
-            //     return tasks;
-            // }
+            return response;
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async getTaskUserDate(data: IGetTasksUserDate){
+        try {
+            const response = await api.get(`/task/getExpiredTasks/${data.userId}/${data.deadline}`);
             return response;
 
         } catch (error) {

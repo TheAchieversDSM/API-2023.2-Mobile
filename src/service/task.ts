@@ -1,5 +1,5 @@
 import { AxiosError, AxiosResponse } from "axios";
-import { ICreateTasks } from "../interfaces/task";
+import { ICreateTasks, IGetTasksUser, IGetTasksUserDate } from "../interfaces/task";
 import { api } from "./api";
 
 class Task {
@@ -27,6 +27,26 @@ class Task {
                 });
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    async getTaskUser(data: IGetTasksUser){
+        try {
+            const response = await api.get(`/task/getByUserId/${data.userId}`);
+            return response;
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async getTaskUserDate(data: IGetTasksUserDate){
+        try {
+            const response = await api.get(`/task/getExpiredTasks/${data.userId}/${data.deadline}`);
+            return response;
+
+        } catch (error) {
+            console.error(error);
         }
     }
 }

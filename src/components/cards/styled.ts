@@ -36,8 +36,9 @@ export const TaskTitle = styled(Text)`
 export const TaskDesc = styled(Text)`
   font-size: 15px;
   font-family: ${(props) => props.theme.FONTS.Poppins_400Regular};
+  margin-top: -10px;
   margin-bottom: 10px;
-  color: #393939;
+  color: #848484;
 `
 
 export const TaskDescT = styled(Text)`
@@ -49,7 +50,7 @@ export const TaskDescT = styled(Text)`
 `
 
 export const Modal = styled(Overlay)`
-  padding: 20px;
+  padding: 60px;
 `
 
 export const ViewIcons = styled(View)`
@@ -58,10 +59,28 @@ export const ViewIcons = styled(View)`
   width: 160px;
 `
 
+export const ViewIcon = styled(View)`
+  flex-direction: row;
+  gap: 20px;
+  justify-content: space-between;
+`
+
 export const ViewCard = styled(View)`
   flex-direction: row;
 `
 
 export const ViewData = styled(View)`
+  width: 330px;
   margin-bottom: 5px
+`
+
+export const GeneralView = styled(View)`
+  padding-top: 5px;
+  padding-left: 10px;
+`
+
+export const InputView = styled(View)`
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin: -30px;
 `

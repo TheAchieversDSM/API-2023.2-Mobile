@@ -96,7 +96,7 @@ export default function CreateTask() {
                 iconL='pencil-square-o'
                 multiline={true}
                 numberLines={4}
-                height={100}
+                height={80}
             />
 
             <DropdownComponent

@@ -43,8 +43,7 @@ export default function Login() {
         setErrorMessage("")
         try {
             if (checkFields(values)) {
-                return
-                
+                return 
             } else {
                 const error = await signIn(values);
                 if (error) setErrorMessage(String(error));

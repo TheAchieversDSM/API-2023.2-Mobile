@@ -3,13 +3,14 @@ import CreateTask from "../pages/CreateTask/index";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import ToDo from "../pages/ToDo";
+import { TabsRoutes } from "./tabs.routes";
 
 const { Screen, Navigator } = createNativeStackNavigator();
 
 export function StackRoutes() {
     return (
         <Navigator
-            initialRouteName="Home"
+            initialRouteName="Tabs"
             screenOptions={{
                 headerStyle: {
                     backgroundColor: '#393939'
@@ -20,9 +21,7 @@ export function StackRoutes() {
                 },
             }}
         >
-            <Screen name="ToDo" component={ToDo} />
-            <Screen name="Home" component={Home} />
-            <Screen name="CreateTask" component={CreateTask} />  
+            <Screen name="Tabs" component={TabsRoutes} options={{ headerShown: false }} ></Screen>
         </Navigator>
     )
 }

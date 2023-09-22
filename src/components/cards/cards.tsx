@@ -45,6 +45,17 @@ export const Cards = (props: ICards) => {
         setVisible(!visible);
     };
 
+    const handleDelete = async () => {
+        try {
+            await serviceTask.deleteTask(props.id)
+
+            setVisible(false)
+        }
+        catch (error) {
+            console.error(error)
+        }
+    }
+
     const handleSubmit = async (data: IUpdateTask) => {
         console.log(data)
         try {
@@ -198,6 +209,7 @@ export const Cards = (props: ICards) => {
                         <ViewIcons>
                             <ViewIcon>
                                 <Icon
+                                    onPress={() => handleDelete()}
                                     name='delete'
                                     color='#bd1310'
                                     size={30}

@@ -58,6 +58,15 @@ class Task {
             console.error(error);
         }
     }
+
+    async deleteTask(id: number) {
+        try {
+            const response = await api.delete(`/task/delete/${id}`);
+            return response;
+        } catch (error) {
+            console.error(error);
+        }
+    }
 }
 
 const serviceTask = new Task();

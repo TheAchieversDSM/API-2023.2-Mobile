@@ -17,7 +17,13 @@ export function TabsRoutes() {
                 tabBarShowLabel: false,
                 tabBarIconStyle: {
                     width: "100%",
+                    height: "100%"
                 },
+                tabBarStyle: {
+                    backgroundColor: "#F2F2F2",
+                    height: 55,
+                    alignContent: "center"
+                }
             }}
         >
             <Tab.Screen

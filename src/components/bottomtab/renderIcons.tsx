@@ -1,5 +1,6 @@
 import { FontAwesome, Entypo } from "@expo/vector-icons";
 import { IconRenderProps } from '../../interfaces/tabs';
+import { styles } from './styled'
 
 export const IconRender = ({ icons, name, isPlusIcon, focused }: IconRenderProps) => {
     switch (icons) {
@@ -8,10 +9,8 @@ export const IconRender = ({ icons, name, isPlusIcon, focused }: IconRenderProps
                 <FontAwesome
                     name={name as keyof typeof FontAwesome.glyphMap}
                     size={isPlusIcon ? 35 : 25}
-                    style={[isPlusIcon ? {
-                        transform: [{ rotate: "-45deg" }],
-                    } : {
-                        color: focused ? '#C74634' : '#393939',
+                    style={[isPlusIcon ? styles.plusIconStyled : {
+                        color: focused ? '#de0300' : '#393939',
                     }]}
                 />
             )
@@ -20,11 +19,9 @@ export const IconRender = ({ icons, name, isPlusIcon, focused }: IconRenderProps
             return (
                 <Entypo
                     name={name as keyof typeof Entypo.glyphMap}
-                    size={isPlusIcon ? 35 : 25}
-                    style={[isPlusIcon ? {
-                        transform: [{ rotate: "-45deg" }],
-                    } : {
-                        color: focused ? '#393939' : '#393939',
+                    size={isPlusIcon ? 45 : 25}
+                    style={[isPlusIcon ? styles.plusIconStyled : {
+                        color: focused ? '#de0300' : '#393939',
                     }]}
                 />
             )

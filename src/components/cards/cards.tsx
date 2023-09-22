@@ -1,13 +1,16 @@
-import { View } from 'react-native'
-import { CardTask, GeneralView, InputView, Modal, StatusColor, TaskDesc, TaskDescT, TaskName, TaskTitle, ViewCard, ViewData, ViewIcon, ViewIcons } from './styled'
+import { CardTask, GeneralView, InputView, Modal, StatusColor, TaskDesc, TaskDescT, TaskName, TaskTitle, ViewCard, ViewData, ViewIcon, ViewIcons, ViewName } from './styled'
 import { Badge, Icon, Overlay, SpeedDial, Text } from '@rneui/themed';
-import { TouchableOpacity } from 'react-native';
-import { useState } from 'react';
-import { ICards } from '../../interfaces/cards';
-import React from 'react';
-import Input from '../input/input';
 import { DropdownComponent } from '../dropdown/dropdown';
+import { IGetTasksUserResp, IUpdateTask } from "../../interfaces/task";
+import { decodeJsonWebToken } from "../../utils/utils";
+import { TouchableOpacity } from 'react-native';
+import { ICards } from '../../interfaces/cards';
+import serviceTask from "../../service/task";
+import { useEffect, useState } from 'react';
 import { DatePicker } from '../datepicker';
+import { useAuth } from "../../hooks/auth";
+import React, { View } from 'react-native'
+import Input from '../input/input';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -15,22 +18,56 @@ const priority = [
     { label: 'Baixa', value: 'Low' }
 ];
 
-const status = [
-    { label: 'TO DO', value: 'TO DO' },
-    { label: 'DOING', value: 'DOING' },
-    { label: 'DONE', value: 'DONE' }
+const stts = [
+    { label: 'A Fazer', value: 'TO DO' },
+    { label: 'Em Progresso', value: 'DOING' },
+    { label: 'Concluído', value: 'DONE' }
 ]
 
 export const Cards = (props: ICards) => {
+    const { userToken } = useAuth()
+
+    const { id } = decodeJsonWebToken(String(userToken))
+
     const [visible, setVisible] = useState(false);
 
+    const [priorities, setPriorities] = useState<string | undefined>(undefined);
+
+    const [status, setStatus] = useState<string | undefined>(undefined);
+
+    const [data, setData] = useState({} as IUpdateTask)
+
     const [date, setDate] = useState(props.deadline)
+
+    const [edit, setEdit] = useState(false);
 
     const toggleOverlay = () => {
         setVisible(!visible);
     };
 
-    const [edit, setEdit] = useState(false);
+    const handleSubmit = async (data: IUpdateTask) => {
+        console.log(data)
+        try {
+            if (data) {
+                await serviceTask.updateTask({
+                    name: data?.name || props.task,
+                    description: data?.description || props.descricao,
+                    priority: data?.priority || props.priority,
+                    deadline: date || props.deadline,
+                    status: data?.status,
+                    userId: id,
+                    id: props.id,
+                    timeSpent: 0,
+                    done: false
+                })
+            }
+
+            setEdit(!edit)
+        }
+        catch (error) {
+            console.error(error)
+        }
+    }
 
     return edit ? (
         <View>
@@ -40,17 +77,18 @@ export const Cards = (props: ICards) => {
                     <TaskName>{props.task}</TaskName>
                 </CardTask>
             </TouchableOpacity>
+
             <Modal isVisible={visible} onBackdropPress={toggleOverlay}>
                 <GeneralView>
                     <ViewCard>
-                        <View>
+                        <ViewName>
                             <TaskTitle>{props.task}</TaskTitle>
-                        </View>
+                        </ViewName>
 
                         <ViewIcons>
                             <ViewIcon>
                                 <Icon
-                                    onPress={() => setEdit(!edit)}
+                                    onPress={() => handleSubmit(data)}
                                     name='check'
                                     color='#000'
                                     size={30}
@@ -65,36 +103,48 @@ export const Cards = (props: ICards) => {
                         </ViewIcons>
                     </ViewCard>
 
+                    <TaskDescT>Nome:</TaskDescT>
+                    <InputView>
+                        <Input
+                            placeholder={props.task}
+                            onChange={(e) => { setData({ ...data, name: e.nativeEvent.text }) }}
+                            textColor='#000'
+                            color='#C74634'
+                            iconL='file-text-o'
+                        />
+                    </InputView>
+
                     <TaskDescT>Status: </TaskDescT>
                     <DropdownComponent
                         placeholder={props.value}
                         width={300}
-                        data={status}
+                        data={stts}
+                        value={priorities}
+                        onValueChange={(selectedItem) => {
+                            setData({ ...data, status: selectedItem })
+                        }}
+                        iconColor='#C74634'
                         iconSelectedName='tags'
                         iconName='tagso'
-                        onChange={(selectedItem) => {
-                            if (selectedItem === 'High' || selectedItem === 'Medium' || selectedItem === 'Low') {
-                                /* setData({ ...data, priority: selectedItem }); */
-                            } else {
-                                console.error('Invalid property value: ', selectedItem);
-                            }
-                        }}
                     />
 
                     <TaskDescT>Prioridade: </TaskDescT>
                     <DropdownComponent
-                        placeholder={props.priority}
+                        placeholder={
+                            props.priority === 'High' ? 'Alta' 
+                            : props.priority === 'Medium' ? 'Média' 
+                            : props.priority === 'Low' ? 'Baixa' 
+                            : 'Selecione uma prioridade'
+                        }
                         width={300}
                         data={priority}
-                        iconSelectedName='star'
-                        iconName='staro'
-                        onChange={(selectedItem) => {
-                            if (selectedItem === 'High' || selectedItem === 'Medium' || selectedItem === 'Low') {
-                                /* setData({ ...data, priority: selectedItem }); */
-                            } else {
-                                console.error('Invalid property value: ', selectedItem);
-                            }
+                        value={priorities}
+                        onValueChange={(selectedItem) => {
+                            setData({ ...data, priority: selectedItem })
                         }}
+                        iconSelectedName='star'
+                        iconColor='#C74634'
+                        iconName='staro'
                     />
 
                     <ViewData>
@@ -104,7 +154,7 @@ export const Cards = (props: ICards) => {
                             onDateChange={(date) => { setDate(date) }}
                             style={{ width: 300, color: 'black' }}
                             iconNameL='calendar-o'
-                            iconColorL='black'
+                            iconColorL='#C74634'
                             iconColorR='grey'
                             iconNameR='angle-down'
                             color='black'
@@ -116,15 +166,15 @@ export const Cards = (props: ICards) => {
                     <TaskDescT>Descrição:</TaskDescT>
                     <InputView>
                         <Input
-                            placeholder='Insira a descrição da tarefa'
-                            onChange={(e) => {/* setData({ ...data, description: e.nativeEvent.text }) */ }}
+                            placeholder={props.descricao}
+                            onChange={(e) => { setData({ ...data, description: e.nativeEvent.text }) }}
                             textColor='#000'
-                            color='black'
+                            color='#C74634'
                             iconL='pencil-square-o'
                             multiline={true}
                             numberLines={4}
                             width={50}
-                            height={100}
+                            height={80}
                         />
                     </InputView>
                 </GeneralView>
@@ -137,12 +187,13 @@ export const Cards = (props: ICards) => {
                     <TaskName>{props.task}</TaskName>
                 </CardTask>
             </TouchableOpacity>
+
             <Modal isVisible={visible} onBackdropPress={toggleOverlay}>
                 <GeneralView>
                     <ViewCard>
-                        <View>
+                        <ViewName>
                             <TaskTitle>{props.task}</TaskTitle>
-                        </View>
+                        </ViewName>
 
                         <ViewIcons>
                             <ViewIcon>
@@ -169,8 +220,13 @@ export const Cards = (props: ICards) => {
 
                     <TaskDescT>Status: {props.value}</TaskDescT>
 
-                    <TaskDescT>Prioridade: {props.priority}</TaskDescT>
-
+                    {props.priority === 'High' ? (
+                        <TaskDescT>Prioridade: Alta</TaskDescT>
+                    ) : props.priority === 'Medium' ? (
+                        <TaskDescT>Prioridade: Média</TaskDescT>
+                    ) : (
+                        <TaskDescT>Prioridade: Baixa</TaskDescT>
+                    )}
                     <ViewData>
                         <TaskDescT>Expira em: {props.deadline}</TaskDescT>
                     </ViewData>

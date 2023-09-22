@@ -1,7 +1,7 @@
 export interface ICreateTasks {
     name: string;
     description: string;
-    priority: 'High' | 'Medium' | 'Low';
+    priority: string;
     deadline: string /* Date */;
     status: 'TO DO';
     timeSpent: number;
@@ -14,7 +14,8 @@ export interface IGetTasksUser {
 }
 
 export interface IGetTasksUserResp {
-    status: string;
+    id: number;
+    status: 'TO DO' | 'DOING' | 'DONE' | 'EXPIRED';
     deadline: string;
     name: string;
     description: string;
@@ -24,4 +25,16 @@ export interface IGetTasksUserResp {
 export interface IGetTasksUserDate {
     userId: number;
     deadline: string;
+}
+
+export interface IUpdateTask {
+    id: number;
+    userId: number;
+    name: string;
+    description: string;
+    priority: string;
+    deadline: string /* Date */;
+    status: string;
+    timeSpent: number;
+    done: boolean;
 }

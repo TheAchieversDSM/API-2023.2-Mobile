@@ -1,9 +1,10 @@
 export interface ICards{
+    id: number;
     task: string;
     descricao: string;
     status: 'success' | 'error' | 'warning';
-    value: 'TO DO' | 'DOING' | 'DONE';
+    value: string;
     statusColor: '#de0300' | '#67d207' | '#ebae11'
-    priority: 'Low' | 'Medium' | 'High';
+    priority: string;
     deadline: string;
 }

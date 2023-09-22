@@ -1,5 +1,5 @@
+import { ICreateTasks, IGetTasksUser, IGetTasksUserDate, IUpdateTask } from "../interfaces/task";
 import { AxiosError, AxiosResponse } from "axios";
-import { ICreateTasks, IGetTasksUser, IGetTasksUserDate } from "../interfaces/task";
 import { api } from "./api";
 
 class Task {
@@ -9,14 +9,14 @@ class Task {
                 .post("/task/create", data)
                 .then((res: AxiosResponse | any) => {
                     console.log(res);
-                    
-                    if (res.status == 201) {                        
-                        return { erro: "", validacao: true };                        
+
+                    if (res.status == 201) {
+                        return { erro: "", validacao: true };
                     }
                 })
                 .catch((err: AxiosError | any) => {
                     console.log(err);
-                    
+
                     if (err.response) {
                         if (err.response.status === 409) {
                             const authenticationError = err.response.data.error;
@@ -30,7 +30,7 @@ class Task {
         }
     }
 
-    async getTaskUser(data: IGetTasksUser){
+    async getTaskUser(data: IGetTasksUser) {
         try {
             const response = await api.get(`/task/getByUserId/${data.userId}`);
             return response;
@@ -40,11 +40,20 @@ class Task {
         }
     }
 
-    async getTaskUserDate(data: IGetTasksUserDate){
+    async getTaskUserDate(data: IGetTasksUserDate) {
         try {
             const response = await api.get(`/task/getExpiredTasks/${data.userId}/${data.deadline}`);
             return response;
 
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async updateTask(data: IUpdateTask) {
+        try {
+            const response = await api.put(`/task/update/${data.id}`, data);
+            return response;
         } catch (error) {
             console.error(error);
         }

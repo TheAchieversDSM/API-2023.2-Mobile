@@ -71,7 +71,7 @@ export default function Login() {
                         title='Sign Up'
                         type='clear'
                         borderColor='transparent'
-                        onPress={() => { navigate.navigate("CreateTask") }}
+                        onPress={() => { navigate.navigate("SignUp") }}
                         fontSize={20}
                     />
                 </TabsContainer>

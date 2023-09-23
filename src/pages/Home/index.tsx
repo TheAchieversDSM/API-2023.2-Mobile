@@ -96,7 +96,7 @@ export default function Home() {
                   </ListItem>
                 )
 
-              )) : <NoTasksText>Nenhuma tarefa expira hoje</NoTasksText>}
+              )) : <NoTasksText>Nenhuma tarefa expirada nessa data</NoTasksText>}
 
 
               {/* TODO: Checkbox task com repetição para a próxima sprint */}

@@ -1,7 +1,6 @@
 import { CardTask, GeneralView, InputView, Modal, StatusColor, TaskDesc, TaskDescT, TaskName, TaskTitle, ViewCard, ViewData, ViewIcon, ViewIcons, ViewName } from './styled'
-import { Badge, Icon, Overlay, SpeedDial, Text } from '@rneui/themed';
 import { DropdownComponent } from '../dropdown/dropdown';
-import { IGetTasksUserResp, IUpdateTask } from "../../interfaces/task";
+import { IUpdateTask } from "../../interfaces/task";
 import { decodeJsonWebToken } from "../../utils/utils";
 import { TouchableOpacity } from 'react-native';
 import { ICards } from '../../interfaces/cards';
@@ -10,8 +9,9 @@ import { useEffect, useState } from 'react';
 import { DatePicker } from '../datepicker';
 import { useAuth } from "../../hooks/auth";
 import React, { View } from 'react-native'
-import Input from '../input/input';
 import { Priority } from './priorities';
+import { Icon } from '@rneui/themed';
+import Input from '../input/input';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -59,7 +59,7 @@ export const Cards = (props: ICards) => {
         catch (error) {
             console.error(error)
         }
-    }    
+    }
 
     const handleSubmit = async (data: IUpdateTask) => {
         try {
@@ -109,7 +109,7 @@ export const Cards = (props: ICards) => {
                                     size={30}
                                 />
                                 <Icon
-                                    onPress={() => { setVisible(false); setEdit(!edit)}}
+                                    onPress={() => { setVisible(false); setEdit(!edit) }}
                                     name='close'
                                     color='#000'
                                     size={30}
@@ -147,10 +147,10 @@ export const Cards = (props: ICards) => {
                     <TaskDescT>Prioridade: </TaskDescT>
                     <DropdownComponent
                         placeholder={
-                            props.priority === 'High' ? 'Alta' 
-                            : props.priority === 'Medium' ? 'Média' 
-                            : props.priority === 'Low' ? 'Baixa' 
-                            : 'Selecione uma prioridade'
+                            props.priority === 'High' ? 'Alta'
+                                : props.priority === 'Medium' ? 'Média'
+                                    : props.priority === 'Low' ? 'Baixa'
+                                        : 'Selecione uma prioridade'
                         }
                         width={300}
                         data={priority}
@@ -235,6 +235,7 @@ export const Cards = (props: ICards) => {
                             </ViewIcon>
                         </ViewIcons>
                     </ViewCard>
+
 
                     <TaskDescT>Status: {props.value}</TaskDescT>
 

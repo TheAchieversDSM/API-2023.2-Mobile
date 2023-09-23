@@ -34,9 +34,22 @@ export default function ToDo() {
     return (
         <Container>
             <ScrollView>
-            <TextStatus3>A Fazer</TextStatus3>
-                {userTasks?.map((task, index) => (
-                    task.status === "TO DO" && (
+                <TextStatus3>A Fazer</TextStatus3>
+                {userTasks
+                    ?.filter((task) => task.status === "TO DO")
+                    .sort((a, b) => {
+                        const priorityOrder = {
+                            'High': 3,
+                            'Medium': 2,
+                            'Low': 1,
+                        }
+
+                        const priorityA = priorityOrder[a.priority] || 0
+                        const priorityB = priorityOrder[b.priority] || 0
+
+                        return priorityB - priorityA
+                    })
+                    .map((task, index) =>  (
                         <Cards
                             id={task.id}
                             key={index}
@@ -49,11 +62,24 @@ export default function ToDo() {
                             priority={task.priority}
                         />
                     )
-                ))}
+                )}
 
                 <TextStatus2>Em Progresso</TextStatus2>
-                {userTasks?.map((task, index) => (
-                    task.status === "DOING" && (
+                {userTasks
+                    ?.filter((task) => task.status === "DOING")
+                    .sort((a, b) => {
+                        const priorityOrder = {
+                            'High': 3,
+                            'Medium': 2,
+                            'Low': 1,
+                        };
+
+                        const priorityA = priorityOrder[a.priority] || 0;
+                        const priorityB = priorityOrder[b.priority] || 0;
+
+                        return priorityB - priorityA;
+                    })
+                    .map((task, index) => (
                         <Cards
                             id={task.id}
                             key={index}
@@ -66,11 +92,24 @@ export default function ToDo() {
                             priority={task.priority}
                         />
                     )
-                ))}
+                )}
 
                 <TextStatus1>Concluído</TextStatus1>
-                {userTasks?.map((task, index) => (
-                    task.status === "DONE" && (
+                {userTasks
+                    ?.filter((task) => task.status === "DONE")
+                    .sort((a, b) => {
+                        const priorityOrder = {
+                            'High': 3,
+                            'Medium': 2,
+                            'Low': 1,
+                        };
+
+                        const priorityA = priorityOrder[a.priority] || 0;
+                        const priorityB = priorityOrder[b.priority] || 0;
+
+                        return priorityB - priorityA;
+                    })
+                    .map((task, index) => (
                         <Cards
                             id={task.id}
                             key={index}
@@ -83,7 +122,7 @@ export default function ToDo() {
                             priority={task.priority}
                         />
                     )
-                ))}
+                    )}
             </ScrollView>
         </Container>
     );

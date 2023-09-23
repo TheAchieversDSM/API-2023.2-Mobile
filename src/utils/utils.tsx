@@ -1,8 +1,9 @@
-import * as SecureStore from 'expo-secure-store'
-import { APP_SECRET } from "@env"
-import { ICreateUser } from '../interfaces/user'
-import jwt_decode from 'jwt-decode'
-import { JsonWebToken } from '../interfaces/auth'
+import { IGetTasksUserResp } from '../interfaces/task';
+import { JsonWebToken } from '../interfaces/auth';
+import * as SecureStore from 'expo-secure-store';
+import { ICreateUser } from '../interfaces/user';
+import { APP_SECRET } from "@env";
+import jwt_decode from 'jwt-decode';
 
 export async function getItem(key: string): Promise<string | null> {
   const value = await SecureStore.getItemAsync(key)
@@ -50,4 +51,11 @@ export const checkTokenValidity = (userToken: string, signOut: Function) => {
   if (expireTime < timeNow) {
     signOut()
   }
-}; 
+};
+
+export function comparePriority(a: IGetTasksUserResp, b: IGetTasksUserResp): number {
+  const prioritiesOrder = { High: 0, Medium: 1, Low: 2 };
+  const priorityA = prioritiesOrder[a.priority];
+  const priorityB = prioritiesOrder[b.priority];
+  return priorityA - priorityB;
+}

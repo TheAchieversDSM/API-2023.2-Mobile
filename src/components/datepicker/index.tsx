@@ -1,10 +1,10 @@
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import React, { useState, useEffect } from 'react'
 import { TouchableOpacity, StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-navigation';
-import { DataPicker } from './styled';
-import { formatDate } from '../../utils/utils';
 import { IDatePicker } from '../../interfaces/datepicker';
+import React, { useState, useEffect } from 'react'
+import { SafeAreaView } from 'react-navigation';
+import { formatDate } from '../../utils/utils';
+import { DataPicker } from './styled';
 
 export const DatePicker = (props: IDatePicker) => {
     const [selected, setSelected] = useState(false)
@@ -26,7 +26,6 @@ export const DatePicker = (props: IDatePicker) => {
 
     useEffect(() => {
         if (props.value) {
-            // If a value is already set, mark it as selected
             setSelected(true);
         }
     }, [props.value]);
@@ -51,7 +50,7 @@ export const DatePicker = (props: IDatePicker) => {
                         testID="dateTimePicker"
                         onConfirm={handleDateChange}
                         onCancel={hideDatePicker}
-                        date={props.value ? new Date(props.value) : new Date()} // Pass the currently selected date
+                        date={props.value ? new Date(props.value) : new Date()}
                     />
                 )}
             </TouchableOpacity>

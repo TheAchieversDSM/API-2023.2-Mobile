@@ -1,6 +1,6 @@
+import { ICheckbox } from "../../interfaces/checkbox";
 import { ListItem } from "@rneui/themed";
 import React, { useState } from "react";
-import { ICheckbox } from "../../interfaces/checkbox";
 
 export const Checkbox = (props: ICheckbox) => {
     const [check, setCheck] = useState(false);

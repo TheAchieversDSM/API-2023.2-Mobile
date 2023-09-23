@@ -1,5 +1,5 @@
-import { Button } from "@rneui/base";
 import { styled } from "styled-components/native";
+import { Button } from "@rneui/base";
 
 interface IButton {
     width?: number;

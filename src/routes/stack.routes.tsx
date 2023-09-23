@@ -1,8 +1,4 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import CreateTask from "../pages/CreateTask/index";
-import Home from "../pages/Home";
-import Login from "../pages/Login";
-import ToDo from "../pages/ToDo";
 import { TabsRoutes } from "./tabs.routes";
 
 const { Screen, Navigator } = createNativeStackNavigator();

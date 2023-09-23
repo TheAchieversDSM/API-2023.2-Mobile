@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
     dropdown: {
@@ -43,8 +43,8 @@ export const styles = StyleSheet.create({
         height: 30,
     },
     inputSearchStyle: {
+        fontFamily: 'Poppins_400Regular',
         height: 40,
         fontSize: 18,
-        fontFamily: 'Poppins_400Regular',
     },
 });

@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Container, SubTextTitle, TextTitle, ViewContainer } from './styled';
-import {
-  ScrollView, View,
-} from 'react-native';
+import { Box, Container, NoTasksText, SubTextTitle, TextTitle, ViewContainer } from './styled';
+import {ScrollView, View} from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
-import { Checkbox } from '../../components/checkbox/checkbox';
-import { ListItem } from '@rneui/themed';
 import { useAuth } from '../../hooks/auth';
 import { decodeJsonWebToken } from '../../utils/utils';
 import { IGetTasksUserResp } from '../../interfaces/task';
 import serviceTask from '../../service/task';
-import day from 'react-native-calendars/src/calendar/day';
 import { Cards } from '../../components/cards/cards';
 import { HeaderComponent } from '../../components/header';
 
@@ -85,7 +80,7 @@ export default function Home() {
                 monthTextColor: '#de0300',
                 arrowColor: '#E7E7E7',
                 textDayFontFamily: 'Poppins_400Regular',
-                textMonthFontFamily: 'Poppins_700Regular', // Substitua 'SuaFonteMes' pelo nome da fonte para meses
+                textMonthFontFamily: 'Poppins_600Regular', // Substitua 'SuaFonteMes' pelo nome da fonte para meses
                 textDayHeaderFontFamily: 'Poppins_500Regular',
                 textDayFontSize: 15,
                 textMonthFontSize: 25,
@@ -103,9 +98,9 @@ export default function Home() {
                 <Box>
                   <TextTitle>Expira dia {selectedDay}/{selectedMonth}</TextTitle>
                   <ScrollView>
-                    {dateTasks?.map((task, index) => (
-                      task.deadline === String(selected) && task.status === "TO DO" &&(
-                        <Cards
+                    {dateTasks ? dateTasks?.map((task, index) => (
+                      task.deadline === String(selected) &&(
+                          <Cards
                               id={task.id}
                               key={index}
                               task={task.name}
@@ -117,24 +112,8 @@ export default function Home() {
                               priority={task.priority}
                           />
                       )
-                    
-                    ))}
-                    {dateTasks?.map((task, index) => (
-                      task.deadline === String(selected) && task.status === "DOING" &&(
-                        <Cards
-                              id={task.id}
-                              key={index}
-                              task={task.name}
-                              descricao={task.description}
-                              status='error'
-                              value={"Em progresso"}
-                              statusColor="#ebae11"
-                              deadline={task.deadline}
-                              priority={task.priority}
-                          />
-                      )
-                    
-                    ))}
+
+                    )) : <NoTasksText>Nenhuma tarefa expirada nessa data</NoTasksText>}
                   </ScrollView>
                   
 

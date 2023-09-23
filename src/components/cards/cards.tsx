@@ -1,17 +1,17 @@
-import { CardTask, GeneralView, InputView, Modal, StatusColor, TaskDesc, TaskDescT, TaskName, TaskTitle, ViewCard, ViewData, ViewIcon, ViewIcons, ViewName } from './styled'
 import { DropdownComponent } from '../dropdown/dropdown';
-import { IUpdateTask } from "../../interfaces/task";
 import { decodeJsonWebToken } from "../../utils/utils";
+import { IUpdateTask } from "../../interfaces/task";
 import { TouchableOpacity } from 'react-native';
 import { ICards } from '../../interfaces/cards';
 import serviceTask from "../../service/task";
-import { useEffect, useState } from 'react';
 import { DatePicker } from '../datepicker';
 import { useAuth } from "../../hooks/auth";
-import React, { View } from 'react-native'
+import React, { View } from 'react-native';
 import { Priority } from './priorities';
 import { Icon } from '@rneui/themed';
 import Input from '../input/input';
+import { useState } from 'react';
+import * as S from './styled';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -37,8 +37,6 @@ export const Cards = (props: ICards) => {
     const [visible, setVisible] = useState(false);
 
     const [priorities, setPriorities] = useState<string | undefined>(undefined);
-
-    const [status, setStatus] = useState<string | undefined>(undefined);
 
     const [data, setData] = useState({} as IUpdateTask)
 
@@ -77,7 +75,7 @@ export const Cards = (props: ICards) => {
                 })
             }
 
-            setEdit(!edit)
+            setEdit(false)
         }
         catch (error) {
             console.error(error)
@@ -87,21 +85,21 @@ export const Cards = (props: ICards) => {
     return edit ? (
         <View>
             <TouchableOpacity onPress={toggleOverlay}>
-                <CardTask>
-                    <StatusColor style={{ backgroundColor: props.statusColor }}></StatusColor>
-                    <TaskName>{props.task}</TaskName>
-                </CardTask>
+                <S.CardTask>
+                    <S.StatusColor style={{ backgroundColor: props.statusColor }}></S.StatusColor>
+                    <S.TaskName>{props.task}</S.TaskName>
+                </S.CardTask>
             </TouchableOpacity>
 
-            <Modal isVisible={visible} onBackdropPress={toggleOverlay}>
-                <GeneralView>
-                    <ViewCard>
-                        <ViewName>
-                            <TaskTitle>{props.task}</TaskTitle>
-                        </ViewName>
+            <S.Modal isVisible={visible} onBackdropPress={toggleOverlay}>
+                <S.GeneralView>
+                    <S.ViewCard>
+                        <S.ViewName>
+                            <S.TaskTitle>{props.task}</S.TaskTitle>
+                        </S.ViewName>
 
-                        <ViewIcons>
-                            <ViewIcon>
+                        <S.ViewIcons>
+                            <S.ViewIcon>
                                 <Icon
                                     onPress={() => handleSubmit(data)}
                                     name='check'
@@ -114,12 +112,12 @@ export const Cards = (props: ICards) => {
                                     color='#000'
                                     size={30}
                                 />
-                            </ViewIcon>
-                        </ViewIcons>
-                    </ViewCard>
+                            </S.ViewIcon>
+                        </S.ViewIcons>
+                    </S.ViewCard>
 
-                    <TaskDescT>Nome:</TaskDescT>
-                    <InputView>
+                    <S.TaskDescT>Nome:</S.TaskDescT>
+                    <S.InputView>
                         <Input
                             placeholder={''}
                             value={name}
@@ -128,9 +126,9 @@ export const Cards = (props: ICards) => {
                             color='#C74634'
                             iconL='file-text-o'
                         />
-                    </InputView>
+                    </S.InputView>
 
-                    <TaskDescT>Status: </TaskDescT>
+                    <S.TaskDescT>Status: </S.TaskDescT>
                     <DropdownComponent
                         placeholder={props.value}
                         width={300}
@@ -144,7 +142,7 @@ export const Cards = (props: ICards) => {
                         iconName='tagso'
                     />
 
-                    <TaskDescT>Prioridade: </TaskDescT>
+                    <S.TaskDescT>Prioridade: </S.TaskDescT>
                     <DropdownComponent
                         placeholder={
                             props.priority === 'High' ? 'Alta'
@@ -163,9 +161,9 @@ export const Cards = (props: ICards) => {
                         iconName='staro'
                     />
 
-                    <ViewData>
-                        <TaskDescT>Expira em: </TaskDescT>
-                        <TaskDesc>Data atual: {props.deadline}</TaskDesc>
+                    <S.ViewData>
+                        <S.TaskDescT>Expira em: </S.TaskDescT>
+                        <S.TaskDesc>Data atual: {props.deadline}</S.TaskDesc>
                         <DatePicker
                             onDateChange={(date) => { setDate(date); setData({ ...data, deadline: date }) }}
                             style={{ width: 300, color: 'black' }}
@@ -177,10 +175,10 @@ export const Cards = (props: ICards) => {
                             title='Data de expiração'
                             value={date}
                         />
-                    </ViewData>
+                    </S.ViewData>
 
-                    <TaskDescT>Descrição:</TaskDescT>
-                    <InputView>
+                    <S.TaskDescT>Descrição:</S.TaskDescT>
+                    <S.InputView>
                         <Input
                             placeholder={''}
                             value={description}
@@ -193,27 +191,23 @@ export const Cards = (props: ICards) => {
                             width={50}
                             height={80}
                         />
-                    </InputView>
-                </GeneralView>
-            </Modal>
+                    </S.InputView>
+                </S.GeneralView>
+            </S.Modal>
         </View>) :
         (<View>
             <TouchableOpacity onPress={toggleOverlay}>
-                <CardTask>
-                    <StatusColor style={{ backgroundColor: props.statusColor }}></StatusColor>
-                    <TaskName>{props.task}</TaskName>
-                </CardTask>
+                <S.CardTask>
+                    <S.StatusColor style={{ backgroundColor: props.statusColor }}></S.StatusColor>
+                    <S.TaskName>{props.task}</S.TaskName>
+                </S.CardTask>
             </TouchableOpacity>
 
-            <Modal isVisible={visible} onBackdropPress={toggleOverlay}>
-                <GeneralView>
-                    <ViewCard>
-                        <ViewName>
-                            <TaskTitle>{props.task}</TaskTitle>
-                        </ViewName>
-
-                        <ViewIcons>
-                            <ViewIcon>
+            <S.Modal isVisible={visible} onBackdropPress={toggleOverlay}>
+                <S.GeneralView>
+                    <S.ViewCard>
+                        <S.ViewIcons>
+                            <S.ViewIcon>
                                 <Icon
                                     onPress={() => handleDelete()}
                                     name='delete'
@@ -232,25 +226,28 @@ export const Cards = (props: ICards) => {
                                     color='#000'
                                     size={30}
                                 />
-                            </ViewIcon>
-                        </ViewIcons>
-                    </ViewCard>
+                            </S.ViewIcon>
+                        </S.ViewIcons>
+                        <S.ViewName>
+                            <S.TaskTitle>{props.task}</S.TaskTitle>
+                        </S.ViewName>
+                    </S.ViewCard>
 
 
-                    <TaskDescT>Status: {props.value}</TaskDescT>
+                    <S.TaskDescT>Status: {props.value}</S.TaskDescT>
 
                     <Priority priority={props.priority} />
 
-                    <ViewData>
-                        <TaskDescT>Expira em: {props.deadline}</TaskDescT>
-                    </ViewData>
+                    <S.ViewData>
+                        <S.TaskDescT>Expira em: {props.deadline}</S.TaskDescT>
+                    </S.ViewData>
 
-                    <ViewData>
-                        <TaskDescT>Descrição:</TaskDescT>
-                        <TaskDesc>{props.descricao}</TaskDesc>
-                    </ViewData>
-                </GeneralView>
-            </Modal>
+                    <S.ViewData>
+                        <S.TaskDescT>Descrição:</S.TaskDescT>
+                        <S.TaskDesc>{props.descricao}</S.TaskDesc>
+                    </S.ViewData>
+                </S.GeneralView>
+            </S.Modal>
         </View>
         )
 }

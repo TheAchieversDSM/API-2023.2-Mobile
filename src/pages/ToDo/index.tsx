@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
 import { Container, TextStatus1, TextStatus2, TextStatus3 } from "./styled";
 import { Cards } from "../../components/cards/cards";
+import React, { useEffect, useState } from "react";
 import serviceTask from "../../service/task";
 import { useAuth } from "../../hooks/auth";
 import { decodeJsonWebToken } from "../../utils/utils";
@@ -9,7 +9,6 @@ import { ScrollView, View } from "react-native";
 import { HeaderComponent } from "../../components/header";
 
 export default function ToDo() {
-    const [open, setOpen] = useState(false);
     const [userTasks, setUserTasks] = useState<IGetTasksUserResp[]>();
     const { userToken } = useAuth()
 
@@ -20,7 +19,7 @@ export default function ToDo() {
             try {
                 const response = await serviceTask.getTaskUser({ userId: id });
                 if (response) {
-                    setUserTasks(response.data.data);
+                    setUserTasks(response);
                 } else {
                     console.error("Erro ao buscar tarefas do usuário");
                 }
@@ -40,19 +39,7 @@ export default function ToDo() {
                 <TextStatus3>A Fazer</TextStatus3>
                 {userTasks
                     ?.filter((task) => task.status === "TO DO")
-                    .sort((a, b) => {
-                        const priorityOrder = {
-                            'High': 3,
-                            'Medium': 2,
-                            'Low': 1,
-                        }
-
-                        const priorityA = priorityOrder[a.priority] || 0
-                        const priorityB = priorityOrder[b.priority] || 0
-
-                        return priorityB - priorityA
-                    })
-                    .map((task, index) =>  (
+                    .map((task, index) => (
                         <Cards
                             id={task.id}
                             key={index}
@@ -65,23 +52,11 @@ export default function ToDo() {
                             priority={task.priority}
                         />
                     )
-                )}
+                    )}
 
                 <TextStatus2>Em Progresso</TextStatus2>
                 {userTasks
                     ?.filter((task) => task.status === "DOING")
-                    .sort((a, b) => {
-                        const priorityOrder = {
-                            'High': 3,
-                            'Medium': 2,
-                            'Low': 1,
-                        };
-
-                        const priorityA = priorityOrder[a.priority] || 0;
-                        const priorityB = priorityOrder[b.priority] || 0;
-
-                        return priorityB - priorityA;
-                    })
                     .map((task, index) => (
                         <Cards
                             id={task.id}
@@ -95,23 +70,11 @@ export default function ToDo() {
                             priority={task.priority}
                         />
                     )
-                )}
+                    )}
 
                 <TextStatus1>Concluído</TextStatus1>
                 {userTasks
                     ?.filter((task) => task.status === "DONE")
-                    .sort((a, b) => {
-                        const priorityOrder = {
-                            'High': 3,
-                            'Medium': 2,
-                            'Low': 1,
-                        };
-
-                        const priorityA = priorityOrder[a.priority] || 0;
-                        const priorityB = priorityOrder[b.priority] || 0;
-
-                        return priorityB - priorityA;
-                    })
                     .map((task, index) => (
                         <Cards
                             id={task.id}

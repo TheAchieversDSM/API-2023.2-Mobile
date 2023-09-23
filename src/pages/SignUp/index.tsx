@@ -1,13 +1,13 @@
 import { ButtonContainer, Container, InputsContainer, Logo, Scroll, SignUpContainer, TabsContainer } from "./styled";
-import oracleLogo from "../../assets/oracle.png"
-import React, { useState } from 'react'
-import { Button } from "../../components/button/button";
-import { useNavigation } from "@react-navigation/native";
-import Input from "../../components/input/input";
-import serviceUser from "../../service/user"
-import { ICreateUser } from "../../interfaces/user";
-import { verifyPasswordMatch } from "../../utils/utils";
 import { IUserCadastro } from "../../interfaces/functions";
+import { useNavigation } from "@react-navigation/native";
+import { Button } from "../../components/button/button";
+import { verifyPasswordMatch } from "../../utils/utils";
+import { ICreateUser } from "../../interfaces/user";
+import oracleLogo from "../../assets/oracle.png";
+import Input from "../../components/input/input";
+import serviceUser from "../../service/user";
+import React, { useState } from 'react';
 
 export function SignUp() {
 

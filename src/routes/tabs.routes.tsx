@@ -17,7 +17,13 @@ export function TabsRoutes() {
                 tabBarShowLabel: false,
                 tabBarIconStyle: {
                     width: "100%",
+                    height: "100%"
                 },
+                tabBarStyle: {
+                    backgroundColor: "#F2F2F2",
+                    height: 55,
+                    alignContent: "center"
+                }
             }}
         >
             <Tab.Screen
@@ -26,7 +32,13 @@ export function TabsRoutes() {
                 component={Home}
                 options={{
                     tabBarIcon: ({ focused }: TabBarIconProps) =>
-                        renderBottomTab('home', focused, "Home"),
+                        renderBottomTab({
+                            icons: "FontAwesome",
+                            name: "home",
+                            isPlusIcon: false,
+                            focused: focused,
+                            nameScreen: "Home",
+                        }),
                 }}
             />
             <Tab.Screen
@@ -35,7 +47,13 @@ export function TabsRoutes() {
                 component={CreateTask}
                 options={{
                     tabBarIcon: ({ focused }: TabBarIconProps) =>
-                        renderBottomTab('plus', focused),
+                        renderBottomTab({
+                            icons: "Entypo",
+                            name: "plus",
+                            isPlusIcon: true,
+                            focused,
+                            nameScreen: "",
+                        }),
                 }}
             />
             <Tab.Screen
@@ -44,7 +62,13 @@ export function TabsRoutes() {
                 component={ToDo}
                 options={{
                     tabBarIcon: ({ focused }: TabBarIconProps) =>
-                        renderBottomTab('tasks', focused, "Tarefas"),
+                        renderBottomTab({
+                            icons: "FontAwesome",
+                            name: "tasks",
+                            isPlusIcon: false,
+                            focused: focused,
+                            nameScreen: "Tarefas",
+                        }),
                 }}
             />
         </Tab.Navigator>

@@ -1,5 +1,5 @@
+import { ICreateTasks, IGetTasksUser, IGetTasksUserDate, IUpdateTask } from "../interfaces/task";
 import { AxiosError, AxiosResponse } from "axios";
-import { ICreateTasks, IGetTasksUser, IGetTasksUserDate } from "../interfaces/task";
 import { api } from "./api";
 
 class Task {
@@ -27,7 +27,7 @@ class Task {
         }
     }
 
-    async getTaskUser(data: IGetTasksUser){
+    async getTaskUser(data: IGetTasksUser) {
         try {
             const response = await api.get(`/task/getByUserId/${data.userId}`);
             return response;
@@ -37,11 +37,29 @@ class Task {
         }
     }
 
-    async getTaskUserDate(data: IGetTasksUserDate){
+    async getTaskUserDate(data: IGetTasksUserDate) {
         try {
             const response = await api.get(`/task/getExpiredTasks/${data.userId}/${data.deadline}`);
             return response;
 
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async updateTask(data: IUpdateTask) {
+        try {
+            const response = await api.put(`/task/update/${data.id}`, data);
+            return response;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async deleteTask(id: number) {
+        try {
+            const response = await api.delete(`/task/delete/${id}`);
+            return response;
         } catch (error) {
             console.error(error);
         }

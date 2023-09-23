@@ -13,6 +13,9 @@ export default function Input(props: IInput) {
             secureTextEntry={props.password}
             onChange={props.onChange}
             marginBottom={props.marginBottom}
+            height={props.height}
+            multiline={props.multiline}
+            numberOfLines={props.numberLines}
         />
     )
 }

@@ -41,3 +41,13 @@ export const decodeJsonWebToken = (data: string): JsonWebToken => {
   const decodedToken: JsonWebToken = jwt_decode(data);
   return decodedToken
 }
+
+
+export const checkTokenValidity = (userToken: string, signOut: Function) => {
+  const { exp } = decodeJsonWebToken(userToken)
+  const expireTime = new Date(exp * 1000);
+  const timeNow = new Date();
+  if (expireTime < timeNow) {
+    signOut()
+  }
+}; 

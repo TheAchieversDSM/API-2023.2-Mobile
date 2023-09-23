@@ -1,8 +1,8 @@
+import { IconRenderProps } from '../../interfaces/tabs';
 import { IconRender } from './renderIcons';
 import { View, Text } from 'react-native';
 import { styles } from './styled';
 import React from 'react';
-import { IconRenderProps } from '../../interfaces/tabs';
 
 
 export const renderBottomTab = ({ icons, name, focused, nameScreen, isPlusIcon }: IconRenderProps) => {

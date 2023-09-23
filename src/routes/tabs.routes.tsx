@@ -1,9 +1,9 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { TabBarIconProps } from "../interfaces/tabs";
-import Home from "../pages/Home";
 import { renderBottomTab } from "../components/bottomtab";
-import ToDo from "../pages/ToDo";
+import { TabBarIconProps } from "../interfaces/tabs";
 import CreateTask from "../pages/CreateTask";
+import Home from "../pages/Home";
+import ToDo from "../pages/ToDo";
 
 const Tab = createBottomTabNavigator();
 

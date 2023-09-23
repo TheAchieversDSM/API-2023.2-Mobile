@@ -1,5 +1,5 @@
-import {styled} from "styled-components/native";
 import {SafeAreaView, Image, View, Text, ScrollView} from "react-native";
+import {styled} from "styled-components/native";
 
 export const Container = styled(SafeAreaView)`
   background-color: #393939;

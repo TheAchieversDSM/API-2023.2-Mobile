@@ -1,9 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Login from "../pages/Login";
 import { SignUp } from "../pages/SignUp";
+import Login from "../pages/Login";
 import Home from "../pages/Home";
 import ToDo from "../pages/ToDo";
-import CreateTask from "../pages/CreateTask";
 
 const { Screen, Navigator } = createNativeStackNavigator();
 

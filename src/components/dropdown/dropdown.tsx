@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { IDropdown, IItem } from '../../interfaces/dropdown';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { IDropdown, IItem } from '../../interfaces/dropdown';
+import React, { useEffect, useState } from 'react';
+import { View, Text } from 'react-native';
 import { styles } from './styled';
 
 const data = [
@@ -34,10 +34,18 @@ export const DropdownComponent = (props: IDropdown) => {
 
     return (
         <Dropdown
-            style={[styles.dropdown, { width: props.width || 330, backgroundColor: props.backgroundColor || 'transparent', borderBottomColor: props.borderColor || '#000' }]}
-            placeholderStyle={[styles.placeholderStyle, { fontSize: props.fontSize || 18, color: props.color || 'black' }]}
-            selectedTextStyle={[styles.selectedTextStyle, { fontSize: props.fontSize || 18, color: props.color || 'black' }]}
-            inputSearchStyle={[styles.inputSearchStyle, { fontSize: props.fontSize }]}
+            style={
+                [styles.dropdown, { width: props.width || 330, backgroundColor: props.backgroundColor || 'transparent', borderBottomColor: props.borderColor || '#000' }]
+            }
+            placeholderStyle={
+                [styles.placeholderStyle, { fontSize: props.fontSize || 18, color: props.color || 'black' }]
+            }
+            selectedTextStyle={
+                [styles.selectedTextStyle, { fontSize: props.fontSize || 18, color: props.color || 'black' }]
+            }
+            inputSearchStyle={
+                [styles.inputSearchStyle, { fontSize: props.fontSize }]
+            }
             iconStyle={styles.iconStyle}
 
             data={props.data || data}

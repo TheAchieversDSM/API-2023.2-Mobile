@@ -1,5 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { TabsRoutes } from "./tabs.routes";
+import Home from "../pages/Home";
+import ToDo from "../pages/ToDo";
+import CreateTask from "../pages/CreateTask";
 
 const { Screen, Navigator } = createNativeStackNavigator();
 
@@ -18,6 +21,10 @@ export function StackRoutes() {
             }}
         >
             <Screen name="Tabs" component={TabsRoutes} options={{ headerShown: false }} ></Screen>
+            <Screen name="Home" component={Home} options={{ headerShown: false }} ></Screen>
+            <Screen name="ToDo" component={ToDo} options={{ headerShown: false }} ></Screen>
+            <Screen name="CreateTask" component={CreateTask} options={{ headerShown: false }} ></Screen>
+
         </Navigator>
     )
 }

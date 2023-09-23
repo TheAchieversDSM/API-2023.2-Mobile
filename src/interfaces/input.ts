@@ -1,7 +1,8 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { InputProps } from '@rneui/base';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 
-export interface IInput{
+export interface IInput extends InputProps {
     placeholder: string;
     marginTop?: number;
     marginBottom?: number;

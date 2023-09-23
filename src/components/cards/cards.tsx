@@ -51,7 +51,6 @@ export const Cards = (props: ICards) => {
     const handleDelete = async () => {
         try {
             await serviceTask.deleteTask(props.id)
-
             setVisible(false)
         }
         catch (error) {
@@ -74,7 +73,6 @@ export const Cards = (props: ICards) => {
                     done: false
                 })
             }
-
             setEdit(false)
         }
         catch (error) {
@@ -94,10 +92,6 @@ export const Cards = (props: ICards) => {
             <S.Modal isVisible={visible} onBackdropPress={toggleOverlay}>
                 <S.GeneralView>
                     <S.ViewCard>
-                        <S.ViewName>
-                            <S.TaskTitle>{props.task}</S.TaskTitle>
-                        </S.ViewName>
-
                         <S.ViewIcons>
                             <S.ViewIcon>
                                 <Icon
@@ -114,6 +108,9 @@ export const Cards = (props: ICards) => {
                                 />
                             </S.ViewIcon>
                         </S.ViewIcons>
+                        <S.ViewName>
+                            <S.TaskTitle>{props.task}</S.TaskTitle>
+                        </S.ViewName>
                     </S.ViewCard>
 
                     <S.TaskDescT>Nome:</S.TaskDescT>

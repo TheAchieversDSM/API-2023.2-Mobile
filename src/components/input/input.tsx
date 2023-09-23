@@ -10,6 +10,7 @@ export default function Input(props: IInput) {
             value={props.value}
             color={props.textColor}
             errorMessage={props.errorMsg}
+            errorStyle={props.errorStyle}
             secureTextEntry={props.password}
             onChange={props.onChange}
             marginBottom={props.marginBottom}

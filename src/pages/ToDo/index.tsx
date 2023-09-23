@@ -39,7 +39,7 @@ export default function ToDo() {
                     .map((task, index) => (
                         <Cards
                             id={task.id}
-                            key={index}
+                            key={task.id}
                             task={task.name}
                             descricao={task.description}
                             status='error'
@@ -57,7 +57,7 @@ export default function ToDo() {
                     .map((task, index) => (
                         <Cards
                             id={task.id}
-                            key={index}
+                            key={task.id}
                             task={task.name}
                             descricao={task.description}
                             status='warning'
@@ -75,7 +75,7 @@ export default function ToDo() {
                     .map((task, index) => (
                         <Cards
                             id={task.id}
-                            key={index}
+                            key={task.id}
                             task={task.name}
                             descricao={task.description}
                             status='success'

@@ -41,6 +41,7 @@ export const DatePicker = (props: IDatePicker) => {
                     value={selected ? props.value : ""}
                     onChange={() => props.value}
                     errorMessage={props.errorMessage}
+                    errorStyle={props.errorStyle}
                     style={{ color: props.color || 'white' }}
                     disabled
                 />

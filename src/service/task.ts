@@ -9,16 +9,16 @@ class Task {
             return await api
                 .post("/task/create", data)
                 .then((res: AxiosResponse | any) => {
-                    if (res.status == 201) {                        
+                    if (res.status == 200) {                        
                         return { erro: "", validacao: true };                        
+                    }else {
+                        return { erro: "Erro desconhecido", validacao: false };
                     }
                 })
-                .catch((err: AxiosError | any) => {
-                    
+                .catch((err: AxiosError | any) => {           
                     if (err.response) {
                         if (err.response.status === 409) {
                             const authenticationError = err.response.data.error;
-
                             return { erro: authenticationError, validacao: false };
                         }
                     }

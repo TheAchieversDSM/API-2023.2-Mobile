@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Container, SubTextTitle, TextTitle, ViewContainer } from './styled';
+import { Box, Container, SubTextTitle, TextTitle, ViewContainer, NoTasksText } from './styled';
 import {
   ScrollView,
 } from 'react-native';
@@ -43,7 +43,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchUserDateTasks() {
       try {
-        const response = await serviceTask.getTaskUserDate({ userId: id, deadline: String(selected) });
+        const response = await serviceTask.getTaskUserDate({ userId: id, deadline: format(new Date(), 'yyyy-MM-dd') });
         if (response) {
           setDateTasks(response.data);
         } else {
@@ -100,7 +100,7 @@ export default function Home() {
                     </ListItem>
                     )
                     
-                  )): <SubTextTitle>Nenhuma tarefa expira hoje</SubTextTitle>}
+                  )): <NoTasksText>Nenhuma tarefa expira hoje</NoTasksText>}
                   
 
                   {/* TODO: Checkbox task com repetição para a próxima sprint */}

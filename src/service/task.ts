@@ -39,6 +39,7 @@ class Task {
 
     async getTaskUserDate(data: IGetTasksUserDate) {
         try {
+            console.log(data);
             const response = await api.get(`/task/getExpiredTasks/${data.userId}/${data.deadline}`);
             return response.data;
 

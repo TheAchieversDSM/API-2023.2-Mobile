@@ -11,6 +11,7 @@ import { DatePicker } from '../datepicker';
 import { useAuth } from "../../hooks/auth";
 import React, { View } from 'react-native'
 import Input from '../input/input';
+import { Priority } from './priorities';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -29,6 +30,10 @@ export const Cards = (props: ICards) => {
 
     const { id } = decodeJsonWebToken(String(userToken))
 
+    const [name, setName] = useState(props.task);
+
+    const [description, setDescription] = useState(props.descricao);
+
     const [visible, setVisible] = useState(false);
 
     const [priorities, setPriorities] = useState<string | undefined>(undefined);
@@ -42,7 +47,7 @@ export const Cards = (props: ICards) => {
     const [edit, setEdit] = useState(false);
 
     const toggleOverlay = () => {
-        setVisible(!visible);
+        setVisible(!visible)
     };
 
     const handleDelete = async () => {
@@ -54,17 +59,16 @@ export const Cards = (props: ICards) => {
         catch (error) {
             console.error(error)
         }
-    }
+    }    
 
     const handleSubmit = async (data: IUpdateTask) => {
-        console.log(data)
         try {
             if (data) {
                 await serviceTask.updateTask({
-                    name: data?.name || props.task,
-                    description: data?.description || props.descricao,
+                    name: name,
+                    description: description,
                     priority: data?.priority || props.priority,
-                    deadline: date || props.deadline,
+                    deadline: date,
                     status: data?.status,
                     userId: id,
                     id: props.id,
@@ -105,7 +109,7 @@ export const Cards = (props: ICards) => {
                                     size={30}
                                 />
                                 <Icon
-                                    onPress={() => setVisible(false)}
+                                    onPress={() => { setVisible(false); setEdit(!edit)}}
                                     name='close'
                                     color='#000'
                                     size={30}
@@ -117,8 +121,9 @@ export const Cards = (props: ICards) => {
                     <TaskDescT>Nome:</TaskDescT>
                     <InputView>
                         <Input
-                            placeholder={props.task}
-                            onChange={(e) => { setData({ ...data, name: e.nativeEvent.text }) }}
+                            placeholder={''}
+                            value={name}
+                            onChange={(e) => { setName(e.nativeEvent.text) }}
                             textColor='#000'
                             color='#C74634'
                             iconL='file-text-o'
@@ -162,7 +167,7 @@ export const Cards = (props: ICards) => {
                         <TaskDescT>Expira em: </TaskDescT>
                         <TaskDesc>Data atual: {props.deadline}</TaskDesc>
                         <DatePicker
-                            onDateChange={(date) => { setDate(date) }}
+                            onDateChange={(date) => { setDate(date); setData({ ...data, deadline: date }) }}
                             style={{ width: 300, color: 'black' }}
                             iconNameL='calendar-o'
                             iconColorL='#C74634'
@@ -177,8 +182,9 @@ export const Cards = (props: ICards) => {
                     <TaskDescT>Descrição:</TaskDescT>
                     <InputView>
                         <Input
-                            placeholder={props.descricao}
-                            onChange={(e) => { setData({ ...data, description: e.nativeEvent.text }) }}
+                            placeholder={''}
+                            value={description}
+                            onChange={(e) => { setDescription(e.nativeEvent.text) }}
                             textColor='#000'
                             color='#C74634'
                             iconL='pencil-square-o'
@@ -232,13 +238,8 @@ export const Cards = (props: ICards) => {
 
                     <TaskDescT>Status: {props.value}</TaskDescT>
 
-                    {props.priority === 'High' ? (
-                        <TaskDescT>Prioridade: Alta</TaskDescT>
-                    ) : props.priority === 'Medium' ? (
-                        <TaskDescT>Prioridade: Média</TaskDescT>
-                    ) : (
-                        <TaskDescT>Prioridade: Baixa</TaskDescT>
-                    )}
+                    <Priority priority={props.priority} />
+
                     <ViewData>
                         <TaskDescT>Expira em: {props.deadline}</TaskDescT>
                     </ViewData>

@@ -8,3 +8,7 @@ export interface ICards{
     priority: string;
     deadline: string;
 }
+
+export interface IPriority {
+    priority: string;
+}

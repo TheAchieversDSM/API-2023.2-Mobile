@@ -6,36 +6,30 @@ import { DataPicker } from './styled';
 import { formatDate } from '../../utils/utils';
 import { IDatePicker } from '../../interfaces/datepicker';
 
-
 export const DatePicker = (props: IDatePicker) => {
-    const [date, setDate] = useState(new Date());
     const [selected, setSelected] = useState(false)
-    const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
-
-    const onChange = (
-        date: Date
-    ) => {
-        const currentDate = date;
-        setShow(false);
-        setSelected(true)
-        setDate(currentDate);
-        const formattedDate = formatDate(currentDate);
-        props.onDateChange(formattedDate);
-    };
 
     const hideDatePicker = () => {
         setShow(false);
     };
+
     const showMode = () => {
         setShow(true);
-        setMode('date');
+    };
+
+    const handleDateChange = (date: Date) => {
+        const formattedDate = formatDate(date);
+        props.onDateChange(formattedDate);
+        hideDatePicker();
     };
 
     useEffect(() => {
-        const formattedDate = formatDate(date);
-        props.onDateChange(formattedDate);
-    }, []);
+        if (props.value) {
+            // If a value is already set, mark it as selected
+            setSelected(true);
+        }
+    }, [props.value]);
 
     return (
         <SafeAreaView>
@@ -44,7 +38,7 @@ export const DatePicker = (props: IDatePicker) => {
                     placeholderTextColor={'#DE0300'}
                     leftIcon={{ type: 'font-awesome', name: props.iconNameL, color: props.iconColorL || '#DE0300', size: props.iconSize || 25 }}
                     rightIcon={{ type: 'font-awesome', name: props.iconNameR, color: props.iconColorR || '#DE0300', size: props.iconSize || 25 }}
-                    placeholder={props.title} 
+                    placeholder={props.title}
                     value={selected ? props.value : ""}
                     onChange={() => props.value}
                     errorMessage={props.errorMessage}
@@ -55,8 +49,9 @@ export const DatePicker = (props: IDatePicker) => {
                     <DateTimePickerModal
                         isVisible={show}
                         testID="dateTimePicker"
-                        onConfirm={onChange}
+                        onConfirm={handleDateChange}
                         onCancel={hideDatePicker}
+                        date={props.value ? new Date(props.value) : new Date()} // Pass the currently selected date
                     />
                 )}
             </TouchableOpacity>

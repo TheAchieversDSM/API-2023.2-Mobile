@@ -23,6 +23,8 @@ export default function CreateTask() {
 
     const { id } = decodeJsonWebToken(String(userToken))
 
+    const [priorities, setPriorities] = useState<string | undefined>(undefined);
+
     const [data, setData] = useState<ICreateTasks>({
         name: '',
         description: '',
@@ -39,7 +41,7 @@ export default function CreateTask() {
         description: "",
         deadline: ""
     })
-    
+
     const [errorStatus, setErrorStatus] = useState({
         name: false,
         description: false,
@@ -66,7 +68,7 @@ export default function CreateTask() {
                 setErrorMessage({ name: "", description: "", deadline: "" })
 
                 await serviceTask.createTask(data);
-                
+
                 navigate.navigate("Home")
 
                 setErrorMessage({ name: "", description: "", deadline: "" })
@@ -94,17 +96,17 @@ export default function CreateTask() {
                 color='#C74634'
                 textColor='#fff'
                 iconL='pencil-square-o'
+                multiline={true}
+                numberLines={4}
+                height={80}
             />
 
             <DropdownComponent
                 placeholder={'Selecione a prioridade'}
                 data={priority}
-                onChange={(selectedItem) => {
-                    if (selectedItem === "High" || selectedItem === "Medium" || selectedItem === "Low") {
-                        setData({ ...data, priority: selectedItem });
-                    } else {
-                        console.error("Invalid property value: ", selectedItem);
-                    }
+                value={priorities}
+                onValueChange={(selectedItem) => {
+                    setData({ ...data, priority: selectedItem })
                 }}
                 borderColor='#9a9999'
                 color='#fff'

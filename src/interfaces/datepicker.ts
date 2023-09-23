@@ -7,6 +7,7 @@ export interface IDatePicker extends InputProps {
   iconColorL?: string;
   iconColorR?: string;
   iconSize?: number;
-  title: string;
+  color?: string;
+  title?: string;
   onDateChange: (date: string) => void;
 }

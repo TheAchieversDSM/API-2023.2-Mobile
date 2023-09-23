@@ -1,8 +1,14 @@
 export interface ICards{
+    id: number;
     task: string;
     descricao: string;
     status: 'success' | 'error' | 'warning';
-    value: 'TO DO' | 'DOING' | 'DONE';
+    value: string;
     statusColor: '#de0300' | '#67d207' | '#ebae11'
-    date: string;
+    priority: string;
+    deadline: string;
+}
+
+export interface IPriority {
+    priority: string;
 }

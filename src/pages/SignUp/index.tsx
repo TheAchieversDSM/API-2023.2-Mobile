@@ -1,5 +1,5 @@
 import { ButtonContainer, Container, InputsContainer, Logo, Scroll, SignUpContainer, TabsContainer } from "./styled";
-import { IUserCadastro } from "../../interfaces/functions";
+import { IResponseCadastro } from "../../interfaces/functions";
 import { useNavigation } from "@react-navigation/native";
 import { Button } from "../../components/button/button";
 import { verifyPasswordMatch } from "../../utils/utils";
@@ -53,7 +53,7 @@ export function SignUp() {
                 if (!validate) {
                     return setErrorMessage({ email: "", password: "The passwords do not match." })
                 }
-                const error: IUserCadastro | undefined = await serviceUser.createUser(data)
+                const error: IResponseCadastro | undefined = await serviceUser.createUser(data)
                 setErrorMessage({ email: String(error?.erro), password: "" })
                 if (error?.validacao) {
                     navigate.navigate("Login")

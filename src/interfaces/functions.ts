@@ -1,4 +1,4 @@
-export interface IUserCadastro {
+export interface IResponseCadastro {
   validacao: boolean;
   erro: string;
 }

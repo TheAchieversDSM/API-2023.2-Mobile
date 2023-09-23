@@ -1,8 +1,9 @@
 import { DropdownComponent } from '../../components/dropdown/dropdown';
+import { decodeJsonWebToken, formatDate } from '../../utils/utils';
+import { IResponseCadastro } from '../../interfaces/functions';
 import { useNavigation } from "@react-navigation/native";
 import { DatePicker } from '../../components/datepicker';
 import { Button } from '../../components/button/button';
-import { decodeJsonWebToken } from '../../utils/utils';
 import { ButtonContainer, Container } from './styled';
 import { ICreateTasks } from '../../interfaces/task';
 import Input from '../../components/input/input';
@@ -50,6 +51,21 @@ export default function CreateTask() {
         deadline: false
     })
 
+    const handleCancel = () => {
+        console.log(priorities)
+        setPriorities(undefined)
+        setData({
+            name: '',
+            description: '',
+            priority: 'Low',
+            deadline: '' /* Date */,
+            status: 'TO DO',
+            timeSpent: 0,
+            done: false,
+            userId: id,
+        })
+    }
+
     const checkFields = (values: ICreateTasks): boolean => {
         const newErrorStatus = {
             name: values.name === '',
@@ -66,14 +82,28 @@ export default function CreateTask() {
         try {
             if (checkFields(data)) {
                 return
-            } else {
+            }
+            else if (data.deadline <= formatDate(new Date())) {
+                setErrorMessage({ name: "", description: "", deadline: "Data invalidade. Selecione uma data futura" })
+                return
+            }
+            else {
                 setErrorMessage({ name: "", description: "", deadline: "" })
+                const insertTask: IResponseCadastro | undefined = await serviceTask.createTask(data)
+                if (insertTask?.validacao) {
+                    setData({
+                        name: '',
+                        description: '',
+                        priority: 'Low',
+                        deadline: '' /* Date */,
+                        status: 'TO DO',
+                        timeSpent: 0,
+                        done: false,
+                        userId: id,
+                    })
+                    navigate.navigate("ToDo")
+                }
 
-                await serviceTask.createTask(data);
-
-                navigate.navigate("Home")
-
-                setErrorMessage({ name: "", description: "", deadline: "" })
             }
         } catch (error) {
             console.log(error)
@@ -91,6 +121,7 @@ export default function CreateTask() {
                 color='#de0300'
                 textColor='#fff'
                 iconL='file-text-o'
+                value={data.name}
             />
 
             <Input
@@ -99,8 +130,10 @@ export default function CreateTask() {
                 errorMsg={errorStatus.description ? "Descrição é obrigatória" : ""}
                 color='#de0300'
                 textColor='#fff'
+                errorStyle={{ color: "#F2F2F2" }}
                 iconL='pencil-square-o'
                 multiline={true}
+                value={data.description}
                 numberLines={4}
                 height={80}
             />
@@ -129,6 +162,8 @@ export default function CreateTask() {
                 iconColorL='#de0300'
                 iconColorR='grey'
                 iconNameR='angle-down'
+                errorMessage={errorMessage.deadline}
+                errorStyle={{ color: "#F2F2F2" }}
                 value={data.deadline}
                 style={{ width: 335, height: 50, marginBottom: 20 }}
             />
@@ -163,7 +198,7 @@ export default function CreateTask() {
                     width={120}
                     borderColor='white'
                     type='outline'
-                    onPress={() => navigate.navigate("Home")}
+                    onPress={handleCancel}
                 />
             </ButtonContainer>
         </Container>

@@ -10,6 +10,7 @@ import { useAuth } from '../../hooks/auth';
 import { decodeJsonWebToken } from '../../utils/utils';
 import { IGetTasksUserResp } from '../../interfaces/task';
 import serviceTask from '../../service/task';
+const { format } = require('date-fns');
 import day from 'react-native-calendars/src/calendar/day';
 
 LocaleConfig.defaultLocale = 'br';
@@ -35,7 +36,8 @@ export default function Home() {
   const [selectedDay, setSelectedDay] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('');
   const [dateTasks, setDateTasks] = useState<IGetTasksUserResp[]>();
-  const {userToken} = useAuth()
+  const {userToken} = useAuth();
+  const today= format(new Date(), 'dd/MM');
   const {id} = decodeJsonWebToken(String(userToken))
 
   useEffect(() => {
@@ -43,7 +45,7 @@ export default function Home() {
       try {
         const response = await serviceTask.getTaskUserDate({ userId: id, deadline: String(selected) });
         if (response) {
-          setDateTasks(response.data.data);
+          setDateTasks(response.data);
         } else {
           console.error("Erro ao buscar tarefas do usuário");
         }
@@ -90,15 +92,15 @@ export default function Home() {
             <ViewContainer>
               <ScrollView>
                 <Box>
-                  <TextTitle>Expira dia {selected}</TextTitle>
-                  {dateTasks?.map((task, index) => (
+                  <TextTitle>Expira dia {selected? selected: today }</TextTitle>
+                  {dateTasks? dateTasks?.map((task, index) => (
                     task.deadline === String(selected) && (
                     <ListItem key={index}>
                       <ListItem.Title>{task.name}</ListItem.Title>
                     </ListItem>
                     )
                     
-                  ))}
+                  )): <SubTextTitle>Nenhuma tarefa expira hoje</SubTextTitle>}
                   
 
                   {/* TODO: Checkbox task com repetição para a próxima sprint */}

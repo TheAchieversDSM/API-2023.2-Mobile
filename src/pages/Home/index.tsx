@@ -54,8 +54,7 @@ export default function Home() {
 
     fetchUserDateTasks();
   }, []);
-  console.log(dateTasks)
-
+  
     return (
       <>
         <Container>

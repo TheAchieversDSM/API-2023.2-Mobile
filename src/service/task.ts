@@ -8,15 +8,12 @@ class Task {
             return await api
                 .post("/task/create", data)
                 .then((res: AxiosResponse | any) => {
-                    console.log(res);
-
-                    if (res.status == 201) {
-                        return { erro: "", validacao: true };
+                    if (res.status == 201) {                        
+                        return { erro: "", validacao: true };                        
                     }
                 })
                 .catch((err: AxiosError | any) => {
-                    console.log(err);
-
+                    
                     if (err.response) {
                         if (err.response.status === 409) {
                             const authenticationError = err.response.data.error;

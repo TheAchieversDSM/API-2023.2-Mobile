@@ -4,7 +4,7 @@ import {View} from "react-native";
 
 export const CardTask = styled(View)`
   height: 15px;
-  background-color: #fff;
+  background-color: #E7E7E7;
   height: 50px;
   border-radius: 10px;
   margin-top: 10px;

@@ -22,9 +22,9 @@ export const ViewContainer = styled(View)`
 `;
 
 export const TextTitle = styled(Text)`
-  color: #c74634;
-  font-size: 22px;
-  font-weight: bold;
+    color: #de0300;
+    font-size: 22px;
+    fontWeight: bold;
 `;
 
 export const SubTextTitle = styled(Text)`

@@ -1,13 +1,13 @@
-import { Box, Container, TextTitle, ViewContainer, NoTasksText } from './styled';
-import { Calendar, LocaleConfig } from 'react-native-calendars';
-import { IGetTasksUserResp } from '../../interfaces/task';
-import { decodeJsonWebToken } from '../../utils/utils';
 import React, { useEffect, useState } from 'react';
-import serviceTask from '../../service/task';
+import { Box, Container, NoTasksText, SubTextTitle, TextTitle, ViewContainer } from './styled';
+import {ScrollView, View} from 'react-native';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { useAuth } from '../../hooks/auth';
-import { ScrollView } from 'react-native';
-import { ListItem } from '@rneui/themed';
-import { format } from 'date-fns'
+import { decodeJsonWebToken } from '../../utils/utils';
+import { IGetTasksUserResp } from '../../interfaces/task';
+import serviceTask from '../../service/task';
+import { Cards } from '../../components/cards/cards';
+import { HeaderComponent } from '../../components/header';
 
 LocaleConfig.defaultLocale = 'br';
 
@@ -32,16 +32,15 @@ export default function Home() {
   const [selectedDay, setSelectedDay] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('');
   const [dateTasks, setDateTasks] = useState<IGetTasksUserResp[]>();
-  const { userToken } = useAuth();
-  const today = format(new Date(), 'dd/MM');
-  const { id } = decodeJsonWebToken(String(userToken))
+  const {userToken} = useAuth()
+  const {id} = decodeJsonWebToken(String(userToken))
 
   useEffect(() => {
     async function fetchUserDateTasks() {
       try {
-        const response = await serviceTask.getTaskUserDate({ userId: id, deadline: format(new Date(), 'yyyy-MM-dd') });
+        const response = await serviceTask.getTaskUserDate({ userId: id, deadline: String(selected) });
         if (response) {
-          setDateTasks(response.data);
+          setDateTasks(response.data.data);
         } else {
           console.error("Erro ao buscar tarefas do usuário");
         }
@@ -52,60 +51,79 @@ export default function Home() {
 
     fetchUserDateTasks();
   }, []);
+  
+    return (
+      <>
+        <Container>
+            <View style={{backgroundColor: '#393939'}}><HeaderComponent/></View>
+            <Calendar 
+              onDayPress={day => {
+                setSelected(day.dateString);
+                setSelectedDay(String(day.day))
+                setSelectedMonth(String(day.month))
+                console.log('selected day', day);
+              }}
 
-  return (
-    <>
-      <Container>
-        <Calendar
-          onDayPress={day => {
-            setSelected(day.dateString);
-            console.log('selected day', day.day);
-          }}
+              markedDates={{
+                [selected]: {selected: true, disableTouchEvent: true}
+              }}
 
-          markedDates={{
-            [selected]: { selected: true, disableTouchEvent: true }
-          }}
+              theme={{
+                backgroundColor: '#393939',
+                calendarBackground: '#393939',
+                textSectionTitleColor: '#de0300',
+                selectedDayBackgroundColor: '#de0300',
+                selectedDayTextColor: '#e7e7e7',
+                todayTextColor: '#de0300',
+                dayTextColor: '#E7E7E7',
+                textDisabledColor: '#808080',
+                monthTextColor: '#de0300',
+                arrowColor: '#E7E7E7',
+                textDayFontFamily: 'Poppins_400Regular',
+                textMonthFontFamily: 'Poppins_600Regular', // Substitua 'SuaFonteMes' pelo nome da fonte para meses
+                textDayHeaderFontFamily: 'Poppins_500Regular',
+                textDayFontSize: 15,
+                textMonthFontSize: 25,
+                textDayHeaderFontSize: 18,
+              }}
 
-          theme={{
-            backgroundColor: '#393939',
-            calendarBackground: '#393939',
-            textSectionTitleColor: '#de0300',
-            selectedDayBackgroundColor: '#de0300',
-            selectedDayTextColor: '#e7e7e7',
-            todayTextColor: '#de0300',
-            dayTextColor: '#E7E7E7',
-            textDisabledColor: '#808080',
-            monthTextColor: '#de0300',
-            arrowColor: '#E7E7E7',
-          }}
+              style = {{
+                marginTop: 10,
+                marginBottom: 10,
+              }}
 
-          style={{
-            marginTop: 10,
-            marginBottom: 10,
-          }}
-        />
+            />
 
-        <ViewContainer>
-          <ScrollView>
-            <Box>
-              <TextTitle>Expira dia {selected ? selected : today}</TextTitle>
-              {dateTasks ? dateTasks?.map((task, index) => (
-                task.deadline === String(selected) && (
-                  <ListItem key={index}>
-                    <ListItem.Title>{task.name}</ListItem.Title>
-                  </ListItem>
-                )
+            <ViewContainer>
+                <Box>
+                  <TextTitle>Expira dia {selectedDay}/{selectedMonth}</TextTitle>
+                  <ScrollView>
+                    {dateTasks ? dateTasks?.map((task, index) => (
+                      task.deadline === String(selected) &&(
+                          <Cards
+                              id={task.id}
+                              key={index}
+                              task={task.name}
+                              descricao={task.description}
+                              status='error'
+                              value={"A Fazer"}
+                              statusColor="#de0300"
+                              deadline={task.deadline}
+                              priority={task.priority}
+                          />
+                      )
 
-              )) : <NoTasksText>Nenhuma tarefa expirada nessa data</NoTasksText>}
+                    )) : <NoTasksText>Nenhuma tarefa expirada nessa data</NoTasksText>}
+                  </ScrollView>
+                  
 
+                  {/* TODO: Checkbox task com repetição para a próxima sprint */}
+                  {/* <Checkbox label= "Tarefa 1"/> */}
+                </Box>
+            </ViewContainer>
+            {/* <Menu/> */}
+        </Container>
+      </>
+    );
 
-              {/* TODO: Checkbox task com repetição para a próxima sprint */}
-              {/* <Checkbox label= "Tarefa 1"/> */}
-            </Box>
-          </ScrollView>
-        </ViewContainer>
-        {/* <Menu/> */}
-      </Container>
-    </>
-  );
 }

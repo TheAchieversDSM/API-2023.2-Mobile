@@ -1,11 +1,12 @@
 import { Container, TextStatus1, TextStatus2, TextStatus3 } from "./styled";
-import { IGetTasksUserResp } from "../../interfaces/task";
-import { decodeJsonWebToken } from "../../utils/utils";
 import { Cards } from "../../components/cards/cards";
 import React, { useEffect, useState } from "react";
 import serviceTask from "../../service/task";
 import { useAuth } from "../../hooks/auth";
-import { ScrollView } from "react-native";
+import { decodeJsonWebToken } from "../../utils/utils";
+import { IGetTasksUserResp } from "../../interfaces/task";
+import { ScrollView, View } from "react-native";
+import { HeaderComponent } from "../../components/header";
 
 export default function ToDo() {
     const [userTasks, setUserTasks] = useState<IGetTasksUserResp[]>();
@@ -31,6 +32,8 @@ export default function ToDo() {
     }, [userTasks]);
 
     return (
+        <>
+        <View style={{backgroundColor: '#393939'}}><HeaderComponent/></View>
         <Container>
             <ScrollView>
                 <TextStatus3>A Fazer</TextStatus3>
@@ -88,5 +91,6 @@ export default function ToDo() {
                     )}
             </ScrollView>
         </Container>
+        </>
     );
 }

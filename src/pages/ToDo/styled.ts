@@ -1,6 +1,6 @@
-import { SafeAreaView, View } from "react-native";
+import { SafeAreaView } from "react-native";
 import styled from "styled-components";
-import { Card, ListItem, Text } from "@rneui/themed";
+import { Text } from "@rneui/themed";
 
 export const Container = styled(SafeAreaView)`
   flex: 1;

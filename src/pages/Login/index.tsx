@@ -1,11 +1,11 @@
 import { ButtonContainer, Container, ErrorMessage, InputsContainer, LoginContainer, Logo, Scroll, TabsContainer } from './styled';
-import oracleLogo from "../../assets/oracle.png"
-import { Button } from '../../components/button/button';
-import Input from '../../components/input/input';
-import React, { useState } from "react"
-import { useAuth } from '../../hooks/auth';
-import { AuthPropsLogin } from '../../interfaces/auth';
 import { useNavigation } from '@react-navigation/native';
+import { Button } from '../../components/button/button';
+import { AuthPropsLogin } from '../../interfaces/auth';
+import Input from '../../components/input/input';
+import oracleLogo from "../../assets/oracle.png";
+import { useAuth } from '../../hooks/auth';
+import React, { useState } from "react";
 
 
 export default function Login() {

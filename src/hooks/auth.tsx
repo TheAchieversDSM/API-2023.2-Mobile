@@ -1,8 +1,8 @@
-import { useMemo, createContext, ReactNode, useReducer, useEffect, useContext, useState } from "react";
-import { api } from "../service/api"
-import { AxiosError, AxiosResponse } from 'axios';
-import { AuthAction, AuthContextActions, AuthContextType, AuthPropsLogin, AuthState, AuthUserData, JsonWebToken } from "../interfaces/auth";
+import { AuthAction, AuthContextActions, AuthContextType, AuthPropsLogin, AuthState, AuthUserData } from "../interfaces/auth";
+import { useMemo, createContext, ReactNode, useReducer, useEffect, useContext } from "react";
 import { getToken, removeToken, setToken } from "../utils/utils";
+import { AxiosError, AxiosResponse } from 'axios';
+import { api } from "../service/api"
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }, [])
 
     const authActions: AuthContextActions = useMemo(
-         () => ({
+        () => ({
             signIn: async (data: AuthPropsLogin) => {
                 try {
                     const login: AxiosResponse<AuthUserData> = await api.post("/user/login", data)

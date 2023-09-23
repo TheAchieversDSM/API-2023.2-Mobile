@@ -1,7 +1,7 @@
-import { INotFound } from "../../interfaces/notfound";
 import { Container, Message, Progress, MessageDate, MessageTitle, Logo } from "./style";
-import React from 'react'
+import { INotFound } from "../../interfaces/notfound";
 import oracleLogo from "../../assets/oracle.png"
+import React from 'react'
 
 export const NotFound = ({ date }: INotFound) => {
     return (

@@ -1,5 +1,5 @@
-import { Input } from "@rneui/base";
 import { styled } from "styled-components/native";
+import { Input } from "@rneui/base";
 
 interface IInput {
     color?: string;

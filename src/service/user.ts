@@ -1,7 +1,6 @@
 import {AxiosError, AxiosResponse} from "axios";
 import {ICreateUser} from "../interfaces/user";
 import {api} from "./api";
-import {useNavigation} from "@react-navigation/native";
 
 class User {
   async createUser(data: ICreateUser) {

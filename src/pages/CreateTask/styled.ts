@@ -1,4 +1,4 @@
-import {SafeAreaView, Image, View, Text} from "react-native";
+import {SafeAreaView, View} from "react-native";
 import {styled} from "styled-components/native";
 
 export const Container = styled(SafeAreaView)`

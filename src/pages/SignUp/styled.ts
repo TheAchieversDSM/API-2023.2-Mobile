@@ -1,7 +1,6 @@
-import {KeyboardAvoidingView, ScrollView} from "react-native";
+import {ScrollView} from "react-native";
 import {Image, SafeAreaView, View} from "react-native";
 import styled from "styled-components/native";
-import {Button} from "../../components/button/button";
 
 export const Container = styled(SafeAreaView)`
   background-color: #393939;

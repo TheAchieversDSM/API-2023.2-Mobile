@@ -14,7 +14,7 @@ export const Box = styled(SafeAreaView)`
 
 export const ViewContainer = styled(View)`
   flex: 1;
-  background-color: #fff;
+  background-color: #E7E7E7;
   width: 100%;
   borderTopLeftRadius: 30px;
   borderTopRightRadius: 30px;

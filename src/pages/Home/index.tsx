@@ -11,6 +11,7 @@ import { decodeJsonWebToken } from '../../utils/utils';
 import { IGetTasksUserResp } from '../../interfaces/task';
 import serviceTask from '../../service/task';
 import day from 'react-native-calendars/src/calendar/day';
+import { Cards } from '../../components/cards/cards';
 
 LocaleConfig.defaultLocale = 'br';
 
@@ -62,6 +63,8 @@ export default function Home() {
             <Calendar 
               onDayPress={day => {
                 setSelected(day.dateString);
+                setSelectedDay(String(day.day))
+                setSelectedMonth(String(day.month))
                 console.log('selected day', day.day);
               }}
 
@@ -80,6 +83,11 @@ export default function Home() {
                 textDisabledColor: '#808080',
                 monthTextColor: '#de0300',
                 arrowColor: '#E7E7E7',
+                textDayFontFamily: 'Poppins_400Regular',
+                textMonthFontFamily: 'Poppins_400Regular', // Substitua 'SuaFonteMes' pelo nome da fonte para meses
+                textDayHeaderFontFamily: 'Poppins_500Regular',
+                textDayFontSize: 15,
+                textDayHeaderFontSize: 20,
               }}
 
               style = {{
@@ -91,12 +99,33 @@ export default function Home() {
             <ViewContainer>
               <ScrollView>
                 <Box>
-                  <TextTitle>Expira dia {selected}</TextTitle>
+                  <TextTitle>Expira dia {selectedDay}/{selectedMonth}</TextTitle>
                   {dateTasks?.map((task, index) => (
-                    task.deadline === String(selected) && (
-                    <ListItem key={index}>
-                      <ListItem.Title>{task.name}</ListItem.Title>
-                    </ListItem>
+                    task.deadline === String(selected) && task.status === "TO DO" &&(
+                      <Cards
+                        key={index}
+                        task={task.name} // Substitua 'title' pelo nome correto do campo da tarefa
+                        descricao={task.description} // Substitua 'description' pelo nome correto do campo da tarefa
+                        status='error'
+                        value={task.status}
+                        statusColor="#de0300"
+                        date={task.deadline}
+                      />
+                    )
+                    
+                  ))}
+
+                  {dateTasks?.map((task, index) => (
+                    task.deadline === String(selected) && task.status === "DOING" &&(
+                      <Cards
+                        key={index}
+                        task={task.name} // Substitua 'title' pelo nome correto do campo da tarefa
+                        descricao={task.description} // Substitua 'description' pelo nome correto do campo da tarefa
+                        status='warning'
+                        value={task.status}
+                        statusColor="#ebae11"
+                        date={task.deadline}
+                      />
                     )
                     
                   ))}

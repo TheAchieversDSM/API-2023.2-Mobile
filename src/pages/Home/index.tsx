@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Container, SubTextTitle, TextTitle, ViewContainer } from './styled';
 import {
-  ScrollView,
+  ScrollView, View,
 } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { Checkbox } from '../../components/checkbox/checkbox';
@@ -12,6 +12,7 @@ import { IGetTasksUserResp } from '../../interfaces/task';
 import serviceTask from '../../service/task';
 import day from 'react-native-calendars/src/calendar/day';
 import { Cards } from '../../components/cards/cards';
+import { HeaderComponent } from '../../components/header';
 
 LocaleConfig.defaultLocale = 'br';
 
@@ -59,12 +60,13 @@ export default function Home() {
     return (
       <>
         <Container>
+            <View style={{backgroundColor: '#393939'}}><HeaderComponent/></View>
             <Calendar 
               onDayPress={day => {
                 setSelected(day.dateString);
                 setSelectedDay(String(day.day))
                 setSelectedMonth(String(day.month))
-                console.log('selected day', day.day);
+                console.log('selected day', day);
               }}
 
               markedDates={{
@@ -83,60 +85,66 @@ export default function Home() {
                 monthTextColor: '#de0300',
                 arrowColor: '#E7E7E7',
                 textDayFontFamily: 'Poppins_400Regular',
-                textMonthFontFamily: 'Poppins_400Regular', // Substitua 'SuaFonteMes' pelo nome da fonte para meses
+                textMonthFontFamily: 'Poppins_700Regular', // Substitua 'SuaFonteMes' pelo nome da fonte para meses
                 textDayHeaderFontFamily: 'Poppins_500Regular',
                 textDayFontSize: 15,
-                textDayHeaderFontSize: 20,
+                textMonthFontSize: 25,
+                textDayHeaderFontSize: 18,
               }}
 
               style = {{
                 marginTop: 10,
                 marginBottom: 10,
               }}
+
             />
 
             <ViewContainer>
-              <ScrollView>
                 <Box>
                   <TextTitle>Expira dia {selectedDay}/{selectedMonth}</TextTitle>
-                  {dateTasks?.map((task, index) => (
-                    task.deadline === String(selected) && task.status === "TO DO" &&(
-                      <Cards
-                        key={index}
-                        task={task.name} // Substitua 'title' pelo nome correto do campo da tarefa
-                        descricao={task.description} // Substitua 'description' pelo nome correto do campo da tarefa
-                        status='error'
-                        value={task.status}
-                        statusColor="#de0300"
-                        date={task.deadline}
-                      />
-                    )
+                  <ScrollView>
+                    {dateTasks?.map((task, index) => (
+                      task.deadline === String(selected) && task.status === "TO DO" &&(
+                        <Cards
+                              id={task.id}
+                              key={index}
+                              task={task.name}
+                              descricao={task.description}
+                              status='error'
+                              value={"A Fazer"}
+                              statusColor="#de0300"
+                              deadline={task.deadline}
+                              priority={task.priority}
+                          />
+                      )
                     
-                  ))}
-
-                  {dateTasks?.map((task, index) => (
-                    task.deadline === String(selected) && task.status === "DOING" &&(
-                      <Cards
-                        key={index}
-                        task={task.name} // Substitua 'title' pelo nome correto do campo da tarefa
-                        descricao={task.description} // Substitua 'description' pelo nome correto do campo da tarefa
-                        status='warning'
-                        value={task.status}
-                        statusColor="#ebae11"
-                        date={task.deadline}
-                      />
-                    )
+                    ))}
+                    {dateTasks?.map((task, index) => (
+                      task.deadline === String(selected) && task.status === "DOING" &&(
+                        <Cards
+                              id={task.id}
+                              key={index}
+                              task={task.name}
+                              descricao={task.description}
+                              status='error'
+                              value={"Em progresso"}
+                              statusColor="#ebae11"
+                              deadline={task.deadline}
+                              priority={task.priority}
+                          />
+                      )
                     
-                  ))}
+                    ))}
+                  </ScrollView>
                   
 
                   {/* TODO: Checkbox task com repetição para a próxima sprint */}
                   {/* <Checkbox label= "Tarefa 1"/> */}
                 </Box>
-              </ScrollView>
             </ViewContainer>
             {/* <Menu/> */}
         </Container>
       </>
     );
+
 }

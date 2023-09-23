@@ -1,5 +1,6 @@
 import { Text } from "@rneui/themed";
 import { SafeAreaView, View } from "react-native";
+import CalendarHeader from "react-native-calendars/src/calendar/header";
 import {styled} from "styled-components/native";
 
 export const Container = styled(SafeAreaView)`
@@ -14,7 +15,7 @@ export const Box = styled(SafeAreaView)`
 
 export const ViewContainer = styled(View)`
   flex: 1;
-  background-color: #E7E7E7;
+  background-color: #fff;
   width: 100%;
   borderTopLeftRadius: 30px;
   borderTopRightRadius: 30px;
@@ -22,7 +23,7 @@ export const ViewContainer = styled(View)`
 `;
 
 export const TextTitle = styled(Text)`
-    color: #c74634;
+    color: #de0300;
     font-size: 22px;
     fontWeight: bold;
 `;

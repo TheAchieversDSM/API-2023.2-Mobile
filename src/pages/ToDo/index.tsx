@@ -5,7 +5,8 @@ import serviceTask from "../../service/task";
 import { useAuth } from "../../hooks/auth";
 import { decodeJsonWebToken } from "../../utils/utils";
 import { IGetTasksUserResp } from "../../interfaces/task";
-import { ScrollView } from "react-native";
+import { ScrollView, View } from "react-native";
+import { HeaderComponent } from "../../components/header";
 
 export default function ToDo() {
     const [open, setOpen] = useState(false);
@@ -32,6 +33,8 @@ export default function ToDo() {
     }, [userTasks]);
 
     return (
+        <>
+        <View style={{backgroundColor: '#393939'}}><HeaderComponent/></View>
         <Container>
             <ScrollView>
                 <TextStatus3>A Fazer</TextStatus3>
@@ -125,5 +128,6 @@ export default function ToDo() {
                     )}
             </ScrollView>
         </Container>
+        </>
     );
 }

@@ -9,6 +9,8 @@ import Input from '../../components/input/input';
 import serviceTask from '../../service/task';
 import { useAuth } from '../../hooks/auth';
 import React, { useState } from 'react';
+import { HeaderComponent } from '../../components/header';
+import { View } from 'react-native';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -79,12 +81,14 @@ export default function CreateTask() {
     }
 
     return (
+        <>
+        <View style={{backgroundColor: '#393939'}}><HeaderComponent/></View>
         <Container>
             <Input
                 placeholder='Insira o nome da tarefa'
                 onChange={(e) => setData({ ...data, name: e.nativeEvent.text })}
                 errorMsg={errorStatus.name ? "Nome é obrigatório" : ""}
-                color='#C74634'
+                color='#de0300'
                 textColor='#fff'
                 iconL='file-text-o'
             />
@@ -93,7 +97,7 @@ export default function CreateTask() {
                 placeholder='Insira a descrição da tarefa'
                 onChange={(e) => setData({ ...data, description: e.nativeEvent.text })}
                 errorMsg={errorStatus.description ? "Descrição é obrigatória" : ""}
-                color='#C74634'
+                color='#de0300'
                 textColor='#fff'
                 iconL='pencil-square-o'
                 multiline={true}
@@ -112,7 +116,7 @@ export default function CreateTask() {
                 color='#fff'
                 iconSelectedName='star'
                 iconName='staro'
-                iconColor='#C74634'
+                iconColor='#de0300'
                 iconSize={28}
                 width={335}
             />
@@ -122,7 +126,7 @@ export default function CreateTask() {
                 title='Selecione o prazo da tarefa'
                 onDateChange={(date) => { setData({ ...data, deadline: date }) }}
                 iconNameL='calendar-o'
-                iconColorL='#C74634'
+                iconColorL='#de0300'
                 iconColorR='grey'
                 iconNameR='angle-down'
                 value={data.deadline}
@@ -148,8 +152,8 @@ export default function CreateTask() {
             <ButtonContainer>
                 <Button
                     title='Criar tarefa'
-                    borderColor='#C74634'
-                    backgroundColor='#C74634'
+                    borderColor='#de0300'
+                    backgroundColor='#de0300'
                     type='solid'
                     onPress={() => handleSubmit(data)}
                 />
@@ -163,5 +167,6 @@ export default function CreateTask() {
                 />
             </ButtonContainer>
         </Container>
+        </>
     )
 }

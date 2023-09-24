@@ -8,6 +8,7 @@ import { IGetTasksUserResp } from '../../interfaces/task';
 import serviceTask from '../../service/task';
 import { Cards } from '../../components/cards/cards';
 import { HeaderComponent } from '../../components/header';
+import { ViewCards } from './cards';
 
 LocaleConfig.defaultLocale = 'br';
 
@@ -42,7 +43,6 @@ export default function Home() {
         const response = await serviceTask.getTaskUserDate({ userId: id, deadline: String(selected) });
         if (response) {
           setDateTasks(response.data);
-          console.log(response.data)
         } else {
           console.error("Erro ao buscar tarefas do usuário");
         }
@@ -63,7 +63,6 @@ export default function Home() {
                 setSelected(day.dateString);
                 setSelectedDay(String(day.day));
                 setSelectedMonth(String(day.month));
-                console.log(day)
               }}
 
               markedDates={{
@@ -102,17 +101,7 @@ export default function Home() {
                   <ScrollView>
                     {dateTasks ? dateTasks?.map((task, index) => (
                       task.deadline === String(selected) && (
-                          <Cards
-                              id={task.id}
-                              key={index}
-                              task={task.name}
-                              descricao={task.description}
-                              status='error'
-                              value={task.status}
-                              statusColor="#ff7b00"
-                              deadline={task.deadline}
-                              priority={task.priority}
-                          />
+                          <ViewCards {...task}/>
                       )
 
                     )) : <NoTasksText>Nenhuma tarefa expirada nessa data</NoTasksText>}

@@ -28,19 +28,21 @@ LocaleConfig.locales['br'] = {
 }
 
 export default function Home() {
-  const [selected, setSelected] = useState('');
-  const [selectedDay, setSelectedDay] = useState('');
-  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selected, setSelected] = useState<string>(new Date().toISOString().split('T')[0]); // Define a data atual como selecionada
+  const [selectedDay, setSelectedDay] = useState<string>('');
+  const [selectedMonth, setSelectedMonth] = useState<string>('');
   const [dateTasks, setDateTasks] = useState<IGetTasksUserResp[]>();
-  const {userToken} = useAuth()
-  const {id} = decodeJsonWebToken(String(userToken))
+  const { userToken } = useAuth();
+  const { id } = decodeJsonWebToken(String(userToken));
+  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     async function fetchUserDateTasks() {
       try {
         const response = await serviceTask.getTaskUserDate({ userId: id, deadline: String(selected) });
         if (response) {
-          setDateTasks(response.data.data);
+          setDateTasks(response.data);
+          console.log(response.data)
         } else {
           console.error("Erro ao buscar tarefas do usuário");
         }
@@ -50,7 +52,7 @@ export default function Home() {
     }
 
     fetchUserDateTasks();
-  }, []);
+  }, [selected, update]);
   
     return (
       <>
@@ -59,9 +61,9 @@ export default function Home() {
             <Calendar 
               onDayPress={day => {
                 setSelected(day.dateString);
-                setSelectedDay(String(day.day))
-                setSelectedMonth(String(day.month))
-                console.log('selected day', day);
+                setSelectedDay(String(day.day));
+                setSelectedMonth(String(day.month));
+                console.log(day)
               }}
 
               markedDates={{
@@ -99,15 +101,15 @@ export default function Home() {
                   <TextTitle>Expira dia {selectedDay}/{selectedMonth}</TextTitle>
                   <ScrollView>
                     {dateTasks ? dateTasks?.map((task, index) => (
-                      task.deadline === String(selected) &&(
+                      task.deadline === String(selected) && (
                           <Cards
                               id={task.id}
                               key={index}
                               task={task.name}
                               descricao={task.description}
                               status='error'
-                              value={"A Fazer"}
-                              statusColor="#de0300"
+                              value={task.status}
+                              statusColor="#ff7b00"
                               deadline={task.deadline}
                               priority={task.priority}
                           />
@@ -121,7 +123,6 @@ export default function Home() {
                   {/* <Checkbox label= "Tarefa 1"/> */}
                 </Box>
             </ViewContainer>
-            {/* <Menu/> */}
         </Container>
       </>
     );

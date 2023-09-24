@@ -149,7 +149,7 @@ export function SignUp() {
                     </InputsContainer>
                     <ButtonContainer>
                         <Button
-                            title='Sign Up'
+                            title='Cadastrar'
                             type='solid'
                             borderColor='#DE0300'
                             backgroundColor='#DE0300'

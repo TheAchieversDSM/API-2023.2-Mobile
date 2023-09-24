@@ -1,19 +1,22 @@
-import {Overlay, Text} from "@rneui/themed";
+import { ScrollView, View } from "react-native";
+import { Overlay, Text } from "@rneui/themed";
 import styled from "styled-components";
-import {View} from "react-native";
 
-export const CardTask = styled(View)`
+export const CardTask = styled(View).attrs({
+  style: {
+    shadowColor: '#000',
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 5,
+  }
+})`
   height: 15px;
   background-color: #fff;
   height: 50px;
   border-radius: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
-  shadowColor: '#000';
-  shadowOpacity: 0.5;
-  shadowRadius: 4;
-  elevation: 5;
-`;
+  `;
 
 export const StatusColor = styled(View)`
   height: 8px;
@@ -55,7 +58,12 @@ export const TaskDescT = styled(Text)`
 `;
 
 export const Modal = styled(Overlay)`
+  width: 320px;
   padding: 60px;
+`;
+
+export const ViewScroll = styled(ScrollView)`
+  width: 320px;
 `;
 
 export const ViewIcons = styled(View)`
@@ -81,6 +89,7 @@ export const ViewData = styled(View)`
 `;
 
 export const GeneralView = styled(View)`
+  width: 320px;
   padding-top: 5px;
   padding-left: 10px;
 `;

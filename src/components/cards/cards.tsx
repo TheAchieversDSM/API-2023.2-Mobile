@@ -12,6 +12,7 @@ import { Icon } from '@rneui/themed';
 import Input from '../input/input';
 import { useState } from 'react';
 import * as S from './styled';
+import { ViewScroll } from './styled';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -90,106 +91,108 @@ export const Cards = (props: ICards) => {
             </TouchableOpacity>
 
             <S.Modal isVisible={visible} onBackdropPress={toggleOverlay}>
-                <S.GeneralView>
-                    <S.ViewCard>
-                        <S.ViewIcons>
-                            <S.ViewIcon>
-                                <Icon
-                                    onPress={() => handleSubmit(data)}
-                                    name='check'
-                                    color='#000'
-                                    size={30}
-                                />
-                                <Icon
-                                    onPress={() => { setVisible(false); setEdit(!edit) }}
-                                    name='close'
-                                    color='#000'
-                                    size={30}
-                                />
-                            </S.ViewIcon>
-                        </S.ViewIcons>
-                        <S.ViewName>
-                            <S.TaskTitle>{props.task}</S.TaskTitle>
-                        </S.ViewName>
-                    </S.ViewCard>
+                <ViewScroll>
+                    <S.GeneralView>
+                        <S.ViewCard>
+                            <S.ViewIcons>
+                                <S.ViewIcon>
+                                    <Icon
+                                        onPress={() => handleSubmit(data)}
+                                        name='check'
+                                        color='#000'
+                                        size={30}
+                                    />
+                                    <Icon
+                                        onPress={() => { setVisible(false); setEdit(!edit) }}
+                                        name='close'
+                                        color='#000'
+                                        size={30}
+                                    />
+                                </S.ViewIcon>
+                            </S.ViewIcons>
+                            <S.ViewName>
+                                <S.TaskTitle>{props.task}</S.TaskTitle>
+                            </S.ViewName>
+                        </S.ViewCard>
 
-                    <S.TaskDescT>Nome:</S.TaskDescT>
-                    <S.InputView>
-                        <Input
-                            placeholder={''}
-                            value={name}
-                            onChange={(e) => { setName(e.nativeEvent.text) }}
-                            textColor='#000'
-                            color='#C74634'
-                            iconL='file-text-o'
+                        <S.TaskDescT>Nome:</S.TaskDescT>
+                        <S.InputView>
+                            <Input
+                                placeholder={''}
+                                value={name}
+                                onChange={(e) => { setName(e.nativeEvent.text) }}
+                                textColor='#000'
+                                color='#C74634'
+                                iconL='file-text-o'
+                            />
+                        </S.InputView>
+
+                        <S.TaskDescT>Status: </S.TaskDescT>
+                        <DropdownComponent
+                            placeholder={props.value}
+                            width={300}
+                            data={stts}
+                            value={priorities}
+                            onValueChange={(selectedItem) => {
+                                setData({ ...data, status: selectedItem })
+                            }}
+                            iconColor='#C74634'
+                            iconSelectedName='tags'
+                            iconName='tagso'
                         />
-                    </S.InputView>
 
-                    <S.TaskDescT>Status: </S.TaskDescT>
-                    <DropdownComponent
-                        placeholder={props.value}
-                        width={300}
-                        data={stts}
-                        value={priorities}
-                        onValueChange={(selectedItem) => {
-                            setData({ ...data, status: selectedItem })
-                        }}
-                        iconColor='#C74634'
-                        iconSelectedName='tags'
-                        iconName='tagso'
-                    />
-
-                    <S.TaskDescT>Prioridade: </S.TaskDescT>
-                    <DropdownComponent
-                        placeholder={
-                            props.priority === 'High' ? 'Alta'
-                                : props.priority === 'Medium' ? 'Média'
-                                    : props.priority === 'Low' ? 'Baixa'
-                                        : 'Selecione uma prioridade'
-                        }
-                        width={300}
-                        data={priority}
-                        value={priorities}
-                        onValueChange={(selectedItem) => {
-                            setData({ ...data, priority: selectedItem })
-                        }}
-                        iconSelectedName='star'
-                        iconColor='#C74634'
-                        iconName='staro'
-                    />
-
-                    <S.ViewData>
-                        <S.TaskDescT>Expira em: </S.TaskDescT>
-                        <S.TaskDesc>Data atual: {props.deadline}</S.TaskDesc>
-                        <DatePicker
-                            onDateChange={(date) => { setDate(date); setData({ ...data, deadline: date }) }}
-                            style={{ width: 300, color: 'black' }}
-                            iconNameL='calendar-o'
-                            iconColorL='#C74634'
-                            iconColorR='grey'
-                            iconNameR='angle-down'
-                            color='black'
-                            title='Data de expiração'
-                            value={date}
+                        <S.TaskDescT>Prioridade: </S.TaskDescT>
+                        <DropdownComponent
+                            placeholder={
+                                props.priority === 'High' ? 'Alta'
+                                    : props.priority === 'Medium' ? 'Média'
+                                        : props.priority === 'Low' ? 'Baixa'
+                                            : 'Selecione uma prioridade'
+                            }
+                            width={300}
+                            data={priority}
+                            value={priorities}
+                            onValueChange={(selectedItem) => {
+                                setData({ ...data, priority: selectedItem })
+                            }}
+                            iconSelectedName='star'
+                            iconColor='#C74634'
+                            iconName='staro'
                         />
-                    </S.ViewData>
 
-                    <S.TaskDescT>Descrição:</S.TaskDescT>
-                    <S.InputView>
-                        <Input
-                            placeholder={''}
-                            value={description}
-                            onChange={(e) => { setDescription(e.nativeEvent.text) }}
-                            textColor='#000'
-                            color='#C74634'
-                            iconL='pencil-square-o'
-                            multiline={true}
-                            numberLines={4}
-                            width={50}
-                            height={80}
-                        />
-                    </S.InputView>
-                </S.GeneralView>
+                        <S.ViewData>
+                            <S.TaskDescT>Expira em: </S.TaskDescT>
+                            <S.TaskDesc>Data atual: {props.deadline}</S.TaskDesc>
+                            <DatePicker
+                                onDateChange={(date) => { setDate(date); setData({ ...data, deadline: date }) }}
+                                style={{ width: 300, color: 'black' }}
+                                iconNameL='calendar-o'
+                                iconColorL='#C74634'
+                                iconColorR='grey'
+                                iconNameR='angle-down'
+                                color='black'
+                                title='Data de expiração'
+                                value={date}
+                            />
+                        </S.ViewData>
+
+                        <S.TaskDescT>Descrição:</S.TaskDescT>
+                        <S.InputView>
+                            <Input
+                                placeholder={''}
+                                value={description}
+                                onChange={(e) => { setDescription(e.nativeEvent.text) }}
+                                textColor='#000'
+                                color='#C74634'
+                                iconL='pencil-square-o'
+                                multiline={true}
+                                numberLines={4}
+                                width={50}
+                                height={80}
+                            />
+                        </S.InputView>
+                    </S.GeneralView>
+                </ViewScroll>
             </S.Modal>
         </View>) :
         (<View>

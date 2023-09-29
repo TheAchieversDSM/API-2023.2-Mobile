@@ -13,6 +13,8 @@ import Input from '../input/input';
 import { useState } from 'react';
 import * as S from './styled';
 import { ViewScroll } from './styled';
+import { Divider } from '@rneui/base';
+import { Checkbox } from '../checkbox/checkbox';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -244,7 +246,15 @@ export const Cards = (props: ICards) => {
 
                     <S.ViewData>
                         <S.TaskDescT>Descrição:</S.TaskDescT>
-                        <S.TaskDesc>{props.descricao}</S.TaskDesc>
+                        <S.TaskDescT>{props.descricao}</S.TaskDescT>
+
+                        <Divider />
+                        <View style={{ height: 20 }}></View>
+
+                        <S.TaskDescT>Subtarefas:</S.TaskDescT>
+                        <Checkbox 
+                            label={'nome da sub'}                        
+                        />
                     </S.ViewData>
                 </S.GeneralView>
             </S.Modal>

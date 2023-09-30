@@ -1,20 +1,22 @@
+import { IGetSubtasks } from '../../interfaces/subtask';
 import { DropdownComponent } from '../dropdown/dropdown';
 import { decodeJsonWebToken } from "../../utils/utils";
+import { ICheckbox } from '../../interfaces/checkbox';
 import { IUpdateTask } from "../../interfaces/task";
+import serviceSubtask from '../../service/subtask';
 import { TouchableOpacity } from 'react-native';
 import { ICards } from '../../interfaces/cards';
 import serviceTask from "../../service/task";
+import { useEffect, useState } from 'react';
 import { DatePicker } from '../datepicker';
 import { useAuth } from "../../hooks/auth";
 import React, { View } from 'react-native';
 import { Priority } from './priorities';
+import { Divider } from '@rneui/base';
+import { ViewScroll } from './styled';
 import { Icon } from '@rneui/themed';
 import Input from '../input/input';
-import { useState } from 'react';
 import * as S from './styled';
-import { ViewScroll } from './styled';
-import { Divider } from '@rneui/base';
-import { Checkbox } from '../checkbox/checkbox';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -42,6 +44,8 @@ export const Cards = (props: ICards) => {
     const [priorities, setPriorities] = useState<string | undefined>(undefined);
 
     const [data, setData] = useState({} as IUpdateTask)
+
+    const [subtask, setSubtask] = useState<IGetSubtasks[]>([])
 
     const [date, setDate] = useState(props.deadline)
 
@@ -73,7 +77,7 @@ export const Cards = (props: ICards) => {
                     userId: id,
                     id: props.id,
                     timeSpent: 0,
-                    done: false
+                    done: false,
                 })
             }
             setEdit(false)
@@ -82,6 +86,24 @@ export const Cards = (props: ICards) => {
             console.error(error)
         }
     }
+
+    useEffect(() => {
+        async function fetchTaskSubtasks() {
+            try {
+                const response = await serviceSubtask.getTaskSubtask(props.id);                
+                if (response) {
+                    setSubtask(response.data)
+                    console.log(subtask)
+                } else {
+                    console.error("Erro ao buscar subtarefas da tarefa");
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        fetchTaskSubtasks();
+    }, [props.id])
 
     return edit ? (
         <View>
@@ -248,13 +270,21 @@ export const Cards = (props: ICards) => {
                         <S.TaskDescT>Descrição:</S.TaskDescT>
                         <S.TaskDescT>{props.descricao}</S.TaskDescT>
 
-                        <Divider />
-                        <View style={{ height: 20 }}></View>
+                        {subtask?.length === 0 ? <S.TaskDescT>Não há subtarefas</S.TaskDescT> : <View>
+                            <Divider />
+                            <View style={{ height: 20 }}></View>
 
-                        <S.TaskDescT>Subtarefas:</S.TaskDescT>
-                        <Checkbox 
-                            label={'nome da sub'}                        
-                        />
+                            <S.TaskDescT>Subtarefas:</S.TaskDescT>
+
+                            {subtask && subtask?.map((item: IGetSubtasks) => (
+
+                                <S.TaskDesc>
+                                    <S.TaskDescT>{item.name}</S.TaskDescT>
+                                </S.TaskDesc>
+                            ))}
+                        </View>
+                        }
+
                     </S.ViewData>
                 </S.GeneralView>
             </S.Modal>

@@ -4,36 +4,49 @@ import { ITimeModal } from "../../interfaces/timermodal";
 import Input from "../input/input";
 import { Button } from "../button/button";
 import { timeCalculate } from "../../utils/utils";
+import serviceTask from "../../service/task";
 
-export const TimerModal = ({ view, onBackdropPress, taskName }: ITimeModal) => {
+export const TimerModal = ({ view, onBackdropPress, task }: ITimeModal) => {
     const [state, setState] = useState({
         time: "",
         newTime: "",
-        send: false
+        send: false,
+        value: 0
     });
+
     useEffect(() => {
         const regex: RegExp = /(\d+[wdhm])/g;
         const matches: RegExpMatchArray | null = state.time.match(regex);
         if (state.time == "") {
-            setState({ ...state, newTime: "", send: true })
+            setState({ ...state, newTime: "", send: true, value: 0 })
         }
         if (matches && matches.length > 0) {
             const valoresEncontrados: string = matches.join(" ");
             const newTime = timeCalculate(valoresEncontrados)
-            setState({ ...state, newTime: newTime.msg, send: false })
-        }else{
-            setState({ ...state, newTime: "", send: true })
+            setState({ ...state, newTime: newTime.msg, send: false, value: newTime.time })
+        } else {
+            setState({ ...state, newTime: "", send: true, value: 0 })
         }
     }, [state.time])
 
+    const handleSubmitTime = async () => {
+        const newValue = task.timeSpent + state.value
+        await serviceTask.updateTask({
+            ...task,
+            timeSpent: newValue,
+        })
+        handleCloseModal()
+    }
+
     const handleCloseModal = () => {
         onBackdropPress()
-        setState({ time: "", newTime: "", send: false  })
+        setState({ time: "", newTime: "", send: false, value: 0 })
     }
+    
     return (
         <OverlaySyld isVisible={view} onBackdropPress={handleCloseModal}>
             <Container>
-                <TaskName>{taskName}</TaskName>
+                <TaskName>{task.name}</TaskName>
                 <Input
                     iconL='clock-o'
                     errorStyle={{ marginLeft: 30, fontSize: 15, marginTop: -5 }}
@@ -61,7 +74,7 @@ export const TimerModal = ({ view, onBackdropPress, taskName }: ITimeModal) => {
                     type="clear"
                     borderColor="transparent"
                     backgroundColor="transparent"
-                    onPress={() => console.log("Salvar")}
+                    onPress={handleSubmitTime}
                     disable={state.send}
                 />
                 <Button

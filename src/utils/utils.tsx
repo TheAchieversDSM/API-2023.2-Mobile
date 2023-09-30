@@ -61,12 +61,15 @@ export function comparePriority(a: IGetTasksUserResp, b: IGetTasksUserResp): num
   return priorityA - priorityB;
 }
 
+export function calculateDateWithTime(time: number): string {
+  const dias = time / 86400;
+  return dias === Math.floor(dias) ? `${dias} Dias` : `${dias.toFixed(2)} Dias`
+}
+
 export function timeCalculate(value: string): ITimeCaculate {
   const timeFind: string[] = value.split(" ");
   let resultadoEmSegundos = 0;
   let mensagem = "";
-
-
 
   const fatoresDeConversao: { [key: string]: number } = {
     w: 604800,
@@ -74,7 +77,6 @@ export function timeCalculate(value: string): ITimeCaculate {
     h: 3600,
     m: 60
   };
-
 
   timeFind.forEach((time) => {
     const quantidade = parseInt(time);
@@ -84,9 +86,7 @@ export function timeCalculate(value: string): ITimeCaculate {
     }
   });
 
-
-  const dias = resultadoEmSegundos / 86400;
-  mensagem = dias === Math.floor(dias) ? `${dias} Dias` : `${dias.toFixed(2)} Dias`;
+  mensagem = calculateDateWithTime(resultadoEmSegundos);
 
   return { msg: mensagem, time: resultadoEmSegundos}
 }

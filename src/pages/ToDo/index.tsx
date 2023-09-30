@@ -41,6 +41,7 @@ export default function ToDo() {
                     ?.filter((task) => task.status === "TO DO")
                     .map((task, index) => (
                         <Cards
+                            timeSpent={task.timeSpent}
                             id={task.id}
                             key={task.id}
                             task={task.name}
@@ -49,6 +50,7 @@ export default function ToDo() {
                             value={"A Fazer"}
                             statusColor="#de0300"
                             deadline={task.deadline}
+                            taskStatus={task.status}
                             priority={task.priority}
                         />
                     )
@@ -59,6 +61,7 @@ export default function ToDo() {
                     ?.filter((task) => task.status === "DOING")
                     .map((task, index) => (
                         <Cards
+                            timeSpent={task.timeSpent}
                             id={task.id}
                             key={task.id}
                             task={task.name}
@@ -68,6 +71,7 @@ export default function ToDo() {
                             statusColor="#ebae11"
                             deadline={task.deadline}
                             priority={task.priority}
+                            taskStatus={task.status}
                         />
                     )
                     )}
@@ -77,12 +81,14 @@ export default function ToDo() {
                     ?.filter((task) => task.status === "DONE")
                     .map((task, index) => (
                         <Cards
+                            timeSpent={task.timeSpent}
                             id={task.id}
                             key={task.id}
                             task={task.name}
                             descricao={task.description}
                             status='success'
                             value={"Concluído"}
+                            taskStatus={task.status}
                             statusColor="#67d207"
                             deadline={task.deadline}
                             priority={task.priority}

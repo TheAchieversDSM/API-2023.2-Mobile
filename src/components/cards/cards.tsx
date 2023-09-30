@@ -1,5 +1,5 @@
 import { DropdownComponent } from '../dropdown/dropdown';
-import { decodeJsonWebToken } from "../../utils/utils";
+import { calculateDateWithTime, decodeJsonWebToken } from "../../utils/utils";
 import { IUpdateTask } from "../../interfaces/task";
 import { TouchableOpacity } from 'react-native';
 import { ICards } from '../../interfaces/cards';
@@ -81,7 +81,7 @@ export const Cards = (props: ICards) => {
                     status: data?.status,
                     userId: id,
                     id: props.id,
-                    timeSpent: 0,
+                    timeSpent: props.timeSpent,
                     done: false
                 })
             }
@@ -172,7 +172,6 @@ export const Cards = (props: ICards) => {
                         />
 
                         <S.ViewData>
-                            <S.TaskDescT>Expira em: </S.TaskDescT>
                             <S.TaskDesc>Data atual: {props.deadline}</S.TaskDesc>
                             <DatePicker
                                 onDateChange={(date) => { setDate(date); setData({ ...data, deadline: date }) }}
@@ -217,7 +216,14 @@ export const Cards = (props: ICards) => {
             <TimerModal
                 view={timer}
                 onBackdropPress={toggleTimerModal}
-                taskName={props.task}
+                task={{
+                    ...props,
+                    userId: id,
+                    description: props.descricao,
+                    name: props.task,
+                    status: props.taskStatus,
+                    done: false /* @REVIEW */
+                }}
             />
 
             <S.Modal isVisible={visible} onBackdropPress={toggleOverlay}>
@@ -260,6 +266,7 @@ export const Cards = (props: ICards) => {
                         </S.ViewName>
                     </S.ViewCard>
 
+                    <S.TaskDescT>Tempo Gasto: {calculateDateWithTime(props.timeSpent)}</S.TaskDescT>
 
                     <S.TaskDescT>Status: {props.value}</S.TaskDescT>
 

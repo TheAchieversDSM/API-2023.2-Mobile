@@ -1,5 +1,7 @@
+import { IUpdateTask } from "./task";
+
 export interface ITimeModal {
-  taskName: string;
+  task: IUpdateTask;
   view: boolean;
   onBackdropPress: () => void;
 }

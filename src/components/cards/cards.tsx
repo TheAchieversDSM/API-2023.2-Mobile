@@ -17,6 +17,7 @@ import { ViewScroll } from './styled';
 import { Icon } from '@rneui/themed';
 import Input from '../input/input';
 import * as S from './styled';
+import { Checkbox } from '../checkbox/checkbox';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -51,6 +52,8 @@ export const Cards = (props: ICards) => {
 
     const [edit, setEdit] = useState(false);
 
+    const [reloadSubtasks, setReloadSubtasks] = useState(false);
+
     const toggleOverlay = () => {
         setVisible(!visible)
     };
@@ -64,6 +67,16 @@ export const Cards = (props: ICards) => {
             console.error(error)
         }
     }
+
+    const handleCheck = async (subtaskId: number, newCheck: boolean) => {
+        try {
+            await serviceSubtask.updateSubtaskStatus(subtaskId, newCheck)
+
+            setReloadSubtasks(true);
+        } catch (error) {
+            console.error("Erro ao atualizar o estado da subtarefa:", error)
+        }
+    };
 
     const handleSubmit = async (data: IUpdateTask) => {
         try {
@@ -90,10 +103,11 @@ export const Cards = (props: ICards) => {
     useEffect(() => {
         async function fetchTaskSubtasks() {
             try {
-                const response = await serviceSubtask.getTaskSubtask(props.id);                
+                const response = await serviceSubtask.getTaskSubtask(props.id);
                 if (response) {
                     setSubtask(response.data)
-                    console.log(subtask)
+
+                    return response.data;
                 } else {
                     console.error("Erro ao buscar subtarefas da tarefa");
                 }
@@ -102,8 +116,13 @@ export const Cards = (props: ICards) => {
             }
         }
 
+        if (reloadSubtasks) {
+            fetchTaskSubtasks();
+            setReloadSubtasks(false);
+        }
+
         fetchTaskSubtasks();
-    }, [props.id])
+    }, [props.id, reloadSubtasks])
 
     return edit ? (
         <View>
@@ -277,10 +296,12 @@ export const Cards = (props: ICards) => {
                             <S.TaskDescT>Subtarefas:</S.TaskDescT>
 
                             {subtask && subtask?.map((item: IGetSubtasks) => (
-
-                                <S.TaskDesc>
-                                    <S.TaskDescT>{item.name}</S.TaskDescT>
-                                </S.TaskDesc>
+                                <Checkbox
+                                    key={item.id}
+                                    label={item.name}
+                                    check={item.done}
+                                    onCheck={() => handleCheck(item.id, !item.done)}
+                                />
                             ))}
                         </View>
                         }

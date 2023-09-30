@@ -30,35 +30,24 @@ class Task {
     async getTaskSubtask(taskId: number) {
         try {
             const response = await api.get(`/subtask/getByTask/${taskId}`);
-            
-            console.log(response.data)
-
+        
             return response.data;
         } catch (error) {
             console.error(error);
         }
     }
 
-    /* async getTaskUserDate(data: IGetTasksUserDate) {
+    async updateSubtaskStatus(subtaskId: number, newCheck: boolean) {
         try {
-            const response = await api.get(`/task/getExpiredTasks/${data.userId}/${data.deadline}`);
-            return response.data;
+            const response = await api.put(`/subtask/update/${subtaskId}`, {done: newCheck});
 
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    async updateTask(data: IUpdateTask) {
-        try {
-            const response = await api.put(`/task/update/${data.id}`, data);
             return response;
         } catch (error) {
             console.error(error);
         }
     }
 
-    async deleteTask(id: number) {
+    /* async deleteTask(id: number) {
         try {
             const response = await api.delete(`/task/delete/${id}`);
             return response;

@@ -6,6 +6,7 @@ export interface ICreateSubtasks {
 }
 
 export interface IGetSubtasks {
+    id: number;
     name: string;
     done: boolean;
 }

@@ -1,5 +1,5 @@
 export interface ICheckbox{
     label: string
     check: boolean
-    onCheck?: () => void
+    onCheck: (newCheck: boolean) => void;
 }

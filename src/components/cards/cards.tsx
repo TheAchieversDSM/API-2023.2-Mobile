@@ -13,6 +13,10 @@ import Input from '../input/input';
 import { useState } from 'react';
 import * as S from './styled';
 import { ViewScroll } from './styled';
+import { IconModel } from '../icons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { TimerModal } from '../timecontroll';
+
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -45,9 +49,16 @@ export const Cards = (props: ICards) => {
 
     const [edit, setEdit] = useState(false);
 
+    const [timer, setTimer] = useState(false)
+
     const toggleOverlay = () => {
         setVisible(!visible)
     };
+
+    const toggleTimerModal = () => {
+        setTimer(!timer)
+        setVisible(!visible)
+    }
 
     const handleDelete = async () => {
         try {
@@ -203,28 +214,44 @@ export const Cards = (props: ICards) => {
                 </S.CardTask>
             </TouchableOpacity>
 
+            <TimerModal
+                view={timer}
+                onBackdropPress={toggleTimerModal}
+                taskName={props.task}
+            />
+
             <S.Modal isVisible={visible} onBackdropPress={toggleOverlay}>
                 <S.GeneralView>
                     <S.ViewCard>
                         <S.ViewIcons>
                             <S.ViewIcon>
-                                <Icon
+                                <IconModel
                                     onPress={() => handleDelete()}
-                                    name='delete'
-                                    color='#bd1310'
-                                    size={30}
+                                    IconColor={"#bd1310"}
+                                    IconSize={24}
+                                    icon='FontAwesome'
+                                    iconName='trash'
                                 />
-                                <Icon
+                                <IconModel
+                                    onPress={toggleTimerModal}
+                                    IconColor={"#000"}
+                                    IconSize={24}
+                                    icon={"AntDesign"}
+                                    iconName={"hourglass"}
+                                />
+                                <IconModel
                                     onPress={() => setEdit(!edit)}
-                                    name='edit'
-                                    color='#000'
-                                    size={30}
+                                    IconColor={"#000"}
+                                    IconSize={24}
+                                    icon='MaterialIcons'
+                                    iconName='edit'
                                 />
-                                <Icon
+                                <IconModel
                                     onPress={() => setVisible(false)}
-                                    name='close'
-                                    color='#000'
-                                    size={30}
+                                    IconColor={"#000"}
+                                    IconSize={24}
+                                    icon='FontAwesome'
+                                    iconName='close'
                                 />
                             </S.ViewIcon>
                         </S.ViewIcons>

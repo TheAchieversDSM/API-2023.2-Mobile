@@ -4,6 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 import { ICreateUser } from '../interfaces/user';
 import { APP_SECRET } from "@env";
 import jwt_decode from 'jwt-decode';
+import { ITimeCaculate } from '../interfaces/functions';
 
 export async function getItem(key: string): Promise<string | null> {
   const value = await SecureStore.getItemAsync(key)
@@ -58,4 +59,34 @@ export function comparePriority(a: IGetTasksUserResp, b: IGetTasksUserResp): num
   const priorityA = prioritiesOrder[a.priority];
   const priorityB = prioritiesOrder[b.priority];
   return priorityA - priorityB;
+}
+
+export function timeCalculate(value: string): ITimeCaculate {
+  const timeFind: string[] = value.split(" ");
+  let resultadoEmSegundos = 0;
+  let mensagem = "";
+
+
+
+  const fatoresDeConversao: { [key: string]: number } = {
+    w: 604800,
+    d: 86400,
+    h: 3600,
+    m: 60
+  };
+
+
+  timeFind.forEach((time) => {
+    const quantidade = parseInt(time);
+    const unidade = time.slice(-1);
+    if (!isNaN(quantidade) && unidade in fatoresDeConversao) {
+      resultadoEmSegundos += quantidade * fatoresDeConversao[unidade];
+    }
+  });
+
+
+  const dias = resultadoEmSegundos / 86400;
+  mensagem = dias === Math.floor(dias) ? `${dias} Dias` : `${dias.toFixed(2)} Dias`;
+
+  return { msg: mensagem, time: resultadoEmSegundos}
 }

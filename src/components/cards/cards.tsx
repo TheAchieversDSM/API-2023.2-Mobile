@@ -1,11 +1,11 @@
 import { IGetSubtasks } from '../../interfaces/subtask';
 import { DropdownComponent } from '../dropdown/dropdown';
 import { decodeJsonWebToken } from "../../utils/utils";
-import { ICheckbox } from '../../interfaces/checkbox';
 import { IUpdateTask } from "../../interfaces/task";
 import serviceSubtask from '../../service/subtask';
 import { TouchableOpacity } from 'react-native';
 import { ICards } from '../../interfaces/cards';
+import { Checkbox } from '../checkbox/checkbox';
 import serviceTask from "../../service/task";
 import { useEffect, useState } from 'react';
 import { DatePicker } from '../datepicker';
@@ -17,7 +17,6 @@ import { ViewScroll } from './styled';
 import { Icon } from '@rneui/themed';
 import Input from '../input/input';
 import * as S from './styled';
-import { Checkbox } from '../checkbox/checkbox';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -289,21 +288,23 @@ export const Cards = (props: ICards) => {
                         <S.TaskDescT>Descrição:</S.TaskDescT>
                         <S.TaskDescT>{props.descricao}</S.TaskDescT>
 
-                        {subtask?.length === 0 ? <S.TaskDescT>Não há subtarefas</S.TaskDescT> : <View>
-                            <Divider />
-                            <View style={{ height: 20 }}></View>
+                        <Divider />
+                        <View style={{ height: 20 }}></View>
 
-                            <S.TaskDescT>Subtarefas:</S.TaskDescT>
+                        {subtask?.length === 0 ? <S.TaskDescT>Não há subtarefas</S.TaskDescT> :
+                            <View>
+                                <S.TaskDescT>Subtarefas:</S.TaskDescT>
 
-                            {subtask && subtask?.map((item: IGetSubtasks) => (
-                                <Checkbox
-                                    key={item.id}
-                                    label={item.name}
-                                    check={item.done}
-                                    onCheck={() => handleCheck(item.id, !item.done)}
-                                />
-                            ))}
-                        </View>
+                                {subtask && subtask?.map((item: IGetSubtasks) => (
+                                    <View key={item.id}>
+                                        <Checkbox
+                                            label={item.name}
+                                            check={item.done}
+                                            onCheck={() => handleCheck(item.id, !item.done)}
+                                        />
+                                    </View>
+                                ))}
+                            </View>
                         }
 
                     </S.ViewData>

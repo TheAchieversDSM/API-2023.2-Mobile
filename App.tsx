@@ -1,6 +1,6 @@
 import { ActivityIndicator, LogBox } from 'react-native';
 import React, { useEffect, useState } from "react";
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components/native';
 import { AuthProvider } from './src/hooks/auth';
 import fontsLoaded from './src/utils/fonts';
 import theme from './src/assets/styles';

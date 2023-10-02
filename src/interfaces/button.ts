@@ -9,4 +9,5 @@ export interface IButton {
     color?: string;
     type?: "solid" | "outline" | "clear";
     onPress: () => void;
+    disable?: boolean
 }

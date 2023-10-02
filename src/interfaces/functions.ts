@@ -3,3 +3,8 @@ export interface IResponseCadastro {
   erro: string;
   taskId?: number;
 }
+
+export interface ITimeCaculate {
+  msg: string;
+  time: number;
+}

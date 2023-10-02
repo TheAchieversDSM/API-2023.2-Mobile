@@ -14,6 +14,7 @@ export const Button = (props: IButton) => {
                 color={props.color}
                 type={props.type}
                 fontSize={props.fontSize}
+                disabled={false || props.disable}
             />
         </View>
     )

@@ -20,6 +20,7 @@ export interface IGetTasksUserResp {
     name: string;
     description: string;
     priority: 'High' | 'Medium' | 'Low';
+    timeSpent: number;
 }
 
 export interface IGetTasksUserDate {

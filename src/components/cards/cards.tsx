@@ -1,6 +1,6 @@
 import { IGetSubtasks } from '../../interfaces/subtask';
 import { DropdownComponent } from '../dropdown/dropdown';
-import { decodeJsonWebToken } from "../../utils/utils";
+import { calculateDateWithTime, decodeJsonWebToken } from "../../utils/utils";
 import { IUpdateTask } from "../../interfaces/task";
 import serviceSubtask from '../../service/subtask';
 import { TouchableOpacity } from 'react-native';
@@ -17,6 +17,10 @@ import { ViewScroll } from './styled';
 import { Icon } from '@rneui/themed';
 import Input from '../input/input';
 import * as S from './styled';
+import { IconModel } from '../icons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { TimerModal } from '../timecontroll';
+
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -52,10 +56,16 @@ export const Cards = (props: ICards) => {
     const [edit, setEdit] = useState(false);
 
     const [reloadSubtasks, setReloadSubtasks] = useState(false);
+    const [timer, setTimer] = useState(false)
 
     const toggleOverlay = () => {
         setVisible(!visible)
     };
+
+    const toggleTimerModal = () => {
+        setTimer(!timer)
+        setVisible(!visible)
+    }
 
     const handleDelete = async () => {
         try {
@@ -88,8 +98,8 @@ export const Cards = (props: ICards) => {
                     status: data?.status,
                     userId: id,
                     id: props.id,
-                    timeSpent: 0,
-                    done: false,
+                    timeSpent: props.timeSpent,
+                    done: false
                 })
             }
             setEdit(false)
@@ -203,7 +213,6 @@ export const Cards = (props: ICards) => {
                         />
 
                         <S.ViewData>
-                            <S.TaskDescT>Expira em: </S.TaskDescT>
                             <S.TaskDesc>Data atual: {props.deadline}</S.TaskDesc>
                             <DatePicker
                                 onDateChange={(date) => { setDate(date); setData({ ...data, deadline: date }) }}
@@ -245,28 +254,51 @@ export const Cards = (props: ICards) => {
                 </S.CardTask>
             </TouchableOpacity>
 
+            <TimerModal
+                view={timer}
+                onBackdropPress={toggleTimerModal}
+                task={{
+                    ...props,
+                    userId: id,
+                    description: props.descricao,
+                    name: props.task,
+                    status: props.taskStatus,
+                    done: false /* @REVIEW */
+                }}
+            />
+
             <S.Modal isVisible={visible} onBackdropPress={toggleOverlay}>
                 <S.GeneralView>
                     <S.ViewCard>
                         <S.ViewIcons>
                             <S.ViewIcon>
-                                <Icon
+                                <IconModel
                                     onPress={() => handleDelete()}
-                                    name='delete'
-                                    color='#bd1310'
-                                    size={30}
+                                    IconColor={"#bd1310"}
+                                    IconSize={24}
+                                    icon='FontAwesome'
+                                    iconName='trash'
                                 />
-                                <Icon
+                                <IconModel
+                                    onPress={toggleTimerModal}
+                                    IconColor={"#000"}
+                                    IconSize={24}
+                                    icon={"AntDesign"}
+                                    iconName={"hourglass"}
+                                />
+                                <IconModel
                                     onPress={() => setEdit(!edit)}
-                                    name='edit'
-                                    color='#000'
-                                    size={30}
+                                    IconColor={"#000"}
+                                    IconSize={24}
+                                    icon='MaterialIcons'
+                                    iconName='edit'
                                 />
-                                <Icon
+                                <IconModel
                                     onPress={() => setVisible(false)}
-                                    name='close'
-                                    color='#000'
-                                    size={30}
+                                    IconColor={"#000"}
+                                    IconSize={24}
+                                    icon='FontAwesome'
+                                    iconName='close'
                                 />
                             </S.ViewIcon>
                         </S.ViewIcons>
@@ -275,6 +307,7 @@ export const Cards = (props: ICards) => {
                         </S.ViewName>
                     </S.ViewCard>
 
+                    <S.TaskDescT>Tempo Gasto: {calculateDateWithTime(props.timeSpent)}</S.TaskDescT>
 
                     <S.TaskDescT>Status: {props.value}</S.TaskDescT>
 

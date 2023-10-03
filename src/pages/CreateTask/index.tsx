@@ -1,6 +1,9 @@
+import { TextInputChangeEventData } from 'react-native/Libraries/Components/TextInput/TextInput';
+import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 import { ButtonContainer, Container, ErrorText, ViewScroll } from './styled';
 import { DropdownComponent } from '../../components/dropdown/dropdown';
 import { decodeJsonWebToken, formatDate } from '../../utils/utils';
+import { ICreateTasks, IUpdateTask } from '../../interfaces/task';
 import { IResponseCadastro } from '../../interfaces/functions';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { HeaderComponent } from '../../components/header';
@@ -8,15 +11,13 @@ import { ICreateSubtasks } from '../../interfaces/subtask';
 import { useNavigation } from "@react-navigation/native";
 import { DatePicker } from '../../components/datepicker';
 import { Button } from '../../components/button/button';
-import { ICreateTasks, IUpdateTask } from '../../interfaces/task';
 import Input from '../../components/input/input';
 import serviceTask from '../../service/task';
 import { useAuth } from '../../hooks/auth';
 import React, { useState } from 'react';
 import { Divider } from '@rneui/base';
 import { Icon } from '@rneui/themed';
-import { TextInputChangeEventData } from 'react-native/Libraries/Components/TextInput/TextInput';
-import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
+import serviceSubtask from '../../service/subtask';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -46,7 +47,6 @@ export default function CreateTask() {
             const newSubtaskObject: ICreateSubtasks = {
                 name: newSubtask,
                 done: false,
-                taskId: 1,
             };
             setSubtasks([...subtasks, newSubtaskObject]);
             setNewSubtask('');
@@ -130,6 +130,15 @@ export default function CreateTask() {
                 const insertTask: IResponseCadastro | undefined = await serviceTask.createTask(data)
 
                 console.log(insertTask?.taskId, 'oiiiiiiiiiiiiiiiii');
+                console.log('subtasks', subtasks);
+
+                subtasks.forEach(subtask => {
+                    subtask.task = insertTask?.taskId as number
+                    console.log(subtask);
+
+                    serviceSubtask.createSubtask(subtask)                    
+                });
+                
 
                 if (insertTask?.validacao) {
                     setData({
@@ -239,7 +248,7 @@ export default function CreateTask() {
                         </View>
                     )}
 
-                    <TouchableOpacity onPress={handleAddSubtask} style={{ flexDirection: 'row', marginTop: 20, marginRight: 40, alignSelf: 'flex-end' }}>
+                    <TouchableOpacity onPress={handleAddSubtask} style={{ flexDirection: 'row', marginRight: 40, alignSelf: 'flex-end' }}>
                         <Icon
                             name='add'
                             color='#fff'

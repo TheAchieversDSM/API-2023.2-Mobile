@@ -2,7 +2,7 @@ export interface ICreateSubtasks {
     id?: number;
     name: string;
     done: false;
-    taskId: number;
+    task?: number;
 }
 
 export interface IGetSubtasks {

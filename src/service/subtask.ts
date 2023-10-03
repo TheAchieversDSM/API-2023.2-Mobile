@@ -2,11 +2,11 @@ import { ICreateSubtasks, IGetSubtasks } from "../interfaces/subtask";
 import { AxiosError, AxiosResponse } from "axios";
 import { api } from "./api";
 
-class Task {
+class Subtask {
     async createSubtask(data: ICreateSubtasks) {
         try {
             return await api
-                .post("/task/create", data)
+                .post("/subtask/create", data)
                 .then((res: AxiosResponse | any) => {
                     if (res.status == 200) {                        
                         return { erro: "", validacao: true };                        
@@ -57,6 +57,6 @@ class Task {
     } */
 }
 
-const serviceSubtask = new Task();
+const serviceSubtask = new Subtask();
 
 export default serviceSubtask;

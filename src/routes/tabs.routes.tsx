@@ -4,6 +4,7 @@ import { TabBarIconProps } from "../interfaces/tabs";
 import CreateTask from "../pages/CreateTask";
 import Home from "../pages/Home";
 import ToDo from "../pages/ToDo";
+import Dashboard from "../pages/Dashboard";
 
 const Tab = createBottomTabNavigator();
 
@@ -68,6 +69,21 @@ export function TabsRoutes() {
                             isPlusIcon: false,
                             focused: focused,
                             nameScreen: "Tarefas",
+                        }),
+                }}
+            />
+            <Tab.Screen
+                key={"TDashboard"}
+                name="dashboard"
+                component={Dashboard}
+                options={{
+                    tabBarIcon: ({ focused }: TabBarIconProps) =>
+                        renderBottomTab({
+                            icons: "FontAwesome",
+                            name: "bar-chart",
+                            isPlusIcon: false,
+                            focused: focused,
+                            nameScreen: "Dash",
                         }),
                 }}
             />

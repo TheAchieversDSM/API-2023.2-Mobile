@@ -148,17 +148,20 @@ export const Cards = (props: ICards) => {
                         <S.ViewCard>
                             <S.ViewIcons>
                                 <S.ViewIcon>
-                                    <Icon
+                                    <IconModel
                                         onPress={() => handleSubmit(data)}
-                                        name='check'
-                                        color='#000'
-                                        size={30}
+                                        IconColor={"#000"}
+                                        IconSize={26}
+                                        icon='AntDesign'
+                                        iconName='check'
                                     />
-                                    <Icon
-                                        onPress={() => { setVisible(false); setEdit(!edit) }}
-                                        name='close'
-                                        color='#000'
-                                        size={30}
+
+                                    <IconModel
+                                        onPress={() => setEdit(!edit)}
+                                        IconColor={"#000"}
+                                        IconSize={25}
+                                        icon='AntDesign'
+                                        iconName='close'
                                     />
                                 </S.ViewIcon>
                             </S.ViewIcons>
@@ -213,7 +216,7 @@ export const Cards = (props: ICards) => {
                         />
 
                         <S.ViewData>
-                            <S.TaskDesc>Data atual: {props.deadline}</S.TaskDesc>
+                            <S.TaskDescT>Prazo:</S.TaskDescT>
                             <DatePicker
                                 onDateChange={(date) => { setDate(date); setData({ ...data, deadline: date }) }}
                                 style={{ width: 300, color: 'black' }}
@@ -275,29 +278,29 @@ export const Cards = (props: ICards) => {
                                 <IconModel
                                     onPress={() => handleDelete()}
                                     IconColor={"#bd1310"}
-                                    IconSize={24}
+                                    IconSize={26}
                                     icon='FontAwesome'
-                                    iconName='trash'
+                                    iconName='trash-o'
                                 />
                                 <IconModel
                                     onPress={toggleTimerModal}
                                     IconColor={"#000"}
-                                    IconSize={24}
-                                    icon={"AntDesign"}
-                                    iconName={"hourglass"}
+                                    IconSize={22}
+                                    icon={"FontAwesome"}
+                                    iconName={"hourglass-o"}
                                 />
                                 <IconModel
                                     onPress={() => setEdit(!edit)}
                                     IconColor={"#000"}
                                     IconSize={24}
-                                    icon='MaterialIcons'
-                                    iconName='edit'
+                                    icon='Feather'
+                                    iconName='edit-2'
                                 />
                                 <IconModel
                                     onPress={() => setVisible(false)}
                                     IconColor={"#000"}
-                                    IconSize={24}
-                                    icon='FontAwesome'
+                                    IconSize={25}
+                                    icon='AntDesign'
                                     iconName='close'
                                 />
                             </S.ViewIcon>

@@ -6,6 +6,7 @@ import Input from '../../components/input/input';
 import oracleLogo from "../../assets/oracle.png";
 import { useAuth } from '../../hooks/auth';
 import React, { useState } from "react";
+import { View } from 'react-native';
 
 
 export default function Login() {
@@ -43,7 +44,7 @@ export default function Login() {
         setErrorMessage("")
         try {
             if (checkFields(values)) {
-                return 
+                return
             } else {
                 const error = await signIn(values);
                 if (error) setErrorMessage(String(error));
@@ -59,7 +60,7 @@ export default function Login() {
                 <Logo source={oracleLogo} />
                 <TabsContainer>
                     <Button
-                        title='Log In'
+                        title='Login'
                         type='clear'
                         color='#DE0300'
                         borderColor='transparent'
@@ -67,7 +68,7 @@ export default function Login() {
                         fontSize={20}
                     />
                     <Button
-                        title='Sign Up'
+                        title='Cadastro'
                         type='clear'
                         borderColor='transparent'
                         onPress={() => { navigate.navigate("SignUp") }}
@@ -79,8 +80,9 @@ export default function Login() {
                         <Input
                             iconL='envelope'
                             errorMsg={
-                                errorStatus.email ? "Email is required" : ""
+                                errorStatus.email ? "Email é obrigatório" : ""
                             }
+                            errorStyle={{ marginLeft: 30, fontSize: 15, marginTop: -5 }}
                             placeholder='Email'
                             onChange={(e) =>
                                 setValues({ ...values, email: e.nativeEvent.text })
@@ -88,25 +90,28 @@ export default function Login() {
                             textColor='#000'
                             color='#DE0300'
                         />
+
+                        <View style={{ marginTop: 10 }} />
+
                         <Input
                             iconL='lock'
                             errorMsg={
-                                errorStatus.password ? 'Password is required' : ''
+                                errorStatus.password ? 'Senha é obrigatória' : ''
                             }
+                            errorStyle={{ marginLeft: 30, fontSize: 15, marginTop: -5 }}
                             password={true}
-                            placeholder='Password'
+                            placeholder='Senha'
                             onChange={(e) =>
                                 setValues({ ...values, password: e.nativeEvent.text })
-                            } 
+                            }
                             textColor='#000'
                             color='#DE0300'
-                            marginBottom={-5}
                         />
                     </InputsContainer>
                     {errorMessage ? <ErrorMessage>{errorMessage}</ErrorMessage> : null}
                     <ButtonContainer>
                         <Button
-                            title='Log In'
+                            title='Entrar'
                             type='solid'
                             borderColor='#DE0300'
                             backgroundColor='#DE0300'

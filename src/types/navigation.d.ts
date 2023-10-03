@@ -6,6 +6,9 @@ export declare global {
       Home: undefined;
       CreateTask: undefined;
       ToDo: undefined;
+      Tabs: {
+        screen: 'Home' | 'ToDo' | 'CreateTask';
+      };
     }
   }
 }

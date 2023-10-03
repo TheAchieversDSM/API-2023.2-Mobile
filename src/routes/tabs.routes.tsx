@@ -59,7 +59,7 @@ export function TabsRoutes() {
             />
             <Tab.Screen
                 key={"ToDo"}
-                name="Afazeres"
+                name="ToDo"
                 component={ToDo}
                 options={{
                     tabBarIcon: ({ focused }: TabBarIconProps) =>

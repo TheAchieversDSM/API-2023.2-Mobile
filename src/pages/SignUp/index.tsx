@@ -8,6 +8,7 @@ import oracleLogo from "../../assets/oracle.png";
 import Input from "../../components/input/input";
 import serviceUser from "../../service/user";
 import React, { useState } from 'react';
+import { View } from "react-native";
 
 export function SignUp() {
 
@@ -51,7 +52,7 @@ export function SignUp() {
             } else {
                 setErrorMessage({ email: "", password: "" })
                 if (!validate) {
-                    return setErrorMessage({ email: "", password: "The passwords do not match." })
+                    return setErrorMessage({ email: "", password: "As senhas são diferentes. Tente novamente." })
                 }
                 const error: IResponseCadastro | undefined = await serviceUser.createUser(data)
                 setErrorMessage({ email: String(error?.erro), password: "" })
@@ -70,14 +71,14 @@ export function SignUp() {
                 <Logo source={oracleLogo} resizeMode='contain' />
                 <TabsContainer>
                     <Button
-                        title='Log In'
+                        title='Login'
                         type='clear'
                         borderColor='transparent'
                         onPress={() => { navigate.navigate("Login") }}
                         fontSize={20}
                     />
                     <Button
-                        title='Sign Up'
+                        title='Cadastro'
                         type='clear'
                         color='#DE0300'
                         borderColor='transparent'
@@ -88,46 +89,59 @@ export function SignUp() {
                 <SignUpContainer>
                     <InputsContainer>
                         <Input
-                            placeholder={"Name"}
+                            placeholder={"Nome"}
                             textColor="#000"
                             iconL="user"
-                            errorMsg={errorStatus.name ? "Name is required" : ""}
+                            errorMsg={errorStatus.name ? "Nome é obrigatório" : ""}
                             onChange={(e) => setData({ ...data, name: e.nativeEvent.text })}
+                            errorStyle={{ marginLeft: 30, fontSize: 15, marginTop: -5 }}
                             marginTop={20}
                             color="#DE0300"
                         />
+
+                        <View style={{ marginTop: 10 }}/>
+                        
                         <Input
                             placeholder={"E-mail"}
                             textColor="#000"
                             iconL="envelope"
                             errorMsg={errorStatus.email ?
                                 errorMessage.email ?
-                                    errorMessage.email : "Email is required"
+                                    errorMessage.email : "Email é obrigatório"
                                 : errorMessage.email}
                             onChange={(e) => setData({ ...data, email: e.nativeEvent.text })}
+                            errorStyle={{ marginLeft: 30, fontSize: 15, marginTop: -5 }}                            
                             color="#DE0300"
                         />
+
+                        <View style={{ marginTop: 10 }}/>
+
                         <Input
-                            placeholder={"Password"}
+                            placeholder={"Senha"}
                             password
                             textColor="#000"
                             errorMsg={errorStatus.password ?
                                 errorMessage.password ?
-                                    errorMessage.password : "Password is required"
+                                    errorMessage.password : "Senha é obrigatória"
                                 : errorMessage.password}
                             onChange={(e) => setData({ ...data, password: e.nativeEvent.text })}
+                            errorStyle={{ marginLeft: 30, fontSize: 15, marginTop: -5 }}
                             iconL={"lock"}
                             color="#DE0300"
                         />
+
+                        <View style={{ marginTop: 10 }}/>
+                        
                         <Input
-                            placeholder={"Repeat Password"}
+                            placeholder={"Repetir senha"}
                             password
                             textColor="#000"
                             errorMsg={errorStatus.rPassword ?
                                 errorMessage.password ?
-                                    errorMessage.password : "Password is required"
+                                    errorMessage.password : "Senha é obrigatória"
                                 : errorMessage.password}
                             onChange={(e) => setData({ ...data, rPassword: e.nativeEvent.text })}
+                            errorStyle={{ marginLeft: 30, fontSize: 15, marginTop: 15 }}
                             iconL={"lock"}
                             marginBottom={-5}
                             color="#DE0300"
@@ -135,7 +149,7 @@ export function SignUp() {
                     </InputsContainer>
                     <ButtonContainer>
                         <Button
-                            title='Sign Up'
+                            title='Cadastrar'
                             type='solid'
                             borderColor='#DE0300'
                             backgroundColor='#DE0300'

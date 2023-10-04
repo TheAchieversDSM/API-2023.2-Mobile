@@ -1,30 +1,23 @@
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { Container } from "./styled";
-import { BarChart } from "react-native-gifted-charts";
+
+import { HeaderComponent } from "../../components/header";
+import { Coluna } from "../../components/graficos/coluna";
+import { Donut } from "../../components/graficos/donut";
 
 export default function Dashboard() {
-    const barData = [
-        {value: 230,label: 'Jan',frontColor: '#4ABFF4'},
-        {value: 180,label: 'Feb',frontColor: '#79C3DB'},
-        {value: 195,label: 'Mar',frontColor: '#28B2B3'},
-        {value: 250,label: 'Apr',frontColor: '#4ADDBA'},
-        {value: 320,label: 'May',frontColor: '#91E3E3'},
-        ];
+
+
+
 
     return(
         <>
+            <View style={{backgroundColor: '#222328'}}><HeaderComponent/></View>
             <Container>
-                <View>
-                    <BarChart
-                        showFractionalValues
-                        showYAxisIndices
-                        noOfSections={4}
-                        maxValue={400}
-                        data={barData}
-                        barBorderRadius={4}
-                        isAnimated
-                    />
-                </View>
+                <ScrollView style={{paddingTop: 20, padding: 10}}>
+                    <Coluna/>
+                    <Donut/>
+                </ScrollView>
             </Container>
         </>
     )

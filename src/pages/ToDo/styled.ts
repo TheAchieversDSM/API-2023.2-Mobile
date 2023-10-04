@@ -4,7 +4,7 @@ import { Text } from "@rneui/themed";
 
 export const Container = styled(SafeAreaView)`
   flex: 1;
-  background-color: #393939;
+  background-color: #222328;
   justify-content: flex-start;
   width: 100%;
   padding: 20px;

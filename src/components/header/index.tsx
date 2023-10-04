@@ -6,7 +6,7 @@ import { SafeAreaView, View } from 'react-native';
 export const HeaderComponent = () => {
     return(
         <>
-            <ViewLogo style={{ backgroundColor: '#393939' }}>
+            <ViewLogo style={{ backgroundColor: '#222328' }}>
                 <ImageLogo
                     source={oracleLogo}
                 />

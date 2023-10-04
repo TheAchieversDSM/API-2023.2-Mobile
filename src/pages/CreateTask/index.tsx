@@ -123,7 +123,7 @@ export default function CreateTask() {
 
     return (
         <>
-            <View style={{ backgroundColor: '#393939', paddingBottom: 20 }}><HeaderComponent /></View>
+            <View style={{ backgroundColor: '#222328', paddingBottom: 20 }}><HeaderComponent /></View>
             <Container>
                 <ViewScroll>
                     <Input

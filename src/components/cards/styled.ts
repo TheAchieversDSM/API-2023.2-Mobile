@@ -2,20 +2,14 @@ import { ScrollView, View } from "react-native";
 import { Overlay, Text } from "@rneui/themed";
 import styled from "styled-components";
 
-export const CardTask = styled(View).attrs({
-  style: {
-    shadowColor: '#000',
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
-    elevation: 5,
-  }
-})`
+export const CardTask = styled(View)`
   height: 15px;
   background-color: #fff;
   height: 50px;
   border-radius: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
+  elevation: 5;
   `;
 
 export const StatusColor = styled(View)`

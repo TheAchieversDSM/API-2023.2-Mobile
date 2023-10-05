@@ -49,7 +49,11 @@ export default function CreateTask() {
                 done: false,
             };
             setSubtasks([...subtasks, newSubtaskObject]);
+
             setNewSubtask('');
+
+            setIsInputVisible(false);
+
         }
     };
 

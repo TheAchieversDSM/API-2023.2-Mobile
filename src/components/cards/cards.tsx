@@ -358,7 +358,7 @@ export const Cards = (props: ICards) => {
                                 <S.TaskDescT>Subtarefas:</S.TaskDescT>
                                 <S.SubtaskDone style={{ marginTop: -10 }}>Total: {checkProgressSubTask(subtask).toFixed(2)}%</S.SubtaskDone>
 
-                                <ScrollView style={{ height: 200, width: 300 }}>
+                                <ScrollView style={{ maxHeight: 200, width: 300 }}>
                                     {subtask && subtask?.map((item: IGetSubtasks) => (
                                         <View key={item.id} style={{marginBottom: -20}}>
                                             <Checkbox
@@ -401,7 +401,6 @@ export const Cards = (props: ICards) => {
 
                             <Text style={{ color: 'grey', fontSize: 20, marginLeft: 5, marginBottom: 10 }}>Adicionar subtarefa</Text>
                         </TouchableOpacity>
-
                     </S.ViewData>
                 </S.GeneralView>
             </S.Modal>

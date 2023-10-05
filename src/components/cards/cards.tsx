@@ -1,6 +1,6 @@
 import { IGetSubtasks } from '../../interfaces/subtask';
 import { DropdownComponent } from '../dropdown/dropdown';
-import { calculateDateWithTime, decodeJsonWebToken } from "../../utils/utils";
+import { calculateDateWithTime, checkProgressSubTask, decodeJsonWebToken } from "../../utils/utils";
 import { IUpdateTask } from "../../interfaces/task";
 import serviceSubtask from '../../service/subtask';
 import { TouchableOpacity } from 'react-native';
@@ -330,6 +330,7 @@ export const Cards = (props: ICards) => {
                         {subtask?.length === 0 ? <S.TaskDescT>Não há subtarefas</S.TaskDescT> :
                             <View>
                                 <S.TaskDescT>Subtarefas:</S.TaskDescT>
+                                <S.SubtaskDone>Total: {checkProgressSubTask(subtask)}%</S.SubtaskDone>
 
                                 {subtask && subtask?.map((item: IGetSubtasks) => (
                                     <View key={item.id}>

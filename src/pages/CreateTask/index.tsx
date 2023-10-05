@@ -62,6 +62,8 @@ export default function CreateTask() {
         timeSpent: 0,
         done: false,
         userId: id,
+        customInterval: 0,
+        last_execution: '2023-02-02'
     })
 
     const [errorMessage, setErrorMessage] = useState({
@@ -88,6 +90,8 @@ export default function CreateTask() {
             timeSpent: 0,
             done: false,
             userId: id,
+            customInterval: 0,
+            last_execution: '2023-02-02'
         })
     }
 
@@ -129,8 +133,8 @@ export default function CreateTask() {
                 
                 const insertTask: IResponseCadastro | undefined = await serviceTask.createTask(data)
 
-                console.log(insertTask?.taskId, 'oiiiiiiiiiiiiiiiii');
-                console.log('subtasks', subtasks);
+                // console.log(insertTask?.taskId, 'oiiiiiiiiiiiiiiiii');
+                // console.log('subtasks', subtasks);
 
                 subtasks.forEach(subtask => {
                     subtask.task = insertTask?.taskId as number
@@ -150,8 +154,10 @@ export default function CreateTask() {
                         timeSpent: 0,
                         done: false,
                         userId: id,
+                        customInterval: 0,
+                        last_execution: '2023-02-02'
                     })
-                    /* navigate.navigate("Tabs", { screen: "ToDo" }) */
+                    navigate.navigate("Tabs", { screen: "ToDo" })
                 }
             }
         } catch (error) {

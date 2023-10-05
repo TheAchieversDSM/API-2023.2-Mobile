@@ -7,6 +7,8 @@ export interface ICreateTasks {
     timeSpent: number;
     done: boolean;
     userId: number;
+    customInterval: number;
+    last_execution: string
 }
 
 export interface IGetTasksUser {

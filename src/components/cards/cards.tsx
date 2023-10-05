@@ -1,12 +1,13 @@
-import { IGetSubtasks } from '../../interfaces/subtask';
-import { DropdownComponent } from '../dropdown/dropdown';
+import { NativeSyntheticEvent, TextInputChangeEventData, TouchableOpacity, Text, ScrollView } from 'react-native';
 import { calculateDateWithTime, checkProgressSubTask, decodeJsonWebToken } from "../../utils/utils";
+import { ICreateSubtasks, IGetSubtasks } from '../../interfaces/subtask';
+import { DropdownComponent } from '../dropdown/dropdown';
 import { IUpdateTask } from "../../interfaces/task";
 import serviceSubtask from '../../service/subtask';
-import { TouchableOpacity } from 'react-native';
 import { ICards } from '../../interfaces/cards';
 import { Checkbox } from '../checkbox/checkbox';
 import serviceTask from "../../service/task";
+import { TimerModal } from '../timecontroll';
 import { useEffect, useState } from 'react';
 import { DatePicker } from '../datepicker';
 import { useAuth } from "../../hooks/auth";
@@ -15,12 +16,10 @@ import { Priority } from './priorities';
 import { Divider } from '@rneui/base';
 import { ViewScroll } from './styled';
 import { Icon } from '@rneui/themed';
+import { IconModel } from '../icons';
 import Input from '../input/input';
 import * as S from './styled';
-import { IconModel } from '../icons';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { TimerModal } from '../timecontroll';
-
+import { set } from 'date-fns';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -56,7 +55,34 @@ export const Cards = (props: ICards) => {
     const [edit, setEdit] = useState(false);
 
     const [reloadSubtasks, setReloadSubtasks] = useState(false);
+
     const [timer, setTimer] = useState(false)
+
+    const [isInputVisible, setIsInputVisible] = useState(false);
+
+    const [subtasks, setSubtasks] = useState<ICreateSubtasks>({} as ICreateSubtasks);
+
+    const [newSubtask, setNewSubtask] = useState('');
+
+    const handleAddSubtask = () => {
+        setIsInputVisible(true);
+
+        if (newSubtask) {
+            const newSubtaskObject: ICreateSubtasks = {
+                name: newSubtask,
+                done: false,
+                task: props.id
+            };
+            setSubtasks(newSubtaskObject);
+
+            serviceSubtask.createSubtask(newSubtaskObject)
+
+            setNewSubtask('');
+
+            setIsInputVisible(false);
+        }
+
+    };
 
     const toggleOverlay = () => {
         setVisible(!visible)
@@ -131,7 +157,7 @@ export const Cards = (props: ICards) => {
         }
 
         fetchTaskSubtasks();
-    }, [props.id, reloadSubtasks])
+    }, [props.id, reloadSubtasks, newSubtask])
 
     return edit ? (
         <View>
@@ -330,19 +356,51 @@ export const Cards = (props: ICards) => {
                         {subtask?.length === 0 ? <S.TaskDescT>Não há subtarefas</S.TaskDescT> :
                             <View>
                                 <S.TaskDescT>Subtarefas:</S.TaskDescT>
-                                <S.SubtaskDone>Total: {checkProgressSubTask(subtask)}%</S.SubtaskDone>
+                                <S.SubtaskDone style={{ marginTop: -10 }}>Total: {checkProgressSubTask(subtask).toFixed(2)}%</S.SubtaskDone>
 
-                                {subtask && subtask?.map((item: IGetSubtasks) => (
-                                    <View key={item.id}>
-                                        <Checkbox
-                                            label={item.name}
-                                            check={item.done}
-                                            onCheck={() => handleCheck(item.id, !item.done)}
-                                        />
-                                    </View>
-                                ))}
+                                <ScrollView style={{ height: 200, width: 300 }}>
+                                    {subtask && subtask?.map((item: IGetSubtasks) => (
+                                        <View key={item.id} style={{marginBottom: -20}}>
+                                            <Checkbox
+                                                label={item.name}
+                                                check={item.done}
+                                                onCheck={() => handleCheck(item.id, !item.done)}
+                                            />
+                                        </View>
+                                    ))}
+                                </ScrollView>
                             </View>
                         }
+
+                        {isInputVisible && (
+                            <S.InputView style={{ marginTop: -10 }}>
+                                <Input
+                                    placeholder="Digite a subtarefa"
+                                    onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) => setNewSubtask(e.nativeEvent.text)}
+                                    textColor='#000'
+                                    value={newSubtask}
+                                />
+                            </S.InputView>
+                        )}
+
+                        <TouchableOpacity onPress={handleAddSubtask} style={{ flexDirection: 'row', marginRight: 40, alignSelf: 'flex-end' }}>
+
+                            {isInputVisible ? (
+                                <Icon
+                                    name='check'
+                                    color='grey'
+                                    size={26}
+                                />
+                            ) :
+                                <Icon
+                                    name='add'
+                                    color='grey'
+                                    size={26}
+                                />
+                            }
+
+                            <Text style={{ color: 'grey', fontSize: 20, marginLeft: 5, marginBottom: 10 }}>Adicionar subtarefa</Text>
+                        </TouchableOpacity>
 
                     </S.ViewData>
                 </S.GeneralView>

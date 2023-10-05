@@ -137,7 +137,6 @@ export default function CreateTask() {
 
                 subtasks.forEach(subtask => {
                     subtask.task = insertTask?.taskId as number
-                    console.log(subtask);
 
                     serviceSubtask.createSubtask(subtask)
                 });

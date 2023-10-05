@@ -1,5 +1,6 @@
 import { View, Text } from "react-native";
 import { PieChart } from "react-native-gifted-charts";
+import { Legenda, TextDonut, Titulo } from "./styled";
 
 export const Donut = () => {
   const pieData = [
@@ -25,7 +26,11 @@ export const Donut = () => {
     return(
         <>
           <View
+            style={{marginBottom: 20}}
           >
+            <Titulo>
+                Tarefas do mês
+            </Titulo>
             <View style={{padding: 20, alignItems: 'center'}}>
               <PieChart
                 data={pieData}
@@ -33,15 +38,15 @@ export const Donut = () => {
                 sectionAutoFocus
                 radius={90}
                 innerRadius={60}
-                innerCircleColor={'#363637'}
+                innerCircleColor={'#222328'}
                 centerLabelComponent={() => {
                   return (
                     <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                      <Text
+                      <TextDonut
                         style={{fontSize: 22, color: 'white', fontWeight: 'bold'}}>
                         47%
-                      </Text>
-                      <Text style={{fontSize: 14, color: 'white'}}>Tarefas</Text>
+                      </TextDonut>
+                      <TextDonut style={{fontSize: 14, color: 'white'}}>Tarefas</TextDonut>
                     </View>
                   );
                 }}
@@ -60,13 +65,13 @@ export const Donut = () => {
             width: 120,
             marginRight: 20,
           }}>
-          {renderDot('#67d207')}
-          <Text style={{color: 'white'}}>Concluído: 47%</Text>
+          {renderDot('#de0300')}
+          <Legenda style={{color: 'white'}}>A Fazer: 5%</Legenda>
         </View>
         <View
           style={{flexDirection: 'row', alignItems: 'center', width: 120}}>
           {renderDot('#ebae11')}
-          <Text style={{color: 'white'}}>Em Progresso: 16%</Text>
+          <Legenda style={{color: 'white'}}>Progresso: 16%</Legenda>
         </View>
       </View>
       <View style={{flexDirection: 'row', justifyContent: 'center'}}>
@@ -77,8 +82,8 @@ export const Donut = () => {
             width: 120,
             marginRight: 20,
           }}>
-          {renderDot('#de0300')}
-          <Text style={{color: 'white'}}>A fazer: 40%</Text>
+          {renderDot('#67d207')}
+          <Legenda style={{color: 'white'}}>Concluído: 47%</Legenda>
         </View>
       </View>
           </View>

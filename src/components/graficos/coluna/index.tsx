@@ -1,25 +1,32 @@
 import { View, Text } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
+import { Titulo } from "./styled";
 
 export const Coluna = () => {
     const barData = [
-        {value: 30, frontColor: '#4ABFF4'},
-        {value: 80, frontColor: '#79C3DB'},
-        {value: 95, frontColor: '#28B2B3'},
-        {value: 50, frontColor: '#4ADDBA'},
-        {value: 20, frontColor: '#91E3E3'},
-        {value: 30, frontColor: '#4ABFF4'},
-        {value: 80, frontColor: '#79C3DB'},
-        {value: 95, frontColor: '#28B2B3'},
-        {value: 50, frontColor: '#4ADDBA'},
-        {value: 20, frontColor: '#91E3E3'},
-        {value: 50, frontColor: '#4ADDBA'},
-        {value: 20, frontColor: '#91E3E3'},
+        {value: 30, frontColor: '#02A8EE'},
+        {value: 80, frontColor: '#02A8EE'},
+        {value: 95, frontColor: '#02A8EE'},
+        {value: 50, frontColor: '#02A8EE'},
+        {value: 20, frontColor: '#02A8EE'},
+        {value: 30, frontColor: '#02A8EE'},
+        {value: 80, frontColor: '#02A8EE'},
+        {value: 95, frontColor: '#02A8EE'},
+        {value: 50, frontColor: '#02A8EE'},
+        {value: 20, frontColor: '#02A8EE'},
+        {value: 50, frontColor: '#02A8EE'},
+        {value: 20, frontColor: '#02A8EE'},
     ];
 
     const xAxisLabels = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
 
     const xAxisWidth = 250;
+
+    const textStyle = {
+        title: { fontFamily: "YourTitleFont", fontSize: 20, color: "black" },
+        xAxisLabel: { fontFamily: "YourLabelFont", fontSize: 12, color: "gray" },
+        yAxisLabel: { fontFamily: "YourLabelFont", fontSize: 12, color: "gray" },
+      };
 
     return(
         <>
@@ -27,10 +34,11 @@ export const Coluna = () => {
                 padding: 20,
                 borderRadius: 20,
                 paddingLeft: 0,
+                marginBottom: 50
             }}>
-                <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>
+                <Titulo>
                     Horas trabalhadas
-                </Text>
+                </Titulo>
                 <View style={{paddingRight: 30, alignItems: 'center', padding: 10}}>
                     <BarChart
                         showYAxisIndices
@@ -42,9 +50,17 @@ export const Coluna = () => {
                         width={xAxisWidth}
                         xAxisColor={'#ffff'}
                         yAxisColor={'#ffff'}
-                        xAxisLabelTextStyle={{color: '#fff', textAlign: 'center'}}
+                        xAxisLabelTextStyle={{
+                            color: "#fff",
+                            fontFamily: "Poppins", // Defina a fonte desejada
+                            fontSize: 13,
+                        }}
                         xAxisLabelTexts={xAxisLabels}
-                        yAxisTextStyle={{color: '#fff'}}
+                        yAxisTextStyle={{
+                            color: "#fff",
+                            fontFamily: "Poppins", // Defina a fonte desejada
+                            fontSize: 13, // Defina o tamanho da fonte desejado
+                        }}
                         renderTooltip={() => {
                             return (
                               <View

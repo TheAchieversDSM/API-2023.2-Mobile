@@ -24,7 +24,7 @@ export const ViewContainer = styled(View)`
 export const TextTitle = styled(Text)`
     color: #de0300;
     font-size: 22px;
-    fontWeight: bold;
+    font-family: ${( props ) => props.theme.FONTS.Poppins_600SemiBold};
 `;
 
 export const SubTextTitle = styled(Text)`

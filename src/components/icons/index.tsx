@@ -3,6 +3,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import AntDesign  from "@expo/vector-icons/AntDesign";
+import Feather  from "@expo/vector-icons/Feather";
 
 import { TouchableOpacity } from "react-native";
 import React from "react";
@@ -11,7 +12,8 @@ const iconComponents: Record<string, React.ComponentType<any>> = {
     FontAwesome: FontAwesome,
     FontAwesome5: FontAwesome5,
     MaterialIcons: MaterialIcons,
-    AntDesign : AntDesign ,
+    AntDesign : AntDesign,
+    Feather: Feather
 };
 
 export const IconModel = ({

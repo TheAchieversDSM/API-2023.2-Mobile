@@ -1,17 +1,20 @@
 import { ICheckbox } from "../../interfaces/checkbox";
 import { ListItem } from "@rneui/themed";
-import React, { useState } from "react";
+import React from "react";
 
 export const Checkbox = (props: ICheckbox) => {
-    const [check, setCheck] = useState(false);
     return (
-        <ListItem style={{backgroundColor: 'transparent'}}>
+        <ListItem style={{ backgroundColor: 'transparent' }}>
             <ListItem.Content>
                 <ListItem.CheckBox
+                    checkedTitle={props.label}
+                    textStyle={{ marginBottom: 2, fontSize: 16, fontWeight: 'normal', fontFamily: 'Poppins_400Regular', textDecorationColor: props.check ? 'black' : 'transparent',
+                    textDecorationLine: props.check ? 'line-through' : 'none',
+                   }}
                     title={props.label}
-                    checked={check}
-                    onPress={() => setCheck(!check)}
-                    containerStyle = {{
+                    checked={props.check}
+                    onPress={props.onCheck}
+                    containerStyle={{
                         backgroundColor: 'transparent',
                     }}
                     checkedColor="#c74634"

@@ -1,17 +1,23 @@
+import { TextInputChangeEventData } from 'react-native/Libraries/Components/TextInput/TextInput';
+import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
+import { ButtonContainer, Container, ErrorText, ViewScroll } from './styled';
 import { DropdownComponent } from '../../components/dropdown/dropdown';
 import { decodeJsonWebToken, formatDate } from '../../utils/utils';
-import { ButtonContainer, Container, ErrorText, ViewScroll } from './styled';
+import { ICreateTasks, IUpdateTask } from '../../interfaces/task';
 import { IResponseCadastro } from '../../interfaces/functions';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { HeaderComponent } from '../../components/header';
+import { ICreateSubtasks } from '../../interfaces/subtask';
 import { useNavigation } from "@react-navigation/native";
 import { DatePicker } from '../../components/datepicker';
 import { Button } from '../../components/button/button';
-import { ICreateTasks } from '../../interfaces/task';
 import Input from '../../components/input/input';
 import serviceTask from '../../service/task';
 import { useAuth } from '../../hooks/auth';
-import { View, Text } from 'react-native';
 import React, { useState } from 'react';
+import { Divider } from '@rneui/base';
+import { Icon } from '@rneui/themed';
+import serviceSubtask from '../../service/subtask';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -28,6 +34,25 @@ export default function CreateTask() {
 
     const [priorities, setPriorities] = useState<string | undefined>(undefined);
 
+    const [isInputVisible, setIsInputVisible] = useState(false);
+
+    const [subtasks, setSubtasks] = useState<ICreateSubtasks[]>([]);
+
+    const [newSubtask, setNewSubtask] = useState('');
+
+    const handleAddSubtask = () => {
+        setIsInputVisible(true);
+
+        if (newSubtask) {
+            const newSubtaskObject: ICreateSubtasks = {
+                name: newSubtask,
+                done: false,
+            };
+            setSubtasks([...subtasks, newSubtaskObject]);
+            setNewSubtask('');
+        }
+    };
+
     const [data, setData] = useState<ICreateTasks>({
         name: '',
         description: '',
@@ -37,6 +62,8 @@ export default function CreateTask() {
         timeSpent: 0,
         done: false,
         userId: id,
+        customInterval: 0,
+        last_execution: '2023-02-02'
     })
 
     const [errorMessage, setErrorMessage] = useState({
@@ -52,7 +79,6 @@ export default function CreateTask() {
     })
 
     const handleCancel = () => {
-        console.log(priorities)
         setPriorities(undefined)
         setData({
             name: '',
@@ -63,7 +89,12 @@ export default function CreateTask() {
             timeSpent: 0,
             done: false,
             userId: id,
+            customInterval: 0,
+            last_execution: '2023-02-02'
         })
+
+        setIsInputVisible(false);
+        setSubtasks([]);
     }
 
     const checkFields = (values: ICreateTasks): boolean => {
@@ -82,7 +113,7 @@ export default function CreateTask() {
 
     const handleSubmit = async (data: ICreateTasks) => {
         console.log(data);
-        
+
         try {
             if (checkFields(data)) {
                 setErrorMessage({ name: "Nome é obrigatório", description: "Descrição é obrigatória", deadline: "Data é obrigatória" })
@@ -101,7 +132,16 @@ export default function CreateTask() {
             }
             else {
                 setErrorMessage({ name: "", description: "", deadline: "" })
+
                 const insertTask: IResponseCadastro | undefined = await serviceTask.createTask(data)
+
+                subtasks.forEach(subtask => {
+                    subtask.task = insertTask?.taskId as number
+
+                    serviceSubtask.createSubtask(subtask)
+                });
+
+
                 if (insertTask?.validacao) {
                     setData({
                         name: '',
@@ -112,7 +152,15 @@ export default function CreateTask() {
                         timeSpent: 0,
                         done: false,
                         userId: id,
+                        customInterval: 0,
+                        last_execution: '2023-02-02'
                     })
+
+                    setPriorities(undefined)
+
+                    setIsInputVisible(false);
+                    setSubtasks([]);
+
                     navigate.navigate("Tabs", { screen: "ToDo" })
                 }
             }
@@ -143,7 +191,7 @@ export default function CreateTask() {
                         errorMsg={errorStatus.description ? "Descrição é obrigatória" : ""}
                         color='#de0300'
                         textColor='#fff'
-                        errorStyle={{ marginLeft: 30, color: "#F2F2F2", fontSize: 15}}
+                        errorStyle={{ marginLeft: 30, color: "#F2F2F2", fontSize: 15 }}
                         iconL='pencil-square-o'
                         multiline={true}
                         value={data.description}
@@ -184,21 +232,40 @@ export default function CreateTask() {
                         />
                     </View>
 
-                    {/* <Input
-                placeholder='Insira a recorrência da tarefa'
-                onChange={() => console.log('oi')}
-                color='#C74634'
-                textColor='#fff'
-                iconL='refresh'
-            />
+                    <Divider style={{ marginHorizontal: 40, marginBottom: 20 }} />
 
-            <Input
-            placeholder='Insira com quem compartilhar'
-            onChange={() => console.log('oi')}
-                color='#C74634'
-                textColor='#fff'
-                iconL='user-o'
-            /> */}
+                    {subtasks.map((subtask, index) => (
+                        <View key={index}>
+                            <Input
+                                placeholder={''}
+                                onChange={(e) => console.log(e.nativeEvent.text)}
+                                iconL='plus-square-o'
+                                textColor='#fff'
+                                value={subtask.name}
+                                editable={false}
+                            />
+                        </View>
+                    ))}
+
+                    {isInputVisible && (
+                        <View>
+                            <Input
+                                placeholder="Digite a subtarefa"
+                                onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) => setNewSubtask(e.nativeEvent.text)}
+                                textColor='#fff'
+                                value={newSubtask}
+                            />
+                        </View>
+                    )}
+
+                    <TouchableOpacity onPress={handleAddSubtask} style={{ flexDirection: 'row', marginRight: 40, alignSelf: 'flex-end' }}>
+                        <Icon
+                            name='add'
+                            color='#fff'
+                            size={30}
+                        />
+                        <Text style={{ color: '#fff', fontSize: 20, marginLeft: 10 }}>Adicionar subtarefa</Text>
+                    </TouchableOpacity>
 
                     <ButtonContainer>
                         <Button

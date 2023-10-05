@@ -79,7 +79,6 @@ export default function CreateTask() {
     })
 
     const handleCancel = () => {
-        console.log(priorities)
         setPriorities(undefined)
         setData({
             name: '',
@@ -93,6 +92,9 @@ export default function CreateTask() {
             customInterval: 0,
             last_execution: '2023-02-02'
         })
+
+        setIsInputVisible(false);
+        setSubtasks([]);
     }
 
     const checkFields = (values: ICreateTasks): boolean => {
@@ -130,19 +132,16 @@ export default function CreateTask() {
             }
             else {
                 setErrorMessage({ name: "", description: "", deadline: "" })
-                
-                const insertTask: IResponseCadastro | undefined = await serviceTask.createTask(data)
 
-                // console.log(insertTask?.taskId, 'oiiiiiiiiiiiiiiiii');
-                // console.log('subtasks', subtasks);
+                const insertTask: IResponseCadastro | undefined = await serviceTask.createTask(data)
 
                 subtasks.forEach(subtask => {
                     subtask.task = insertTask?.taskId as number
                     console.log(subtask);
 
-                    serviceSubtask.createSubtask(subtask)                    
+                    serviceSubtask.createSubtask(subtask)
                 });
-                
+
 
                 if (insertTask?.validacao) {
                     setData({
@@ -157,6 +156,12 @@ export default function CreateTask() {
                         customInterval: 0,
                         last_execution: '2023-02-02'
                     })
+
+                    setPriorities(undefined)
+
+                    setIsInputVisible(false);
+                    setSubtasks([]);
+
                     navigate.navigate("Tabs", { screen: "ToDo" })
                 }
             }

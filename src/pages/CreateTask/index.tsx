@@ -263,11 +263,19 @@ export default function CreateTask() {
                     )}
 
                     <TouchableOpacity onPress={handleAddSubtask} style={{ flexDirection: 'row', marginRight: 40, alignSelf: 'flex-end' }}>
-                        <Icon
-                            name='add'
-                            color='#fff'
-                            size={30}
-                        />
+                        {isInputVisible ? (
+                            <Icon
+                                name='check'
+                                color='#fff'
+                                size={26}
+                            />
+                        ) :
+                            <Icon
+                                name='add'
+                                color='#fff'
+                                size={30}
+                            />
+                        }
                         <Text style={{ color: '#fff', fontSize: 20, marginLeft: 10 }}>Adicionar subtarefa</Text>
                     </TouchableOpacity>
 

@@ -27,6 +27,10 @@ export const TaskName = styled(Text)`
   color: #393939;
 `;
 
+export const SubtaskDone = styled(Text)`
+  color: #848484;
+`;
+
 export const TaskTitle = styled(Text)`
   width: 100%;
   font-size: 20px;

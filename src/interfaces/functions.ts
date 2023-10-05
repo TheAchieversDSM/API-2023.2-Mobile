@@ -1,6 +1,7 @@
 export interface IResponseCadastro {
   validacao: boolean;
   erro: string;
+  taskId?: number;
 }
 
 export interface ITimeCaculate {

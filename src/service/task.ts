@@ -2,6 +2,7 @@ import { ICreateTasks, IGetTasksUser, IGetTasksUserDate, IGetTasksUserResp, IUpd
 import { AxiosError, AxiosResponse } from "axios";
 import { comparePriority } from "../utils/utils";
 import { api } from "./api";
+import serviceSubtask from "./subtask";
 
 class Task {
     async createTask(data: ICreateTasks) {
@@ -9,8 +10,10 @@ class Task {
             return await api
                 .post("/task/create", data)
                 .then((res: AxiosResponse | any) => {
-                    if (res.status == 200) {                        
-                        return { erro: "", validacao: true };                        
+                    if (res.status == 200) {                    
+                        const taskId = res.data.data.id                        
+                           
+                        return { taskId, erro: "", validacao: true };                        
                     }else {
                         return { erro: "Erro desconhecido", validacao: false };
                     }

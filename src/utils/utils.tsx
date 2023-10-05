@@ -5,6 +5,8 @@ import { ICreateUser } from '../interfaces/user';
 import { APP_SECRET } from "@env";
 import jwt_decode from 'jwt-decode';
 import { ITimeCaculate } from '../interfaces/functions';
+import { IGetSubtasks } from '../interfaces/subtask';
+import { sub } from 'date-fns';
 
 export async function getItem(key: string): Promise<string | null> {
   const value = await SecureStore.getItemAsync(key)
@@ -89,4 +91,11 @@ export function timeCalculate(value: string): ITimeCaculate {
   mensagem = calculateDateWithTime(resultadoEmSegundos);
 
   return { msg: mensagem, time: resultadoEmSegundos}
+}
+
+export function checkProgressSubTask(subTaskList: IGetSubtasks[]): number{
+  const totalSubTasks = subTaskList.length;
+  const totalSubTasksDone = subTaskList.filter(subTask => subTask.done).length;
+  const porcentagem = totalSubTasksDone / totalSubTasks * 100;
+  return porcentagem
 }

@@ -1,22 +1,25 @@
+import { NativeSyntheticEvent, TextInputChangeEventData, TouchableOpacity, Text, ScrollView } from 'react-native';
+import { calculateDateWithTime, checkProgressSubTask, decodeJsonWebToken } from "../../utils/utils";
+import { ICreateSubtasks, IGetSubtasks } from '../../interfaces/subtask';
 import { DropdownComponent } from '../dropdown/dropdown';
-import { calculateDateWithTime, decodeJsonWebToken } from "../../utils/utils";
 import { IUpdateTask } from "../../interfaces/task";
-import { TouchableOpacity } from 'react-native';
+import serviceSubtask from '../../service/subtask';
 import { ICards } from '../../interfaces/cards';
+import { Checkbox } from '../checkbox/checkbox';
 import serviceTask from "../../service/task";
+import { TimerModal } from '../timecontroll';
+import { useEffect, useState } from 'react';
 import { DatePicker } from '../datepicker';
 import { useAuth } from "../../hooks/auth";
 import React, { View } from 'react-native';
 import { Priority } from './priorities';
-import { Icon } from '@rneui/themed';
-import Input from '../input/input';
-import { useState } from 'react';
-import * as S from './styled';
+import { Divider } from '@rneui/base';
 import { ViewScroll } from './styled';
+import { Icon } from '@rneui/themed';
 import { IconModel } from '../icons';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { TimerModal } from '../timecontroll';
-
+import Input from '../input/input';
+import * as S from './styled';
+import { set } from 'date-fns';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -45,11 +48,41 @@ export const Cards = (props: ICards) => {
 
     const [data, setData] = useState({} as IUpdateTask)
 
+    const [subtask, setSubtask] = useState<IGetSubtasks[]>([])
+
     const [date, setDate] = useState(props.deadline)
 
     const [edit, setEdit] = useState(false);
 
+    const [reloadSubtasks, setReloadSubtasks] = useState(false);
+
     const [timer, setTimer] = useState(false)
+
+    const [isInputVisible, setIsInputVisible] = useState(false);
+
+    const [subtasks, setSubtasks] = useState<ICreateSubtasks>({} as ICreateSubtasks);
+
+    const [newSubtask, setNewSubtask] = useState('');
+
+    const handleAddSubtask = () => {
+        setIsInputVisible(true);
+
+        if (newSubtask) {
+            const newSubtaskObject: ICreateSubtasks = {
+                name: newSubtask,
+                done: false,
+                task: props.id
+            };
+            setSubtasks(newSubtaskObject);
+
+            serviceSubtask.createSubtask(newSubtaskObject)
+
+            setNewSubtask('');
+
+            setIsInputVisible(false);
+        }
+
+    };
 
     const toggleOverlay = () => {
         setVisible(!visible)
@@ -69,6 +102,16 @@ export const Cards = (props: ICards) => {
             console.error(error)
         }
     }
+
+    const handleCheck = async (subtaskId: number, newCheck: boolean) => {
+        try {
+            await serviceSubtask.updateSubtaskStatus(subtaskId, newCheck)
+
+            setReloadSubtasks(true);
+        } catch (error) {
+            console.error("Erro ao atualizar o estado da subtarefa:", error)
+        }
+    };
 
     const handleSubmit = async (data: IUpdateTask) => {
         try {
@@ -92,6 +135,30 @@ export const Cards = (props: ICards) => {
         }
     }
 
+    useEffect(() => {
+        async function fetchTaskSubtasks() {
+            try {
+                const response = await serviceSubtask.getTaskSubtask(props.id);
+                if (response) {
+                    setSubtask(response.data)
+
+                    return response.data;
+                } else {
+                    console.error("Erro ao buscar subtarefas da tarefa");
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        if (reloadSubtasks) {
+            fetchTaskSubtasks();
+            setReloadSubtasks(false);
+        }
+
+        fetchTaskSubtasks();
+    }, [props.id, reloadSubtasks, newSubtask])
+
     return edit ? (
         <View>
             <TouchableOpacity onPress={toggleOverlay}>
@@ -107,17 +174,20 @@ export const Cards = (props: ICards) => {
                         <S.ViewCard>
                             <S.ViewIcons>
                                 <S.ViewIcon>
-                                    <Icon
+                                    <IconModel
                                         onPress={() => handleSubmit(data)}
-                                        name='check'
-                                        color='#000'
-                                        size={30}
+                                        IconColor={"#000"}
+                                        IconSize={26}
+                                        icon='AntDesign'
+                                        iconName='check'
                                     />
-                                    <Icon
-                                        onPress={() => { setVisible(false); setEdit(!edit) }}
-                                        name='close'
-                                        color='#000'
-                                        size={30}
+
+                                    <IconModel
+                                        onPress={() => setEdit(!edit)}
+                                        IconColor={"#000"}
+                                        IconSize={25}
+                                        icon='AntDesign'
+                                        iconName='close'
                                     />
                                 </S.ViewIcon>
                             </S.ViewIcons>
@@ -172,7 +242,7 @@ export const Cards = (props: ICards) => {
                         />
 
                         <S.ViewData>
-                            <S.TaskDesc>Data atual: {props.deadline}</S.TaskDesc>
+                            <S.TaskDescT>Prazo:</S.TaskDescT>
                             <DatePicker
                                 onDateChange={(date) => { setDate(date); setData({ ...data, deadline: date }) }}
                                 style={{ width: 300, color: 'black' }}
@@ -234,29 +304,29 @@ export const Cards = (props: ICards) => {
                                 <IconModel
                                     onPress={() => handleDelete()}
                                     IconColor={"#bd1310"}
-                                    IconSize={24}
+                                    IconSize={26}
                                     icon='FontAwesome'
-                                    iconName='trash'
+                                    iconName='trash-o'
                                 />
                                 <IconModel
                                     onPress={toggleTimerModal}
                                     IconColor={"#000"}
-                                    IconSize={24}
-                                    icon={"AntDesign"}
-                                    iconName={"hourglass"}
+                                    IconSize={22}
+                                    icon={"FontAwesome"}
+                                    iconName={"hourglass-o"}
                                 />
                                 <IconModel
                                     onPress={() => setEdit(!edit)}
                                     IconColor={"#000"}
                                     IconSize={24}
-                                    icon='MaterialIcons'
-                                    iconName='edit'
+                                    icon='Feather'
+                                    iconName='edit-2'
                                 />
                                 <IconModel
                                     onPress={() => setVisible(false)}
                                     IconColor={"#000"}
-                                    IconSize={24}
-                                    icon='FontAwesome'
+                                    IconSize={25}
+                                    icon='AntDesign'
                                     iconName='close'
                                 />
                             </S.ViewIcon>
@@ -278,7 +348,59 @@ export const Cards = (props: ICards) => {
 
                     <S.ViewData>
                         <S.TaskDescT>Descrição:</S.TaskDescT>
-                        <S.TaskDesc>{props.descricao}</S.TaskDesc>
+                        <S.TaskDescT>{props.descricao}</S.TaskDescT>
+
+                        <Divider />
+                        <View style={{ height: 20 }}></View>
+
+                        {subtask?.length === 0 ? <S.TaskDescT>Não há subtarefas</S.TaskDescT> :
+                            <View>
+                                <S.TaskDescT>Subtarefas:</S.TaskDescT>
+                                <S.SubtaskDone style={{ marginTop: -10 }}>Total: {checkProgressSubTask(subtask).toFixed(2)}%</S.SubtaskDone>
+
+                                <ScrollView style={{ maxHeight: 200, width: 300 }}>
+                                    {subtask && subtask?.map((item: IGetSubtasks) => (
+                                        <View key={item.id} style={{marginBottom: -20}}>
+                                            <Checkbox
+                                                label={item.name}
+                                                check={item.done}
+                                                onCheck={() => handleCheck(item.id, !item.done)}
+                                            />
+                                        </View>
+                                    ))}
+                                </ScrollView>
+                            </View>
+                        }
+
+                        {isInputVisible && (
+                            <S.InputView style={{ marginTop: -10 }}>
+                                <Input
+                                    placeholder="Digite a subtarefa"
+                                    onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) => setNewSubtask(e.nativeEvent.text)}
+                                    textColor='#000'
+                                    value={newSubtask}
+                                />
+                            </S.InputView>
+                        )}
+
+                        <TouchableOpacity onPress={handleAddSubtask} style={{ flexDirection: 'row', marginRight: 40, alignSelf: 'flex-end' }}>
+
+                            {isInputVisible ? (
+                                <Icon
+                                    name='check'
+                                    color='grey'
+                                    size={26}
+                                />
+                            ) :
+                                <Icon
+                                    name='add'
+                                    color='grey'
+                                    size={26}
+                                />
+                            }
+
+                            <Text style={{ color: 'grey', fontSize: 20, marginLeft: 5, marginBottom: 10 }}>Adicionar subtarefa</Text>
+                        </TouchableOpacity>
                     </S.ViewData>
                 </S.GeneralView>
             </S.Modal>

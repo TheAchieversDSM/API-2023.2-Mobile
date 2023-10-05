@@ -33,7 +33,7 @@ export default function ToDo() {
 
     return (
         <>
-        <View style={{backgroundColor: '#393939'}}><HeaderComponent/></View>
+        <View style={{backgroundColor: '#222328'}}><HeaderComponent/></View>
         <Container>
             <ScrollView>
                 <TextStatus3>A Fazer</TextStatus3>

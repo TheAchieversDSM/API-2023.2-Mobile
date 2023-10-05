@@ -3,7 +3,7 @@ import {View, Text, Image} from "react-native";
 import styled from "styled-components";
 
 export const Container = styled(View)`
-  background-color: #393939;
+  background-color: #222328;
   justify-content: center;
   align-items: center;
   width: 100%;

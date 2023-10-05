@@ -57,7 +57,7 @@ export default function Home() {
   return (
     <>
       <Container>
-        <View style={{ backgroundColor: '#393939' }}><HeaderComponent /></View>
+        <View style={{ backgroundColor: '#222328' }}><HeaderComponent /></View>
         <Calendar
           onDayPress={day => {
             setSelected(day.dateString);
@@ -70,8 +70,8 @@ export default function Home() {
           }}
 
           theme={{
-            backgroundColor: '#393939',
-            calendarBackground: '#393939',
+            backgroundColor: '#222328',
+            calendarBackground: '#222328',
             textSectionTitleColor: '#de0300',
             selectedDayBackgroundColor: '#de0300',
             selectedDayTextColor: '#e7e7e7',

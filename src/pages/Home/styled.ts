@@ -4,7 +4,7 @@ import {styled} from "styled-components/native";
 
 export const Container = styled(SafeAreaView)`
   flex: 1;
-  background-color: #393939;
+  background-color: #222328;
   width: 100%;
 `;
 
@@ -24,7 +24,7 @@ export const ViewContainer = styled(View)`
 export const TextTitle = styled(Text)`
     color: #de0300;
     font-size: 22px;
-    fontWeight: bold;
+    font-family: ${( props ) => props.theme.FONTS.Poppins_600SemiBold};
 `;
 
 export const SubTextTitle = styled(Text)`

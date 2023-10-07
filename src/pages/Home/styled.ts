@@ -1,6 +1,6 @@
 import {Text} from "@rneui/themed";
 import {SafeAreaView, View} from "react-native";
-import {styled} from "styled-components/native";
+import {styled} from "styled-components";
 
 export const Container = styled(SafeAreaView)`
   flex: 1;
@@ -36,7 +36,7 @@ export const SubTextTitle = styled(Text)`
 
 export const NoTasksText = styled(Text)`
   text-align: center;
-  font-size: 18;
-  color: "#808080ff";
+  font-size: 18px;
+  color: #808080ff;
   margin-top: 120px;
 `;

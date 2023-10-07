@@ -9,6 +9,7 @@ import serviceTask from '../../service/task';
 import { Cards } from '../../components/cards/cards';
 import { HeaderComponent } from '../../components/header';
 import { ViewCards } from './cards';
+import { useTheme } from 'styled-components';
 
 LocaleConfig.defaultLocale = 'br';
 
@@ -29,6 +30,7 @@ LocaleConfig.locales['br'] = {
 }
 
 export default function Home() {
+  const theme = useTheme()
   const [selected, setSelected] = useState<string>(new Date().toISOString().split('T')[0]); // Define a data atual como selecionada
   const [selectedDay, setSelectedDay] = useState<string>('');
   const [selectedMonth, setSelectedMonth] = useState<string>('');
@@ -80,9 +82,9 @@ export default function Home() {
             textDisabledColor: '#808080',
             monthTextColor: '#de0300',
             arrowColor: '#E7E7E7',
-            textDayFontFamily: 'Poppins_400Regular',
-            textMonthFontFamily: 'Poppins_600Regular', // Substitua 'SuaFonteMes' pelo nome da fonte para meses
-            textDayHeaderFontFamily: 'Poppins_500Regular',
+            textDayFontFamily: theme.FONTS.Poppins_400Regular,
+            textMonthFontFamily: theme.FONTS.Poppins_500Medium, // Substitua 'SuaFonteMes' pelo nome da fonte para meses
+            textDayHeaderFontFamily: theme.FONTS.Poppins_500Medium,
             textDayFontSize: 15,
             textMonthFontSize: 25,
             textDayHeaderFontSize: 18,

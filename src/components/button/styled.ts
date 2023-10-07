@@ -1,4 +1,4 @@
-import { styled } from "styled-components/native";
+import { styled } from "styled-components";
 import { Button } from "@rneui/base";
 
 interface IButton {
@@ -23,7 +23,7 @@ export const Btn = styled(Button).attrs<IButton>((props) => ({
     },
     titleStyle: {
         color: props.color || 'white',
-        fontFamily: 'Poppins_400Regular',
+        fontFamily: props.theme.FONTS.Poppins_400Regular,
         fontSize: props.fontSize || 16,
     }
 }))``

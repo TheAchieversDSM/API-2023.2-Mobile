@@ -4,7 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 import { ICreateUser } from '../interfaces/user';
 import { APP_SECRET } from "@env";
 import jwt_decode from 'jwt-decode';
-import { ITimeCaculate } from '../interfaces/functions';
+import { ITaskCheck, ITimeCaculate } from '../interfaces/functions';
 import { IGetSubtasks } from '../interfaces/subtask';
 import { sub } from 'date-fns';
 
@@ -90,12 +90,32 @@ export function timeCalculate(value: string): ITimeCaculate {
 
   mensagem = calculateDateWithTime(resultadoEmSegundos);
 
-  return { msg: mensagem, time: resultadoEmSegundos}
+  return { msg: mensagem, time: resultadoEmSegundos }
 }
 
-export function checkProgressSubTask(subTaskList: IGetSubtasks[]): number{
+export function checkProgressSubTask(subTaskList: IGetSubtasks[]): number {
   const totalSubTasks = subTaskList.length;
   const totalSubTasksDone = subTaskList.filter(subTask => subTask.done).length;
   const porcentagem = totalSubTasksDone / totalSubTasks * 100;
   return porcentagem
+}
+
+export function checkTaskUser(tasks: IGetTasksUserResp[]): ITaskCheck {
+  let done = 0;
+  let doing = 0;
+  let todo = 0;
+  let expirada = 0;
+
+  tasks.forEach((task: IGetTasksUserResp) => {
+    if (task.status == "TO DO") todo += 1
+    else if (task.status == "DONE") done += 1
+    else if (task.status == "DOING") doing += 1
+    else if (task.status == "EXPIRED") expirada += 1
+  })
+
+  done = Number((done / tasks.length * 100).toFixed(0))
+  doing = Number((doing / tasks.length * 100).toFixed(0))
+  todo = Number((todo / tasks.length * 100).toFixed(0))
+
+  return { doing: doing, done: done, todo: todo, expirada: expirada }
 }

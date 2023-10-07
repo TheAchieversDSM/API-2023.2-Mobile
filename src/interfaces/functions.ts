@@ -8,3 +8,10 @@ export interface ITimeCaculate {
   msg: string;
   time: number;
 }
+
+export interface ITaskCheck {
+  done: number;
+  todo: number;
+  doing: number;
+  expirada?: number;
+}

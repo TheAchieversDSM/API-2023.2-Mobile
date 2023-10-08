@@ -10,6 +10,7 @@ const Tab = createBottomTabNavigator();
 
 
 export function TabsRoutes() {
+    
     return (
         <Tab.Navigator
             initialRouteName="Home"
@@ -44,7 +45,7 @@ export function TabsRoutes() {
             />
             <Tab.Screen
                 key={"createTask"}
-                name="createTask"
+                name="CreateTask"
                 component={CreateTask}
                 options={{
                     tabBarIcon: ({ focused }: TabBarIconProps) =>
@@ -74,7 +75,7 @@ export function TabsRoutes() {
             />
             <Tab.Screen
                 key={"TDashboard"}
-                name="dashboard"
+                name="Dashboard"
                 component={Dashboard}
                 options={{
                     tabBarIcon: ({ focused }: TabBarIconProps) =>

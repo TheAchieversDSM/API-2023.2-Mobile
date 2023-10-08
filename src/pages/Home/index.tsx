@@ -34,10 +34,9 @@ export default function Home() {
   const [selected, setSelected] = useState<string>(new Date().toISOString().split('T')[0]); // Define a data atual como selecionada
   const [selectedDay, setSelectedDay] = useState<string>('');
   const [selectedMonth, setSelectedMonth] = useState<string>('');
-  const [dateTasks, setDateTasks] = useState<IGetTasksUserResp[]>();
+  const [dateTasks, setDateTasks] = useState<IGetTasksUserResp[]>([]);
   const { userToken } = useAuth();
   const { id } = decodeJsonWebToken(String(userToken));
-  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     async function fetchUserDateTasks() {
@@ -45,8 +44,6 @@ export default function Home() {
         const response = await serviceTask.getTaskUserDate({ userId: id, deadline: String(selected) });
         if (response) {
           setDateTasks(response.data);
-        } else {
-          console.error("Erro ao buscar tarefas do usuário");
         }
       } catch (error) {
         console.error(error);
@@ -54,7 +51,7 @@ export default function Home() {
     }
 
     fetchUserDateTasks();
-  }, [selected, update]);
+  }, [selected]);
 
   return (
     <>
@@ -105,7 +102,7 @@ export default function Home() {
                 <ScrollView>
                   {dateTasks ? dateTasks?.map((task, index) => (
                     task.deadline === String(selected) && (
-                      <ViewCards {...task} />
+                      <ViewCards key={task.id} {...task} />
                     )
 
                   )) : <NoTasksText>Nenhuma tarefa expirada nessa data</NoTasksText>}

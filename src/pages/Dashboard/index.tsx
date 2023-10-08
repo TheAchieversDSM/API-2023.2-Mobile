@@ -6,43 +6,47 @@ import { Coluna } from "../../components/graficos/coluna";
 import { Donut } from "../../components/graficos/donut";
 import { Divider } from "@rneui/themed";
 import { DropdownComponent } from "../../components/dropdown/dropdown";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Button } from "../../components/button/button";
 import { IGetTasksUserResp } from "../../interfaces/task";
 import { ITaskCheck } from "../../interfaces/functions";
 import { useAuth } from "../../hooks/auth";
 import { checkTaskUser, decodeJsonWebToken } from "../../utils/utils";
 import serviceTask from "../../service/task";
+import { useFocusEffect } from '@react-navigation/native';
+
+
+const months: Months[] = []
 
 export default function Dashboard() {
     const [selectedYear, setSelectedYear] = useState('');
     const [selectedMonth, setSelectedMonth] = useState('');
 
-    const [userTasks, setUserTasks] = useState<IGetTasksUserResp[]>();
     const [values, setValues] = useState<ITaskCheck>()
     const { userToken } = useAuth()
     const { id } = decodeJsonWebToken(String(userToken))
 
-    useEffect(() => {
-        async function fetchUserTasks() {
-            try {
-                const response = await serviceTask.getTaskUser({ userId: id });
-                if (response) {
-                    setUserTasks(response);
-                    const valores = checkTaskUser(response)
-                    setValues(valores)
-                } else {
-                    console.error("Erro ao buscar tarefas do usuário");
+    useFocusEffect(
+        useCallback(() => {
+            async function fetchUserTasks() {
+                try {
+                    const response = await serviceTask.getTaskUser({ userId: id });
+                    if (response) {
+                        const valores = checkTaskUser(response)
+                        setValues(valores)
+                    } else {
+                        console.error("Erro ao buscar tarefas do usuário");
+                    }
+                } catch (error) {
+                    console.error("Erro ao buscar tarefas do usuário:", error);
                 }
-            } catch (error) {
-                console.error(error);
             }
-        }
-
-        fetchUserTasks();
-
-    }, [userTasks]);
-
+            fetchUserTasks();
+            return () => {
+                setValues(undefined);
+            };
+        }, [id])
+    );
 
     return (
         <>

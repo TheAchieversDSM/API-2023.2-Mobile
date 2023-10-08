@@ -63,7 +63,7 @@ export const Cards = (props: ICards) => {
     const [subtasks, setSubtasks] = useState<ICreateSubtasks>({} as ICreateSubtasks);
 
     const [newSubtask, setNewSubtask] = useState('');
-    
+
     const [subtaskName, setSubtaskName] = useState('' as string);
 
     const [changeSub, setChangeSub] = useState(false);
@@ -122,13 +122,23 @@ export const Cards = (props: ICards) => {
 
     const handleSubtaskName = async (subtaskId: number, newName: string) => {
         try {
-            await serviceSubtask.updateSubtaskName(subtaskId, newName)            
+            await serviceSubtask.updateSubtaskName(subtaskId, newName)
 
             setReloadSubtasks(true);
         } catch (error) {
             console.error("Erro ao atualizar o estado da subtarefa:", error)
         }
     };
+
+    const handleDeleteSubtask = async (subtaskId: number) => {
+        try {
+            await serviceSubtask.deleteSubtask(subtaskId)
+
+            setReloadSubtasks(true);
+        } catch (error) {
+            console.error("Erro ao atualizar o estado da subtarefa:", error)
+        }
+    }
 
     const handleSubmit = async (data: IUpdateTask) => {
         try {
@@ -333,7 +343,7 @@ export const Cards = (props: ICards) => {
                                     iconName={"hourglass-o"}
                                 />
                                 <IconModel
-                                    onPress={() => { setEdit(!edit), setEditingSubtaskId(null)}}
+                                    onPress={() => { setEdit(!edit), setEditingSubtaskId(null) }}
                                     IconColor={"#000"}
                                     IconSize={24}
                                     icon='Feather'
@@ -390,15 +400,15 @@ export const Cards = (props: ICards) => {
                                                         onCheck={() => handleCheck(item.id, !item.done)}
                                                         onLongPress={() => {
                                                             setEditingSubtaskId(item.id),
-                                                            setSubtaskName(item.name)
+                                                                setSubtaskName(item.name)
                                                         }}
                                                     />
                                                 ) : (
-                                                    <S.InputView style={{marginTop: 5}}>
+                                                    <S.InputView style={{ marginTop: 5, display: 'flex', flexDirection: 'row' }}>
                                                         <TouchableOpacity
                                                             onPressOut={() => { setEditingSubtaskId(null), handleSubtaskName(item.id, subtaskName) }}
                                                             onLongPress={() => { setEditingSubtaskId(null), handleSubtaskName(item.id, subtaskName) }}
-                                                            style={{ paddingVertical: 7 }}
+                                                            style={{ paddingVertical: 7, width: 300 }}
                                                         >
                                                             <Input
                                                                 placeholder={''}
@@ -410,10 +420,19 @@ export const Cards = (props: ICards) => {
                                                                 color="#C74634"
                                                                 iconL="bookmark-o"
                                                                 height={5}
-                                                                fontSize={16}
-                                                                iconLeftSize={22}
+                                                                fontSize={17}
                                                             />
                                                         </TouchableOpacity>
+
+                                                        <View style={{ marginRight: 30, marginTop: 14, alignItems: 'flex-end' }}>
+                                                            <IconModel
+                                                                onPress={() => { handleDeleteSubtask(item.id), setEditingSubtaskId(null) }}
+                                                                IconColor={"#bd1310"}
+                                                                IconSize={28}
+                                                                icon='FontAwesome'
+                                                                iconName='trash-o'
+                                                            />
+                                                        </View>
                                                     </S.InputView>
                                                 )}
                                             </View>
@@ -429,11 +448,13 @@ export const Cards = (props: ICards) => {
                                     onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) => setNewSubtask(e.nativeEvent.text)}
                                     textColor='#000'
                                     value={newSubtask}
+                                    fontSize={17}
+                                    height={5}
                                 />
                             </S.InputView>
                         )}
 
-                        <TouchableOpacity onPress={handleAddSubtask} style={{ flexDirection: 'row', marginRight: 40, alignSelf: 'flex-end' }}>
+                        <TouchableOpacity onPress={handleAddSubtask} style={{ flexDirection: 'row', marginRight: 40, alignSelf: 'flex-end', marginTop: 10 }}>
 
                             {isInputVisible ? (
                                 <Icon

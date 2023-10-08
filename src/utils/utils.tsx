@@ -100,22 +100,29 @@ export function checkProgressSubTask(subTaskList: IGetSubtasks[]): number {
   return porcentagem
 }
 
-export function checkTaskUser(tasks: IGetTasksUserResp[]): ITaskCheck {
+export function checkTaskUser(tasks: IGetTasksUserResp[], year: string, month: string): ITaskCheck {
   let done = 0;
   let doing = 0;
   let todo = 0;
   let expirada = 0;
+  let monthLength = 0;
 
   tasks.forEach((task: IGetTasksUserResp) => {
-    if (task.status == "TO DO") todo += 1
-    else if (task.status == "DONE") done += 1
-    else if (task.status == "DOING") doing += 1
-    else if (task.status == "EXPIRED") expirada += 1
+    let monthDeadLine = task.deadline.split('-')[1]
+    let yearDeadLine = task.deadline.split('-')[0]
+    monthLength += monthDeadLine == month ? 1 : 0
+    done += task.status == "DONE" && yearDeadLine == year && monthDeadLine == month ? 1 : 0
+    doing += task.status == "DOING" && yearDeadLine == year && monthDeadLine == month ? 1 : 0
+    todo += task.status == "TO DO" && yearDeadLine == year && monthDeadLine == month ? 1 : 0
+    expirada += task.status == "EXPIRED" && yearDeadLine == year && monthDeadLine == month ? 1 : 0
   })
 
-  done = Number((done / tasks.length * 100).toFixed(0))
-  doing = Number((doing / tasks.length * 100).toFixed(0))
-  todo = Number((todo / tasks.length * 100).toFixed(0))
+  const percentage = (value: number, total: number) => (total === 0 ? 0 : (value / total) * 100);
+  
+  done = percentage(done, monthLength);
+  doing = percentage(doing, monthLength);
+  todo = percentage(todo, monthLength);
+  expirada = percentage(expirada, monthLength);
 
   return { doing: doing, done: done, todo: todo, expirada: expirada }
 }

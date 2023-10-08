@@ -50,7 +50,7 @@ export const Donut = (values: ITaskCheck) => {
                     style={{ fontSize: 22, color: 'white', fontWeight: 'bold' }}>
                     {values?.done}%
                   </TextDonut>
-                  <TextDonut style={{ fontSize: 14, color: 'white' }}>Tarefas</TextDonut>
+                  <TextDonut style={{ fontSize: 14, color: 'white' }}>concluídas</TextDonut>
                 </View>
               );
             }}

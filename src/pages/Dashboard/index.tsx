@@ -14,15 +14,15 @@ import { useAuth } from "../../hooks/auth";
 import { checkTaskUser, decodeJsonWebToken } from "../../utils/utils";
 import serviceTask from "../../service/task";
 import { useFocusEffect } from '@react-navigation/native';
+import { months } from "../../interfaces/dashboard";
 
-
-const months: Months[] = []
 
 export default function Dashboard() {
     const [selectedYear, setSelectedYear] = useState('');
     const [selectedMonth, setSelectedMonth] = useState('');
 
     const [values, setValues] = useState<ITaskCheck>()
+    const [resp, setResp] = useState<IGetTasksUserResp[]>([])
     const { userToken } = useAuth()
     const { id } = decodeJsonWebToken(String(userToken))
 
@@ -32,8 +32,7 @@ export default function Dashboard() {
                 try {
                     const response = await serviceTask.getTaskUser({ userId: id });
                     if (response) {
-                        const valores = checkTaskUser(response)
-                        setValues(valores)
+                        setResp(response)
                     } else {
                         console.error("Erro ao buscar tarefas do usuário");
                     }
@@ -43,10 +42,21 @@ export default function Dashboard() {
             }
             fetchUserTasks();
             return () => {
+
                 setValues(undefined);
             };
         }, [id])
     );
+
+    const handleSearch = () => {
+        const newErrorStatus = {
+            year: selectedYear === undefined || '',
+            month: selectedMonth === undefined || ''
+        };
+        if (newErrorStatus.month || newErrorStatus.year) return
+        const valores = checkTaskUser(resp, selectedYear, selectedMonth)
+        setValues(valores)
+    }
 
     return (
         <>
@@ -72,11 +82,7 @@ export default function Dashboard() {
                         </Column>
                         <Column>
                             <DropdownComponent
-                                data={[
-                                    { label: 'Janeiro', value: 'Janeiro' },
-                                    { label: 'Fevereiro', value: 'Fevereiro' },
-                                    { label: 'Março', value: 'Março' },
-                                ]}
+                                data={months}
                                 placeholder="Mês"
                                 onValueChange={(value) => setSelectedMonth(value)}
                                 value={selectedMonth}
@@ -90,9 +96,7 @@ export default function Dashboard() {
                     <ButtonContainer>
                         <Button
                             title={"Buscar"}
-                            onPress={function (): void {
-                                throw new Error("Function not implemented.");
-                            }}
+                            onPress={handleSearch}
                             borderColor='#de0300'
                             backgroundColor='#de0300'
                             type='solid'

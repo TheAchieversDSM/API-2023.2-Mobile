@@ -7,6 +7,7 @@ interface IInput {
     multiline?: boolean;
     numberLines?: number;
     height?: number;
+    fontSize?: number;
 }
 
 export const InputC = styled(Input).attrs<IInput>((props) => ({
@@ -16,6 +17,7 @@ export const InputC = styled(Input).attrs<IInput>((props) => ({
         fontFamily: props.theme.FONTS.Poppins_400Regular,
         overflow: "scroll",
         height: props.height || 50,
+        fontSize: props.fontSize || 18,
     },
     inputContainerStyle: {
         marginHorizontal: 30,

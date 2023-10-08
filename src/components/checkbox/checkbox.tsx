@@ -13,6 +13,7 @@ export const Checkbox = (props: ICheckbox) => {
                    }}
                     title={props.label}
                     checked={props.check}
+                    onLongPress={props.onLongPress}
                     onPress={props.onCheck}
                     containerStyle={{
                         backgroundColor: 'transparent',

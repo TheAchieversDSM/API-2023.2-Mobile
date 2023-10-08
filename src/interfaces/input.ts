@@ -17,5 +17,8 @@ export interface IInput extends InputProps {
     numberLines?: number;
     multiline?: boolean;
     height?: number;
+    fontSize?: number;
+    iconRightSize?: number;
+    iconLeftSize?: number;
     onChange: (e: NativeSyntheticEvent<TextInputChangeEventData>) => void;   
 }

@@ -5,6 +5,7 @@ import CreateTask from "../pages/CreateTask";
 import Home from "../pages/Home";
 import ToDo from "../pages/ToDo";
 import Dashboard from "../pages/Dashboard";
+import Usuario from "../pages/Usuario";
 
 const Tab = createBottomTabNavigator();
 
@@ -43,21 +44,6 @@ export function TabsRoutes() {
                 }}
             />
             <Tab.Screen
-                key={"createTask"}
-                name="createTask"
-                component={CreateTask}
-                options={{
-                    tabBarIcon: ({ focused }: TabBarIconProps) =>
-                        renderBottomTab({
-                            icons: "Entypo",
-                            name: "plus",
-                            isPlusIcon: true,
-                            focused,
-                            nameScreen: "",
-                        }),
-                }}
-            />
-            <Tab.Screen
                 key={"ToDo"}
                 name="ToDo"
                 component={ToDo}
@@ -73,6 +59,21 @@ export function TabsRoutes() {
                 }}
             />
             <Tab.Screen
+                key={"createTask"}
+                name="createTask"
+                component={CreateTask}
+                options={{
+                    tabBarIcon: ({ focused }: TabBarIconProps) =>
+                        renderBottomTab({
+                            icons: "Entypo",
+                            name: "plus",
+                            isPlusIcon: true,
+                            focused,
+                            nameScreen: "",
+                        }),
+                }}
+            /> 
+            <Tab.Screen
                 key={"TDashboard"}
                 name="dashboard"
                 component={Dashboard}
@@ -84,6 +85,21 @@ export function TabsRoutes() {
                             isPlusIcon: false,
                             focused: focused,
                             nameScreen: "Dash",
+                        }),
+                }}
+            />
+            <Tab.Screen
+                key={"Usuário"}
+                name="Usuario"
+                component={Usuario}
+                options={{
+                    tabBarIcon: ({ focused }: TabBarIconProps) =>
+                        renderBottomTab({
+                            icons: "FontAwesome",
+                            name: "user",
+                            isPlusIcon: false,
+                            focused: focused,
+                            nameScreen: "Perfil",
                         }),
                 }}
             />

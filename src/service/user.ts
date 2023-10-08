@@ -1,5 +1,5 @@
 import {AxiosError, AxiosResponse} from "axios";
-import {ICreateUser} from "../interfaces/user";
+import {ICreateUser, IGetUser, IGetUserByIdResp} from "../interfaces/user";
 import {api} from "./api";
 
 class User {
@@ -22,6 +22,15 @@ class User {
         });
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async getUserById(data: IGetUser){
+    try {
+      const response = await api.get(`/user/getById/${data.userId}`);
+      return response;
+    } catch (error){
+      console.error(error);
     }
   }
 }

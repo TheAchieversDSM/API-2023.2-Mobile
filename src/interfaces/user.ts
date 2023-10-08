@@ -4,3 +4,13 @@ export interface ICreateUser {
   password: string;
   rPassword: string;
 }
+
+export interface IGetUser {
+  userId: number;
+}
+
+export interface IGetUserByIdResp{
+  name: string;
+  email: string;
+  password: string;
+}

@@ -5,8 +5,8 @@ export default function Input(props: IInput) {
     return (
         <InputC
             placeholder={props.placeholder}
-            rightIcon={{ type: 'font-awesome', name: props.iconR, color: props.color || '#DE0300' }}
-            leftIcon={{ type: 'font-awesome', name: props.iconL, color: props.color || '#DE0300', size: 25 }}
+            rightIcon={{ type: 'font-awesome', name: props.iconR, color: props.color || '#DE0300', size: props.iconRightSize || 25 }}
+            leftIcon={{ type: 'font-awesome', name: props.iconL, color: props.color || '#DE0300', size: props.iconLeftSize || 25 }}
             value={props.value}
             color={props.textColor}
             errorMessage={props.errorMsg}
@@ -17,6 +17,7 @@ export default function Input(props: IInput) {
             height={props.height}
             multiline={props.multiline}
             numberOfLines={props.numberLines}
+            fontSize={props.fontSize || 18}
         />
     )
 }

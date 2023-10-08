@@ -47,6 +47,16 @@ class Subtask {
         }
     }
 
+    async updateSubtaskName(subtaskId: number, newName: string) {
+        try {
+            const response = await api.put(`/subtask/update/${subtaskId}`, {name: newName});
+
+            return response;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     /* async deleteTask(id: number) {
         try {
             const response = await api.delete(`/task/delete/${id}`);

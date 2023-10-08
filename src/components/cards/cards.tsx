@@ -63,6 +63,12 @@ export const Cards = (props: ICards) => {
     const [subtasks, setSubtasks] = useState<ICreateSubtasks>({} as ICreateSubtasks);
 
     const [newSubtask, setNewSubtask] = useState('');
+    
+    const [subtaskName, setSubtaskName] = useState('' as string);
+
+    const [changeSub, setChangeSub] = useState(false);
+
+    const [editingSubtaskId, setEditingSubtaskId] = useState<number | null>(null);
 
     const handleAddSubtask = () => {
         setIsInputVisible(true);
@@ -106,6 +112,17 @@ export const Cards = (props: ICards) => {
     const handleCheck = async (subtaskId: number, newCheck: boolean) => {
         try {
             await serviceSubtask.updateSubtaskStatus(subtaskId, newCheck)
+
+            setReloadSubtasks(true);
+        } catch (error) {
+            console.error("Erro ao atualizar o estado da subtarefa:", error)
+        }
+    };
+
+
+    const handleSubtaskName = async (subtaskId: number, newName: string) => {
+        try {
+            await serviceSubtask.updateSubtaskName(subtaskId, newName)            
 
             setReloadSubtasks(true);
         } catch (error) {
@@ -168,7 +185,7 @@ export const Cards = (props: ICards) => {
                 </S.CardTask>
             </TouchableOpacity>
 
-            <S.Modal isVisible={visible} onBackdropPress={toggleOverlay}>
+            <S.Modal isVisible={visible} onBackdropPress={toggleOverlay} >
                 <ViewScroll>
                     <S.GeneralView>
                         <S.ViewCard>
@@ -302,7 +319,7 @@ export const Cards = (props: ICards) => {
                         <S.ViewIcons>
                             <S.ViewIcon>
                                 <IconModel
-                                    onPress={() => handleDelete()}
+                                    onPress={() => { handleDelete(), setEditingSubtaskId(null) }}
                                     IconColor={"#bd1310"}
                                     IconSize={26}
                                     icon='FontAwesome'
@@ -316,14 +333,14 @@ export const Cards = (props: ICards) => {
                                     iconName={"hourglass-o"}
                                 />
                                 <IconModel
-                                    onPress={() => setEdit(!edit)}
+                                    onPress={() => { setEdit(!edit), setEditingSubtaskId(null)}}
                                     IconColor={"#000"}
                                     IconSize={24}
                                     icon='Feather'
                                     iconName='edit-2'
                                 />
                                 <IconModel
-                                    onPress={() => setVisible(false)}
+                                    onPress={() => { setVisible(false), setEditingSubtaskId(null) }}
                                     IconColor={"#000"}
                                     IconSize={25}
                                     icon='AntDesign'
@@ -353,29 +370,62 @@ export const Cards = (props: ICards) => {
                         <Divider />
                         <View style={{ height: 20 }}></View>
 
-                        {subtask?.length === 0 ? <S.TaskDescT>Não há subtarefas</S.TaskDescT> :
+                        {subtask?.length === 0 ? (
+                            <S.TaskDescT>Não há subtarefas</S.TaskDescT>
+                        ) : (
                             <View>
                                 <S.TaskDescT>Subtarefas:</S.TaskDescT>
-                                <S.SubtaskDone style={{ marginTop: -10 }}>Total: {checkProgressSubTask(subtask).toFixed(2)}%</S.SubtaskDone>
+                                <S.SubtaskDone style={{ marginTop: -10 }}>
+                                    Total: {checkProgressSubTask(subtask).toFixed(2)}%
+                                </S.SubtaskDone>
 
                                 <ScrollView style={{ maxHeight: 200, width: 300 }}>
-                                    {subtask && subtask?.map((item: IGetSubtasks) => (
-                                        <View key={item.id} style={{marginBottom: -20}}>
-                                            <Checkbox
-                                                label={item.name}
-                                                check={item.done}
-                                                onCheck={() => handleCheck(item.id, !item.done)}
-                                            />
-                                        </View>
-                                    ))}
+                                    {subtask &&
+                                        subtask.map((item: IGetSubtasks) => (
+                                            <View key={item.id} style={{ marginBottom: -20 }}>
+                                                {!editingSubtaskId || editingSubtaskId !== item.id ? (
+                                                    <Checkbox
+                                                        label={item.name}
+                                                        check={item.done}
+                                                        onCheck={() => handleCheck(item.id, !item.done)}
+                                                        onLongPress={() => {
+                                                            setEditingSubtaskId(item.id),
+                                                            setSubtaskName(item.name)
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <S.InputView style={{marginTop: 5}}>
+                                                        <TouchableOpacity
+                                                            onPressOut={() => { setEditingSubtaskId(null), handleSubtaskName(item.id, subtaskName) }}
+                                                            onLongPress={() => { setEditingSubtaskId(null), handleSubtaskName(item.id, subtaskName) }}
+                                                            style={{ paddingVertical: 7 }}
+                                                        >
+                                                            <Input
+                                                                placeholder={''}
+                                                                value={subtaskName}
+                                                                onChange={(e) => {
+                                                                    setSubtaskName(e.nativeEvent.text);
+                                                                }}
+                                                                textColor="#000"
+                                                                color="#C74634"
+                                                                iconL="bookmark-o"
+                                                                height={5}
+                                                                fontSize={16}
+                                                                iconLeftSize={22}
+                                                            />
+                                                        </TouchableOpacity>
+                                                    </S.InputView>
+                                                )}
+                                            </View>
+                                        ))}
                                 </ScrollView>
                             </View>
-                        }
+                        )}
 
                         {isInputVisible && (
                             <S.InputView style={{ marginTop: -10 }}>
                                 <Input
-                                    placeholder="Digite a subtarefa"
+                                    placeholder="Insira a nova subtarefa"
                                     onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) => setNewSubtask(e.nativeEvent.text)}
                                     textColor='#000'
                                     value={newSubtask}

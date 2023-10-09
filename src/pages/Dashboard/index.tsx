@@ -73,6 +73,9 @@ export default function Dashboard() {
                                 ]}
                                 placeholder="Ano"
                                 onValueChange={(value) => setSelectedYear(value)}
+                                iconColor="#de0300"
+                                iconName="calendar"
+                                iconSelectedName="check"
                                 value={selectedYear}
                                 borderColor='#9a9999'
                                 color='#fff'
@@ -85,6 +88,9 @@ export default function Dashboard() {
                                 data={months}
                                 placeholder="Mês"
                                 onValueChange={(value) => setSelectedMonth(value)}
+                                iconColor="#de0300"
+                                iconName="calendar"
+                                iconSelectedName="check"
                                 value={selectedMonth}
                                 borderColor='#9a9999'
                                 color='#fff'

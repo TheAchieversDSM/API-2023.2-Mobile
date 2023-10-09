@@ -4,7 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 import { ICreateUser } from '../interfaces/user';
 import { APP_SECRET } from "@env";
 import jwt_decode from 'jwt-decode';
-import { ITimeCaculate } from '../interfaces/functions';
+import { ITaskCheck, ITimeCaculate } from '../interfaces/functions';
 import { IGetSubtasks } from '../interfaces/subtask';
 import { sub } from 'date-fns';
 
@@ -90,12 +90,39 @@ export function timeCalculate(value: string): ITimeCaculate {
 
   mensagem = calculateDateWithTime(resultadoEmSegundos);
 
-  return { msg: mensagem, time: resultadoEmSegundos}
+  return { msg: mensagem, time: resultadoEmSegundos }
 }
 
-export function checkProgressSubTask(subTaskList: IGetSubtasks[]): number{
+export function checkProgressSubTask(subTaskList: IGetSubtasks[]): number {
   const totalSubTasks = subTaskList.length;
   const totalSubTasksDone = subTaskList.filter(subTask => subTask.done).length;
   const porcentagem = totalSubTasksDone / totalSubTasks * 100;
   return porcentagem
+}
+
+export function checkTaskUser(tasks: IGetTasksUserResp[], year: string, month: string): ITaskCheck {
+  let done = 0;
+  let doing = 0;
+  let todo = 0;
+  let expirada = 0;
+  let monthLength = 0;
+
+  tasks.forEach((task: IGetTasksUserResp) => {
+    let monthDeadLine = task.deadline.split('-')[1]
+    let yearDeadLine = task.deadline.split('-')[0]
+    monthLength += monthDeadLine == month ? 1 : 0
+    done += task.status == "DONE" && yearDeadLine == year && monthDeadLine == month ? 1 : 0
+    doing += task.status == "DOING" && yearDeadLine == year && monthDeadLine == month ? 1 : 0
+    todo += task.status == "TO DO" && yearDeadLine == year && monthDeadLine == month ? 1 : 0
+    expirada += task.status == "EXPIRED" && yearDeadLine == year && monthDeadLine == month ? 1 : 0
+  })
+
+  const percentage = (value: number, total: number) => (total === 0 ? 0 : (value / total) * 100);
+  
+  done = percentage(done, monthLength);
+  doing = percentage(doing, monthLength);
+  todo = percentage(todo, monthLength);
+  expirada = percentage(expirada, monthLength);
+
+  return { doing: doing, done: done, todo: todo, expirada: expirada }
 }

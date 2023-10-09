@@ -1,4 +1,4 @@
-import { styled } from "styled-components/native";
+import { styled } from "styled-components";
 import { Input } from "@rneui/base";
 
 interface IInput {
@@ -9,7 +9,7 @@ export const DataPicker = styled(Input).attrs<IInput>((props) => ({
     inputStyle: {
         color: props.color || 'white',
         paddingLeft: 10,
-        fontFamily: 'Poppins_400Regular',
+        fontFamily: props.theme.FONTS.Poppins_400Regular,
     },
     placeholderTextColor: props.color || 'white',
 }))``

@@ -47,7 +47,6 @@ class Task {
         try {
             const response = await api.get(`/task/getExpiredTasks/${data.userId}/${data.deadline}`);
             return response.data;
-
         } catch (error) {
             console.error(error);
         }

@@ -47,14 +47,24 @@ class Subtask {
         }
     }
 
-    /* async deleteTask(id: number) {
+    async updateSubtaskName(subtaskId: number, newName: string) {
         try {
-            const response = await api.delete(`/task/delete/${id}`);
+            const response = await api.put(`/subtask/update/${subtaskId}`, {name: newName});
+
             return response;
         } catch (error) {
             console.error(error);
         }
-    } */
+    }
+
+    async deleteSubtask(id: number) {
+        try {
+            const response = await api.delete(`/subtask/delete/${id}`);
+            return response;
+        } catch (error) {
+            console.error(error);
+        }
+    }
 }
 
 const serviceSubtask = new Subtask();

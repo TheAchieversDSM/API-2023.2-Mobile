@@ -12,29 +12,29 @@ import { NotFound } from './src/pages/NotFound';
 LogBox.ignoreAllLogs()
 
 export default function App() {
-
   const fontLoaded = fontsLoaded.fontsLoaded();
-  const [date, setDate] = useState(new Date())
-  const [status, setStatus] = useState(false);
-
+  const [state, setState] = useState({
+    date: new Date(),
+    status: false,
+  })
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const reqStatus = await apiStatus.checkApi();
         if (reqStatus === 200) {
-          setStatus(true);
+          setState({ ...state, status: true });
         } else {
-          setStatus(false);
+          setState({ ...state, status: false });
         }
       } catch (error) {
         console.error('Erro ao verificar o status da API:', error);
-        setStatus(false);
+        setState({ ...state, status: false });
       }
     };
 
     const intervalId = setInterval(() => {
-      setDate(new Date())
+      setState({ ...state, date: new Date() })
       fetchData();
     }, 60000);
 
@@ -42,17 +42,17 @@ export default function App() {
     return () => {
       clearInterval(intervalId);
     };
-  }, [status]);
+  }, [state.status]);
 
 
   if (!fontLoaded) {
     return <ActivityIndicator />
   }
 
-  if (!status) {
+  if (!state.status) {
     return (
       <ThemeProvider theme={theme}>
-        <NotFound date={date} />
+        <NotFound date={state.date} />
       </ThemeProvider>
     )
 

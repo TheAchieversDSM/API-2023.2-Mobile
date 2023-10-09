@@ -6,18 +6,63 @@ import { Coluna } from "../../components/graficos/coluna";
 import { Donut } from "../../components/graficos/donut";
 import { Divider } from "@rneui/themed";
 import { DropdownComponent } from "../../components/dropdown/dropdown";
-import { useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Button } from "../../components/button/button";
+import { IGetTasksUserResp } from "../../interfaces/task";
+import { ITaskCheck } from "../../interfaces/functions";
+import { useAuth } from "../../hooks/auth";
+import { checkTaskUser, decodeJsonWebToken } from "../../utils/utils";
+import serviceTask from "../../service/task";
+import { useFocusEffect } from '@react-navigation/native';
+import { months } from "../../interfaces/dashboard";
+
 
 export default function Dashboard() {
     const [selectedYear, setSelectedYear] = useState('');
     const [selectedMonth, setSelectedMonth] = useState('');
 
-    return(
+    const [values, setValues] = useState<ITaskCheck>()
+    const [resp, setResp] = useState<IGetTasksUserResp[]>([])
+    const { userToken } = useAuth()
+    const { id } = decodeJsonWebToken(String(userToken))
+
+    useFocusEffect(
+        useCallback(() => {
+            async function fetchUserTasks() {
+                try {
+                    const response = await serviceTask.getTaskUser({ userId: id });
+                    if (response) {
+                        setResp(response)
+                    } else {
+                        console.error("Erro ao buscar tarefas do usuário");
+                    }
+                } catch (error) {
+                    console.error("Erro ao buscar tarefas do usuário:", error);
+                }
+            }
+            fetchUserTasks();
+            return () => {
+
+                setValues(undefined);
+            };
+        }, [id])
+    );
+
+    const handleSearch = () => {
+        const newErrorStatus = {
+            year: selectedYear === undefined || '',
+            month: selectedMonth === undefined || ''
+        };
+        if (newErrorStatus.month || newErrorStatus.year) return
+        const valores = checkTaskUser(resp, selectedYear, selectedMonth)
+        setValues(valores)
+    }
+
+    return (
         <>
-            <View style={{backgroundColor: '#222328'}}><HeaderComponent/></View>
+            <View style={{ backgroundColor: '#222328' }}><HeaderComponent /></View>
             <Container>
-                <View style={{ marginTop: 20}}>
+                <View style={{ marginTop: 20 }}>
                     <Filtro>
                         <Column>
                             <DropdownComponent
@@ -33,15 +78,11 @@ export default function Dashboard() {
                                 color='#fff'
                                 width={160}
                             />
-                            <View style={{marginBottom: -40}}></View>
+                            <View style={{ marginBottom: -40 }}></View>
                         </Column>
                         <Column>
                             <DropdownComponent
-                                data={[
-                                    { label: 'Janeiro', value: 'Janeiro' },
-                                    { label: 'Fevereiro', value: 'Fevereiro' },
-                                    { label: 'Março', value: 'Março' },
-                                ]}
+                                data={months}
                                 placeholder="Mês"
                                 onValueChange={(value) => setSelectedMonth(value)}
                                 value={selectedMonth}
@@ -49,29 +90,31 @@ export default function Dashboard() {
                                 color='#fff'
                                 width={160}
                             />
-                            <View style={{marginBottom: -40}}></View>
+                            <View style={{ marginBottom: -40 }}></View>
                         </Column>
                     </Filtro>
                     <ButtonContainer>
                         <Button
                             title={"Buscar"}
-                            onPress={function (): void {
-                            throw new Error("Function not implemented.");
-                            } }
+                            onPress={handleSearch}
                             borderColor='#de0300'
                             backgroundColor='#de0300'
                             type='solid'
                         />
                     </ButtonContainer>
                 </View>
-                <ScrollView style={{paddingTop: 20, padding: 10}}>
-                    <Donut/>
+                <ScrollView style={{ paddingTop: 20, padding: 10 }}>
+                    <Donut
+                        doing={values ? values?.doing : 0}
+                        done={values ? values?.done : 0}
+                        todo={values ? values?.todo : 0}
+                    />
                     <Divider />
                     <View>
-                        <Expirado>123 tarefas expiraram esse mês</Expirado>
+                        <Expirado>{values?.expirada} tarefas expiraram esse mês</Expirado>
                     </View>
-                    <Divider/>
-                    <Coluna/>
+                    <Divider />
+                    <Coluna />
                 </ScrollView>
             </Container>
         </>

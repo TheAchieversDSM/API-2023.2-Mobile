@@ -1,5 +1,5 @@
 import {SafeAreaView, View, Text} from "react-native";
-import {styled} from "styled-components/native";
+import {styled} from "styled-components";
 
 export const Container = styled(SafeAreaView)`
   flex: 1;
@@ -31,6 +31,6 @@ export const ButtonContainer = styled(View)`
   margin: 0 auto;
 `;
 
-export const Column = styled.View`
+export const Column = styled(View)`
   width: 50%; /* Defina a largura máxima desejada, como 50% para duas colunas */
 `;

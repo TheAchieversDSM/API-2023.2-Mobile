@@ -1,5 +1,5 @@
 import {SafeAreaView, View, Text} from "react-native";
-import {styled} from "styled-components/native";
+import {styled} from "styled-components";
 
 export const Titulo = styled(Text)`
   font-size: 20px;

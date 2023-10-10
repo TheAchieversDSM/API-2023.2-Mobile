@@ -11,6 +11,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 export default function ToDo() {
     const [userTasks, setUserTasks] = useState<IGetTasksUserResp[]>([]);
+    const [reload, setReload] = useState(false);
     const { userToken } = useAuth()
 
     const { id } = decodeJsonWebToken(String(userToken))
@@ -31,13 +32,18 @@ export default function ToDo() {
             }
 
             fetchUserTasks();
-
+            setReload(false)
             return () => {
                 setUserTasks([])
             }
-
-        }, [id])    
+        }, [id, reload])
     )
+
+
+    const reloadTasksData = () => {
+        setReload(!reload);
+    };
+
 
     return (
         <>
@@ -49,6 +55,8 @@ export default function ToDo() {
                         ?.filter((task) => task.status === "TO DO")
                         .map((task, index) => (
                             <Cards
+                                reloadTasksData={reloadTasksData}
+                                reload={reload}
                                 timeSpent={task.timeSpent}
                                 id={task.id}
                                 key={task.id}
@@ -69,6 +77,8 @@ export default function ToDo() {
                         ?.filter((task) => task.status === "DOING")
                         .map((task, index) => (
                             <Cards
+                                reload={reload}
+                                reloadTasksData={reloadTasksData}
                                 timeSpent={task.timeSpent}
                                 id={task.id}
                                 key={task.id}
@@ -89,6 +99,8 @@ export default function ToDo() {
                         ?.filter((task) => task.status === "DONE")
                         .map((task, index) => (
                             <Cards
+                                reload={reload}
+                                reloadTasksData={reloadTasksData}
                                 timeSpent={task.timeSpent}
                                 id={task.id}
                                 key={task.id}

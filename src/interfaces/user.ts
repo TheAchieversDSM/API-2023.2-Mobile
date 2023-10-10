@@ -14,3 +14,11 @@ export interface IGetUserByIdResp{
   email: string;
   password: string;
 }
+
+export interface IUpdateUser{
+  userId: number;
+  name: string | undefined;
+  email: string | undefined;
+  password: string | undefined;
+  reloadUser: () => void;
+}

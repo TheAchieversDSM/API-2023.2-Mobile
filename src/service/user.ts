@@ -1,5 +1,5 @@
 import {AxiosError, AxiosResponse} from "axios";
-import {ICreateUser, IGetUser, IGetUserByIdResp} from "../interfaces/user";
+import {ICreateUser, IGetUser, IGetUserByIdResp, IUpdateUser} from "../interfaces/user";
 import {api} from "./api";
 
 class User {
@@ -30,6 +30,16 @@ class User {
       const response = await api.get(`/user/getById/${data.userId}`);
       return response;
     } catch (error){
+      console.error(error);
+    }
+  }
+
+  async updateUser(data: IUpdateUser){
+    console.log(data)
+    try {      
+      const response = await api.put(`/user/updateUser/${data.userId}`, data);
+      return response;
+    } catch (error) {
       console.error(error);
     }
   }

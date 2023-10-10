@@ -8,12 +8,14 @@ import { useEffect, useState } from "react";
 import serviceUser from "../../service/user";
 import { IGetUserByIdResp } from "../../interfaces/user";
 import { TouchableOpacity } from "react-native";
+import UserModal from "../../components/userModal";
 
 export default function Usuario() {
     const { userToken } = useAuth();
     const { id } = decodeJsonWebToken(String(userToken));
     const [usuario, setUsuario] = useState<IGetUserByIdResp>();
     const { signOut } = useAuth();
+    const [reloadUserData, setReloadUserData] = useState(false);
     
     const handleLogout = async () => {
         await signOut();
@@ -27,14 +29,15 @@ export default function Usuario() {
                 if (response) {
                     setUsuario(response.data.data);
                 } else {
-                    console.error("Erro ao buscar tarefas do usuário");
+                    console.error("Erro ao buscar o usuário");
                 }
             } catch (error) {
                 console.error(error);
             }
         }
-        fetchUser();
-    }, []);
+            fetchUser();
+        
+    }, [reloadUserData]);
     
     return(
         <>
@@ -44,9 +47,7 @@ export default function Usuario() {
                 <Nome>{usuario?.name}</Nome>
                 <Email>{usuario?.email}</Email>
                 
-                <TouchableOpacity>
-                    <Logout>Editar</Logout>
-                </TouchableOpacity>
+                <UserModal userId={id} name={usuario?.name} email={usuario?.email} password={usuario?.password} reloadUser={() => setReloadUserData(!reloadUserData)}/>
 
                 <Divider
                     style={{ width: "80%", margin: 20 }}

@@ -1,23 +1,24 @@
 import { TextInputChangeEventData } from 'react-native/Libraries/Components/TextInput/TextInput';
-import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
+import { GestureResponderEvent, NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 import { ButtonContainer, Container, ErrorText, ViewScroll } from './styled';
 import { DropdownComponent } from '../../components/dropdown/dropdown';
 import { decodeJsonWebToken, formatDate } from '../../utils/utils';
 import { ICreateTasks, IUpdateTask } from '../../interfaces/task';
 import { IResponseCadastro } from '../../interfaces/functions';
+import { Checkbox } from '../../components/checkbox/checkbox';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { HeaderComponent } from '../../components/header';
 import { ICreateSubtasks } from '../../interfaces/subtask';
+import { HeaderComponent } from '../../components/header';
 import { useNavigation } from "@react-navigation/native";
 import { DatePicker } from '../../components/datepicker';
 import { Button } from '../../components/button/button';
+import serviceSubtask from '../../service/subtask';
 import Input from '../../components/input/input';
+import { Divider, Switch } from '@rneui/base';
 import serviceTask from '../../service/task';
 import { useAuth } from '../../hooks/auth';
 import React, { useState } from 'react';
-import { Divider } from '@rneui/base';
 import { Icon } from '@rneui/themed';
-import serviceSubtask from '../../service/subtask';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -31,6 +32,8 @@ export default function CreateTask() {
     const { userToken } = useAuth();
 
     const { id } = decodeJsonWebToken(String(userToken))
+
+    const [recurrency, setRecurrency] = useState(false)
 
     const [priorities, setPriorities] = useState<string | undefined>(undefined);
 
@@ -68,7 +71,7 @@ export default function CreateTask() {
         userId: id,
         customInterval: 0,
         last_execution: '2023-02-02'
-    })
+    })        
 
     const [errorMessage, setErrorMessage] = useState({
         name: "",
@@ -105,7 +108,7 @@ export default function CreateTask() {
         const newErrorStatus = {
             name: values.name === '',
             description: values.description === '',
-            deadline: values.deadline === '',
+            deadline: values.deadline === '' || recurrency == false,
         };
 
         setErrorStatus(newErrorStatus);
@@ -116,8 +119,7 @@ export default function CreateTask() {
     const [prio, setPrio] = useState(false)
 
     const handleSubmit = async (data: ICreateTasks) => {
-        console.log(data);
-
+        setData({...data, deadline: recurrency ? String(formatDate(new Date())) : data.deadline})
         try {
             if (checkFields(data)) {
                 setErrorMessage({ name: "Nome é obrigatório", description: "Descrição é obrigatória", deadline: "Data é obrigatória" })
@@ -130,7 +132,7 @@ export default function CreateTask() {
                 }
                 return
             }
-            else if (data.deadline <= formatDate(new Date())) {
+            else if (data.deadline < formatDate(new Date())) {
                 setErrorMessage({ name: "", description: "", deadline: "Data inválida. Selecione uma data futura." })
                 return
             }
@@ -161,6 +163,8 @@ export default function CreateTask() {
                     })
 
                     setPriorities(undefined)
+
+                    setRecurrency(false)
 
                     setIsInputVisible(false);
                     setSubtasks([]);
@@ -232,8 +236,32 @@ export default function CreateTask() {
                             errorMessage={errorMessage.deadline}
                             errorStyle={{ color: "#F2F2F2", marginLeft: -1, marginTop: 15, fontSize: 15 }}
                             value={data.deadline}
-                            style={{ width: 330, height: 50, marginBottom: 40, marginTop: 10, marginLeft: 3 }}
+                            style={{ width: 330, height: 50, marginBottom: 40, marginTop: 10, marginLeft: 3, display: recurrency ? 'none' : 'flex' }}
                         />
+
+                        <Checkbox
+                            label={'A tarefa é recorrente?'}
+                            check={recurrency}
+                            cross={false}
+                            color='white'
+                            backgroundColor='#222328'
+                            onCheck={() => setRecurrency(!recurrency)}
+                        />
+
+                        {recurrency && (
+                            <View style={{marginLeft: -25, marginTop: 20}}>
+                                <Input
+                                    placeholder='Insira a frequência em dias'
+                                    onChange={(e) => setData({ ...data, customInterval: Number(e.nativeEvent.text) })}
+                                    errorMsg={errorStatus.name ? "Frequência é obrigatória" : ""}
+                                    errorStyle={{ marginLeft: 30, color: "#F2F2F2", fontSize: 15 }}
+                                    color='#de0300'
+                                    textColor='#fff'
+                                    iconL='file-text-o'
+                                    value={data.customInterval.toString() == '0' ? '' : data.customInterval.toString()}
+                                />
+                            </View>
+                        )}
                     </View>
 
                     <Divider style={{ marginHorizontal: 40, marginBottom: 20 }} />
@@ -264,19 +292,25 @@ export default function CreateTask() {
 
                     <TouchableOpacity onPress={handleAddSubtask} style={{ flexDirection: 'row', marginRight: 40, alignSelf: 'flex-end' }}>
                         {isInputVisible ? (
-                            <Icon
-                                name='check'
-                                color='#fff'
-                                size={26}
-                            />
+                            <>
+                                <Icon
+                                    name='check'
+                                    color='#fff'
+                                    size={26}
+                                />
+                                <Text style={{ color: '#fff', fontSize: 20, marginLeft: 10 }}>Confirmar subtarefa</Text>
+                            </>
                         ) :
-                            <Icon
-                                name='add'
-                                color='#fff'
-                                size={30}
-                            />
+                            <>
+                                <Icon
+                                    name='add'
+                                    color='#fff'
+                                    size={30}
+                                />
+                                <Text style={{ color: '#fff', fontSize: 20, marginLeft: 10 }}>Adicionar subtarefa</Text>
+                            </>
                         }
-                        <Text style={{ color: '#fff', fontSize: 20, marginLeft: 10 }}>Adicionar subtarefa</Text>
+
                     </TouchableOpacity>
 
                     <ButtonContainer>

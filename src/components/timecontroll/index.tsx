@@ -6,7 +6,7 @@ import { Button } from "../button/button";
 import { timeCalculate } from "../../utils/utils";
 import serviceTask from "../../service/task";
 
-export const TimerModal = ({ view, onBackdropPress, task }: ITimeModal) => {
+export const TimerModal = ({ view, onBackdropPress, task, reload, reloadTasksData }: ITimeModal) => {
     const [state, setState] = useState({
         time: "",
         newTime: "",
@@ -34,15 +34,16 @@ export const TimerModal = ({ view, onBackdropPress, task }: ITimeModal) => {
         await serviceTask.updateTask({
             ...task,
             timeSpent: newValue,
-        })
-        handleCloseModal()
+        });
+        handleCloseModal();
+        reloadTasksData();
     }
 
     const handleCloseModal = () => {
         onBackdropPress()
         setState({ time: "", newTime: "", send: false, value: 0 })
     }
-    
+
     return (
         <OverlaySyld isVisible={view} onBackdropPress={handleCloseModal}>
             <Container>

@@ -62,13 +62,15 @@ export const Cards = (props: ICards) => {
 
     const [subtasks, setSubtasks] = useState<ICreateSubtasks>({} as ICreateSubtasks);
 
+    const [reload, setReload] = useState(false);
+
     const [newSubtask, setNewSubtask] = useState('');
 
     const [subtaskName, setSubtaskName] = useState('' as string);
 
-    const [changeSub, setChangeSub] = useState(false);
-
     const [editingSubtaskId, setEditingSubtaskId] = useState<number | null>(null);
+
+
 
     const handleAddSubtask = () => {
         setIsInputVisible(true);
@@ -86,6 +88,7 @@ export const Cards = (props: ICards) => {
             setNewSubtask('');
 
             setIsInputVisible(false);
+            setReloadSubtasks(true);
         }
 
     };
@@ -154,6 +157,7 @@ export const Cards = (props: ICards) => {
                     timeSpent: props.timeSpent,
                     done: false
                 })
+                props.reloadTasksData();
             }
             setEdit(false)
         }
@@ -161,6 +165,11 @@ export const Cards = (props: ICards) => {
             console.error(error)
         }
     }
+
+    useEffect(() => {
+        setReload(false);
+        if (reload) props.reloadTasksData()
+    }, [props, reload])
 
     useEffect(() => {
         async function fetchTaskSubtasks() {
@@ -178,13 +187,19 @@ export const Cards = (props: ICards) => {
             }
         }
 
+
         if (reloadSubtasks) {
-            fetchTaskSubtasks();
+            fetchTaskSubtasks()
             setReloadSubtasks(false);
         }
 
         fetchTaskSubtasks();
-    }, [props.id, reloadSubtasks, newSubtask])
+    }, [props, newSubtask])
+
+    const reloadTasksData = () => {
+        setReload(!reload);
+    };
+
 
     return edit ? (
         <View>
@@ -321,6 +336,8 @@ export const Cards = (props: ICards) => {
                     status: props.taskStatus,
                     done: false /* @REVIEW */
                 }}
+                reload={reload}
+                reloadTasksData={reloadTasksData}
             />
 
             <S.Modal isVisible={visible} onBackdropPress={toggleOverlay}>

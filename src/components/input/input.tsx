@@ -13,6 +13,7 @@ export default function Input(props: IInput) {
             errorStyle={props.errorStyle}
             secureTextEntry={props.password}
             onChange={props.onChange}
+            onSubmitEditing={props.onSubmitEditing}
             marginBottom={props.marginBottom}
             height={props.height}
             multiline={props.multiline}

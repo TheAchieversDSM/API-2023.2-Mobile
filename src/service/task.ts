@@ -64,6 +64,7 @@ class Task {
     async deleteTask(id: number) {
         try {
             const response = await api.delete(`/task/delete/${id}`);
+            console.log(response.data)
             return response;
         } catch (error) {
             console.error(error);

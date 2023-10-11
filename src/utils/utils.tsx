@@ -6,7 +6,7 @@ import { APP_SECRET } from "@env";
 import jwt_decode from 'jwt-decode';
 import { ITaskCheck, ITimeCaculate } from '../interfaces/functions';
 import { IGetSubtasks } from '../interfaces/subtask';
-import { sub } from 'date-fns';
+import { apiStatus } from '../service/api';
 
 export async function getItem(key: string): Promise<string | null> {
   const value = await SecureStore.getItemAsync(key)
@@ -55,6 +55,12 @@ export const checkTokenValidity = (userToken: string, signOut: Function) => {
     signOut()
   }
 };
+
+export const checkTaskLogs = async (userToken: string) => {
+  const { id } = decodeJsonWebToken(userToken);
+  const service = await apiStatus.timeUpdate(id)
+  return service;
+}
 
 export function comparePriority(a: IGetTasksUserResp, b: IGetTasksUserResp): number {
   const prioritiesOrder = { High: 0, Medium: 1, Low: 2 };
@@ -118,7 +124,7 @@ export function checkTaskUser(tasks: IGetTasksUserResp[], year: string, month: s
   })
 
   const percentage = (value: number, total: number) => (total === 0 ? 0 : (value / total) * 100);
-  
+
   done = percentage(done, monthLength);
   doing = percentage(doing, monthLength);
   todo = percentage(todo, monthLength);

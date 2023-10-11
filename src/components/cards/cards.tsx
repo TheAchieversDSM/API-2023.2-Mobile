@@ -116,7 +116,7 @@ export const Cards = (props: ICards) => {
               console.error('Erro ao carregar subtasks:', error);
             });
         }
-      }, [reloadSubtasks]);
+      }, [props.id, reloadSubtasks]);
 
     const handleAddSubtask = () => {
         setIsInputVisible(true);

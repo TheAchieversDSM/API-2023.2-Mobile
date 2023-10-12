@@ -82,7 +82,7 @@ export const Cards = (props: ICards) => {
         } catch (error) {
             console.error(error);
         }
-    }
+    }    
 
     const handleEnterAddSubtask = (e: string) => {
         if (e) {
@@ -397,7 +397,7 @@ export const Cards = (props: ICards) => {
                     <View style={{ display: "flex", flexDirection: "row", justifyContent: 'space-between', marginRight: 15, marginLeft: 5 }}>
                         <View style={{ display: "flex", flexDirection: "row", justifyContent: 'space-between', marginLeft: 10 }}>
 
-                            {new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() ? (
+                            {new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() && props.value != 'Concluído' ? (
                                 <View style={{ marginTop: 10 }}>
                                     <IconModel
                                         iconName={'exclamationcircleo'}
@@ -409,15 +409,15 @@ export const Cards = (props: ICards) => {
                             ) : null}
 
                             <S.TaskName style={{
-                                color: new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() < new Date().toLocaleDateString() ? "#de0300"
-                                    : new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() ? "#FF4328"
+                                color: new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() < new Date().toLocaleDateString() && props.value != 'Concluído' ? "#de0300"
+                                    : new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() && props.value != 'Concluído' ? "#FF4328"
                                         : "black", fontWeight: "bold", fontSize: 18
                             }}>{props.task}</S.TaskName>
                         </View>
 
                         <S.TaskName style={{
-                            color: new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() < new Date().toLocaleDateString() ? "#de0300"
-                                : new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() ? "#FF4328"
+                            color: new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() < new Date().toLocaleDateString() && props.value != 'Concluído' ? "#de0300" 
+                                : new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() && props.value != 'Concluído' ? "#FF4328" 
                                     : "black", fontSize: 18
                         }}>{props.priority === "Low" ? "★" : props.priority === "Medium" ? "★★" : "★★★"}</S.TaskName>
                     </View>

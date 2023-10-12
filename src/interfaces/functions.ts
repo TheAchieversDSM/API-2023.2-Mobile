@@ -1,3 +1,5 @@
+import {IMonthlyArray} from "./dashboard";
+
 export interface IResponseCadastro {
   validacao: boolean;
   erro: string;
@@ -14,4 +16,9 @@ export interface ITaskCheck {
   todo: number;
   doing: number;
   expirada?: number;
+}
+
+export interface IDashboardDivider {
+  maxValue: number;
+  barData: IMonthlyArray[];
 }

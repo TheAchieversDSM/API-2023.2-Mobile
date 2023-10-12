@@ -52,7 +52,7 @@ export default function ToDo() {
                 <ScrollView>
                     <TextStatus3>A Fazer</TextStatus3>
                     {userTasks
-                        ?.filter((task) => task.status === "TO DO")
+                        ?.filter((task) => task.status === "TO DO" && task.customInterval == 0)
                         .map((task, index) => (
                             <Cards
                                 reloadTasksData={reloadTasksData}
@@ -74,7 +74,7 @@ export default function ToDo() {
 
                     <TextStatus2>Em Progresso</TextStatus2>
                     {userTasks
-                        ?.filter((task) => task.status === "DOING")
+                        ?.filter((task) => task.status === "DOING" && task.customInterval == 0)
                         .map((task, index) => (
                             <Cards
                                 reload={reload}
@@ -96,7 +96,7 @@ export default function ToDo() {
 
                     <TextStatus1>Concluído</TextStatus1>
                     {userTasks
-                        ?.filter((task) => task.status === "DONE")
+                        ?.filter((task) => task.status === "DONE" && task.customInterval == 0)
                         .map((task, index) => (
                             <Cards
                                 reload={reload}

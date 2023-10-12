@@ -33,7 +33,7 @@ class Task {
 
     async getTaskUser(data: IGetTasksUser) {
         try {
-            const response = await api.get(`/task/getByUserId/${data.userId}`);
+            const response = await api.get(`/task/getNonCyclicTaskByUserId/${data.userId}`);
             const tasks: IGetTasksUserResp[] = response.data.data;
             tasks.sort(comparePriority);
             return tasks;

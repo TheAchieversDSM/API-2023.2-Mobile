@@ -207,6 +207,7 @@ export const Cards = (props: ICards) => {
                 <S.CardTask>
                     <S.StatusColor style={{ backgroundColor: props.statusColor }}></S.StatusColor>
                     <S.TaskName>{props.task}</S.TaskName>
+                    <S.TaskName>{props.priority === "Low" ? "★" : props.priority === "Medium" ? "★★" : "★★★"}</S.TaskName>
                 </S.CardTask>
             </TouchableOpacity>
 
@@ -321,7 +322,10 @@ export const Cards = (props: ICards) => {
             <TouchableOpacity onPress={toggleOverlay}>
                 <S.CardTask>
                     <S.StatusColor style={{ backgroundColor: props.statusColor }}></S.StatusColor>
-                    <S.TaskName>{props.task}</S.TaskName>
+                    <View style={{ display: "flex", flexDirection: "row", justifyContent: 'space-between', marginRight: 15, marginLeft: 5 }}>
+                        <S.TaskName>{props.task}</S.TaskName>
+                        <S.TaskName>{props.priority === "Low" ? "★" : props.priority === "Medium" ? "★★" : "★★★"}</S.TaskName>
+                    </View>
                 </S.CardTask>
             </TouchableOpacity>
 

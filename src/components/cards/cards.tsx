@@ -70,7 +70,7 @@ export const Cards = (props: ICards) => {
 
     const [editingSubtaskId, setEditingSubtaskId] = useState<number | null>(null);
 
-
+    const [dateError, setDateError] = useState(false)
 
     const handleAddSubtask = () => {
         setIsInputVisible(true);
@@ -122,7 +122,6 @@ export const Cards = (props: ICards) => {
         }
     };
 
-
     const handleSubtaskName = async (subtaskId: number, newName: string) => {
         try {
             await serviceSubtask.updateSubtaskName(subtaskId, newName)
@@ -132,6 +131,12 @@ export const Cards = (props: ICards) => {
             console.error("Erro ao atualizar o estado da subtarefa:", error)
         }
     };
+
+    const handleCloseSubtask = () => {
+        setNewSubtask('');
+
+        setIsInputVisible(false);
+    }
 
     const handleDeleteSubtask = async (subtaskId: number) => {
         try {
@@ -146,20 +151,38 @@ export const Cards = (props: ICards) => {
     const handleSubmit = async (data: IUpdateTask) => {
         try {
             if (data) {
-                await serviceTask.updateTask({
-                    name: name,
-                    description: description,
-                    priority: data?.priority || props.priority,
-                    deadline: date,
-                    status: data?.status,
-                    userId: id,
-                    id: props.id,
-                    timeSpent: props.timeSpent,
-                    done: false
-                })
-                props.reloadTasksData();
+                const currentDate = new Date();
+                const deadlineDate = new Date(data.deadline);
+                const deadlineProps = new Date(props.deadline);
+
+                currentDate.setHours(0, 0, 0, 0);
+                deadlineDate.setHours(0, 0, 0, 0);
+                deadlineProps.setHours(0, 0, 0, 0);
+
+                deadlineDate.setTime(deadlineDate.getTime() + 24 * 60 * 60 * 1000);
+                deadlineProps.setTime(deadlineProps.getTime() + 24 * 60 * 60 * 1000);
+
+                if (currentDate <= deadlineDate || isNaN(deadlineDate.getTime())) {
+                    await serviceTask.updateTask({
+                        name: name,
+                        description: description,
+                        priority: data?.priority || props.priority,
+                        deadline: date,
+                        status: data?.status,
+                        userId: id,
+                        id: props.id,
+                        timeSpent: props.timeSpent,
+                        done: false
+                    })
+
+                    setEdit(false)
+
+                    setDateError(false)
+                    props.reloadTasksData();
+                } else {
+                    setDateError(true)
+                }
             }
-            setEdit(false)
         }
         catch (error) {
             console.error(error)
@@ -200,13 +223,38 @@ export const Cards = (props: ICards) => {
         setReload(!reload);
     };
 
-
     return edit ? (
         <View>
             <TouchableOpacity onPress={toggleOverlay}>
                 <S.CardTask>
                     <S.StatusColor style={{ backgroundColor: props.statusColor }}></S.StatusColor>
-                    <S.TaskName>{props.task}</S.TaskName>
+                    <View style={{ display: "flex", flexDirection: "row", justifyContent: 'space-between', marginRight: 15, marginLeft: 5 }}>
+                        <View style={{ display: "flex", flexDirection: "row", justifyContent: 'space-between', marginLeft: 10 }}>
+
+                            {new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() ? (
+                                <View style={{ marginTop: 10 }}>
+                                    <IconModel
+                                        iconName={'exclamationcircleo'}
+                                        icon={'AntDesign'}
+                                        IconColor={'#FF4328'}
+                                        IconSize={22}
+                                    />
+                                </View>
+                            ) : null}
+
+                            <S.TaskName style={{
+                                color: new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() < new Date().toLocaleDateString() ? "#de0300"
+                                    : new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() ? "#FF4328"
+                                        : "black", fontWeight: "bold", fontSize: 18
+                            }}>{props.task}</S.TaskName>
+                        </View>
+
+                        <S.TaskName style={{
+                            color: new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() < new Date().toLocaleDateString() ? "#de0300"
+                                : new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() ? "#FF4328"
+                                    : "black", fontSize: 18
+                        }}>{props.priority === "Low" ? "★" : props.priority === "Medium" ? "★★" : "★★★"}</S.TaskName>
+                    </View>
                 </S.CardTask>
             </TouchableOpacity>
 
@@ -217,7 +265,7 @@ export const Cards = (props: ICards) => {
                             <S.ViewIcons>
                                 <S.ViewIcon>
                                     <IconModel
-                                        onPress={() => handleSubmit(data)}
+                                        onPress={() => { handleSubmit(data) }}
                                         IconColor={"#000"}
                                         IconSize={26}
                                         icon='AntDesign'
@@ -225,7 +273,7 @@ export const Cards = (props: ICards) => {
                                     />
 
                                     <IconModel
-                                        onPress={() => setEdit(!edit)}
+                                        onPress={() => { setEdit(!edit), setDateError(false), setDate(props.deadline), setName(props.task), setDescription(props.descricao), setPriorities(props.priority) }}
                                         IconColor={"#000"}
                                         IconSize={25}
                                         icon='AntDesign'
@@ -296,6 +344,10 @@ export const Cards = (props: ICards) => {
                                 title='Data de expiração'
                                 value={date}
                             />
+
+                            {dateError && (
+                                <Text style={{ color: 'red', fontSize: 14, marginTop: -10, marginBottom: 10 }}>A data não pode ser menor que o dia de hoje.</Text>
+                            )}
                         </S.ViewData>
 
                         <S.TaskDescT>Descrição:</S.TaskDescT>
@@ -321,7 +373,33 @@ export const Cards = (props: ICards) => {
             <TouchableOpacity onPress={toggleOverlay}>
                 <S.CardTask>
                     <S.StatusColor style={{ backgroundColor: props.statusColor }}></S.StatusColor>
-                    <S.TaskName>{props.task}</S.TaskName>
+                    <View style={{ display: "flex", flexDirection: "row", justifyContent: 'space-between', marginRight: 15, marginLeft: 5 }}>
+                        <View style={{ display: "flex", flexDirection: "row", justifyContent: 'space-between', marginLeft: 10 }}>
+
+                            {new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() ? (
+                                <View style={{ marginTop: 10 }}>
+                                    <IconModel
+                                        iconName={'exclamationcircleo'}
+                                        icon={'AntDesign'}
+                                        IconColor={'#FF4328'}
+                                        IconSize={22}
+                                    />
+                                </View>
+                            ) : null}
+
+                            <S.TaskName style={{
+                                color: new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() < new Date().toLocaleDateString() ? "#de0300"
+                                    : new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() ? "#FF4328"
+                                        : "black", fontWeight: "bold", fontSize: 18
+                            }}>{props.task}</S.TaskName>
+                        </View>
+
+                        <S.TaskName style={{
+                            color: new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() < new Date().toLocaleDateString() ? "#de0300"
+                                : new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() ? "#FF4328"
+                                    : "black", fontSize: 18
+                        }}>{props.priority === "Low" ? "★" : props.priority === "Medium" ? "★★" : "★★★"}</S.TaskName>
+                    </View>
                 </S.CardTask>
             </TouchableOpacity>
 
@@ -441,7 +519,7 @@ export const Cards = (props: ICards) => {
                                                             />
                                                         </TouchableOpacity>
 
-                                                        <View style={{ marginRight: 30, marginTop: 14, alignItems: 'flex-end' }}>
+                                                        <View style={{ marginRight: 30, marginTop: -14, alignItems: 'flex-end' }}>
                                                             <IconModel
                                                                 onPress={() => { handleDeleteSubtask(item.id), setEditingSubtaskId(null) }}
                                                                 IconColor={"#bd1310"}
@@ -474,20 +552,36 @@ export const Cards = (props: ICards) => {
                         <TouchableOpacity onPress={handleAddSubtask} style={{ flexDirection: 'row', marginRight: 40, alignSelf: 'flex-end', marginTop: 10 }}>
 
                             {isInputVisible ? (
-                                <Icon
-                                    name='check'
-                                    color='grey'
-                                    size={26}
-                                />
-                            ) :
-                                <Icon
-                                    name='add'
-                                    color='grey'
-                                    size={26}
-                                />
-                            }
+                                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+                                    <View style={{ paddingRight: 35 }}>
+                                        <Icon
+                                            name='close'
+                                            color='#de0300'
+                                            size={28}
+                                            onPress={handleCloseSubtask}
+                                        />
+                                    </View>
 
-                            <Text style={{ color: 'grey', fontSize: 20, marginLeft: 5, marginBottom: 10 }}>Adicionar subtarefa</Text>
+                                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginLeft: 0 }}>
+                                        <Icon
+                                            name='check'
+                                            color='grey'
+                                            size={26}
+                                        />
+                                        <Text style={{ color: 'grey', fontSize: 20, marginLeft: 10 }}>Confirmar subtarefa</Text>
+                                    </View>
+                                </View>
+                            ) :
+                                <>
+                                    <Icon
+                                        name='add'
+                                        color='grey'
+                                        size={26}
+                                    />
+
+                                    <Text style={{ color: 'grey', fontSize: 20, marginLeft: 5, marginBottom: 10 }}>Adicionar subtarefa</Text>
+                                </>
+                            }
                         </TouchableOpacity>
                     </S.ViewData>
                 </S.GeneralView>

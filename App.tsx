@@ -8,6 +8,7 @@ import { Routes } from './src/routes';
 import { apiStatus } from './src/service/api';
 import { Text } from '@rneui/themed';
 import { NotFound } from './src/pages/NotFound';
+import Toast from 'react-native-toast-message';
 
 LogBox.ignoreAllLogs()
 
@@ -63,6 +64,7 @@ export default function App() {
       <AuthProvider>
         <Routes />
       </AuthProvider>
+      <Toast />
     </ThemeProvider>
   );
 }

@@ -3,6 +3,7 @@ import { IResponseCadastro } from "../../interfaces/functions";
 import { useNavigation } from "@react-navigation/native";
 import { Button } from "../../components/button/button";
 import { verifyPasswordMatch } from "../../utils/utils";
+import { ToastComponent } from "../../components/toast";
 import { ICreateUser } from "../../interfaces/user";
 import oracleLogo from "../../assets/oracle.png";
 import Input from "../../components/input/input";
@@ -57,6 +58,8 @@ export function SignUp() {
                 const error: IResponseCadastro | undefined = await serviceUser.createUser(data)
                 setErrorMessage({ email: String(error?.erro), password: "" })
                 if (error?.validacao) {
+                    ToastComponent({ type: 'success', title: 'Usuário cadastrado!' })
+
                     navigate.navigate("Login")
                 }
             }

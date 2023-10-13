@@ -7,7 +7,7 @@ import { useAuth } from "../hooks/auth";
 
 export function Routes() {
     const { userToken, signOut } = useAuth();
-
+    
     useEffect(() => {
         const intervalId = setInterval(() => {
             if (userToken) {

@@ -47,3 +47,15 @@ export const ViewIcon = styled(View)`
   gap: 20px;
   justify-content: space-between;
 `;
+
+export const ContainerOptions = styled(View)`
+  justify-content: space-around;
+  flex-direction: row;
+  align-items: center;
+  margin-inline: 20px;
+  margin-top: 20px;
+  width: 200px;
+  height: 50px;
+  border-radius: 8px;
+  border: 1px solid #DE0300;
+`;

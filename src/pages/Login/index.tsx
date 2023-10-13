@@ -7,6 +7,7 @@ import oracleLogo from "../../assets/oracle.png";
 import { useAuth } from '../../hooks/auth';
 import React, { useState } from "react";
 import { View } from 'react-native';
+import { ToastComponent } from '../../components/toast';
 
 
 export default function Login() {
@@ -27,7 +28,6 @@ export default function Login() {
         password: false
     })
 
-
     const checkFields = (values: AuthPropsLogin): boolean => {
         const newErrorStatus = {
             email: values.email === '',
@@ -39,7 +39,6 @@ export default function Login() {
         return newErrorStatus.email || newErrorStatus.password;
     };
 
-
     const handleSubmit = async () => {
         setErrorMessage("")
         try {
@@ -47,6 +46,7 @@ export default function Login() {
                 return
             } else {
                 const error = await signIn(values);
+                ToastComponent({ type: 'info', title: 'Bem-vindo!' })
                 if (error) setErrorMessage(String(error));
             }
         } catch (error) {

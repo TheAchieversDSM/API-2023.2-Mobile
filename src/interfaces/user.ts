@@ -9,16 +9,16 @@ export interface IGetUser {
   userId: number;
 }
 
-export interface IGetUserByIdResp{
+export interface IGetUserByIdResp {
   name: string;
   email: string;
   password: string;
 }
 
-export interface IUpdateUser{
+export interface IUpdateUser {
   userId: number;
-  name: string | undefined;
-  email: string | undefined;
-  password: string | undefined;
+  name: string;
+  email: string;
+  password: string;
   reloadUser: () => void;
 }

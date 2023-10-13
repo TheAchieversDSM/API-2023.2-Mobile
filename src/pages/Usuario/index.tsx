@@ -57,27 +57,30 @@ export default function Usuario() {
                     orientation="horizontal"
                 />
 
-                <ContainerOptions>
-                    <UserModal
-                        userId={id}
-                        name={usuario?.name}
-                        email={usuario?.email}
-                        password={usuario?.password}
-                        reloadUser={() => setReloadUserData(!reloadUserData)}
-                    />
-                </ContainerOptions>
+                {
+                    usuario ?
+                        <UserModal
+                            userId={id}
+                            name={usuario?.name}
+                            email={usuario?.email}
+                            password={usuario?.password}
+                            reloadUser={() => setReloadUserData(!reloadUserData)}
+                        />
+                        : null
+                }
 
-                <ContainerOptions style={{ backgroundColor: '#DE0300'}}>
-                    <TouchableOpacity onPress={handleLogout} style={{ display: "flex", flexDirection: "row" }}>
+                <TouchableOpacity onPress={handleLogout} style={{ display: "flex", flexDirection: "row" }}>
+                    <ContainerOptions style={{ backgroundColor: '#DE0300' }}>
                         <IconModel
                             IconColor={"white"}
                             IconSize={22}
                             icon='MaterialIcons'
                             iconName='logout'
+                            onPress={handleLogout}
                         />
-                        <Logout style={{ fontSize: 17, marginLeft: 10, marginBottom: 5 }}>Logout</Logout>
-                    </TouchableOpacity>
-                </ContainerOptions>
+                        <Logout style={{ fontSize: 17, marginLeft: -120, marginBottom: 5 }}>Sair</Logout>
+                    </ContainerOptions>
+                </TouchableOpacity>
             </Container>
         </>
     )

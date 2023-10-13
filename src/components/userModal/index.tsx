@@ -1,12 +1,12 @@
-import { NativeSyntheticEvent, TextInputChangeEventData, TouchableOpacity } from "react-native";
-import * as A from "./styled";
-import { useEffect, useState } from "react";
-import Input from '../input/input';
-import { IconModel } from "../icons";
 import { IGetUserByIdResp, IUpdateUser } from "../../interfaces/user";
-import serviceUser from "../../service/user";
-import { useAuth } from "../../hooks/auth";
 import { decodeJsonWebToken } from "../../utils/utils";
+import { TouchableOpacity } from "react-native";
+import serviceUser from "../../service/user";
+import { useEffect, useState } from "react";
+import { useAuth } from "../../hooks/auth";
+import { IconModel } from "../icons";
+import Input from '../input/input';
+import * as A from "./styled";
 
 export default function UserModal(props: IUpdateUser) {
     const [visible, setVisible] = useState(false);
@@ -17,21 +17,27 @@ export default function UserModal(props: IUpdateUser) {
     const [reloadUser, setReloadUser] = useState(false);
     const [usuario, setUsuario] = useState<IGetUserByIdResp>();
 
-    const [name, setName] = useState(props.name);
-    const [email, setEmail] = useState(props.email);
-    const [password, setPassword] = useState(props.password);
-    
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
     const toggleOverlay = () => {
         setVisible(!visible)
     };
 
+    const checkPwdChange = (pwd: string) => {
+        return pwd === "" ? props.password : password
+    }
+
     const handleSubmit = async (data: IUpdateUser) => {
+        const pwd = checkPwdChange(password)
+        console.log(pwd);
         try {
             if (data) {
                 await serviceUser.updateUser({
                     name: name,
                     email: email,
-                    password: password,
+                    password: pwd,
                     userId: id,
                     reloadUser: function (): void {
                         throw new Error("Function not implemented.");
@@ -42,22 +48,32 @@ export default function UserModal(props: IUpdateUser) {
             }
 
             setEdit(false)
-            
+
         } catch (error) {
             console.error(error)
         }
-    }
+    }    
+
+    useEffect(() => {
+        setEmail(props.email)
+        setName(props.name)
+        setPassword("")
+    }, [id])
 
     return (
         <>
-            <TouchableOpacity onPress={toggleOverlay} style={{display:"flex", flexDirection: "row", backgroundColor: 'transparent'}}>
-                <IconModel
-                    IconColor={"white"}
-                    IconSize={20}
-                    icon='Feather'
-                    iconName='edit-2'
-                />
-                <A.Logout style={{fontSize: 17, marginLeft: 10, marginBottom: 5}}>Editar</A.Logout>
+            <TouchableOpacity onPress={toggleOverlay} style={{ display: "flex", flexDirection: "row", backgroundColor: 'transparent' }}>
+                <A.ContainerOptions>
+
+                    <IconModel
+                        IconColor={"white"}
+                        IconSize={20}
+                        icon='Feather'
+                        iconName='edit-2'
+                        onPress={toggleOverlay}
+                    />
+                    <A.Logout style={{ fontSize: 17, marginLeft: -100, marginBottom: 5 }}>Editar</A.Logout>
+                </A.ContainerOptions>
             </TouchableOpacity>
 
             <A.Modal isVisible={visible} onBackdropPress={toggleOverlay}>
@@ -65,7 +81,7 @@ export default function UserModal(props: IUpdateUser) {
                     <A.ViewIcons>
                         <A.ViewIcon>
                             <IconModel
-                                onPress={() =>{ 
+                                onPress={() => {
                                     handleSubmit(data);
                                     toggleOverlay();
                                 }}
@@ -78,7 +94,7 @@ export default function UserModal(props: IUpdateUser) {
                                 onPress={() => {
                                     toggleOverlay();
                                     setEdit(false);
-                                  }}
+                                }}
                                 IconColor={"#000"}
                                 IconSize={25}
                                 icon='AntDesign'
@@ -86,7 +102,7 @@ export default function UserModal(props: IUpdateUser) {
                             />
                         </A.ViewIcon>
                     </A.ViewIcons>
-                    
+
                     <A.TaskDescT>Nome:</A.TaskDescT>
                     <A.InputView>
                         <Input
@@ -94,7 +110,7 @@ export default function UserModal(props: IUpdateUser) {
                             placeholder={''}
                             textColor='#000'
                             color='#C74634'
-                            iconL='user' 
+                            iconL='user'
                             onChange={(e) => { setName(e.nativeEvent.text) }}
                         />
                     </A.InputView>
@@ -105,7 +121,7 @@ export default function UserModal(props: IUpdateUser) {
                             placeholder={''}
                             textColor='#000'
                             color='#C74634'
-                            iconL='envelope' 
+                            iconL='envelope'
                             onChange={(e) => { setEmail(e.nativeEvent.text) }}
                         />
                     </A.InputView>
@@ -118,7 +134,7 @@ export default function UserModal(props: IUpdateUser) {
                             color='#C74634'
                             onChange={(e) => { setPassword(e.nativeEvent.text) }}
                             password={true}
-                            iconL='lock' 
+                            iconL='lock'
                         />
                     </A.InputView>
                     {/* <A.TaskDescT>Repita a senha:</A.TaskDescT>

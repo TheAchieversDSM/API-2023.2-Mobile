@@ -22,6 +22,7 @@ import React, { useState } from 'react';
 import { Divider } from '@rneui/base';
 import { Icon } from '@rneui/themed';
 import { ToastComponent } from '../../components/toast';
+import { TextInputSubmitEditingEventData } from 'react-native';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -52,12 +53,12 @@ export default function CreateTask() {
         setIsInputVisible(false);
     }
 
-    const handleAddSubtask = () => {
+    const handleAddSubtask = (e?: string) => {
         setIsInputVisible(true);
 
         if (newSubtask) {
             const newSubtaskObject: ICreateSubtasks = {
-                name: newSubtask,
+                name: e ? e : newSubtask ,
                 done: false,
             };
             setSubtasks([...subtasks, newSubtaskObject]);
@@ -183,7 +184,9 @@ export default function CreateTask() {
                 serviceSubtask.createSubtask(subtask)
             });
 
-            ToastComponent({ type: 'success', title: 'Tarefa criada!'})
+            const texto =  recurrency ? "Tarefa ciclica criada!" : "Tarefa criada!"
+
+            ToastComponent({ type: 'success', title: texto})
 
             if (insertTask?.validacao) {
                 setData({
@@ -206,7 +209,7 @@ export default function CreateTask() {
                 setIsInputVisible(false);
                 setSubtasks([]);
 
-                navigate.navigate("Tabs", { screen: "ToDo" })
+                recurrency ? navigate.navigate("Tabs", { screen: "Home" }) : navigate.navigate("Tabs", { screen: "ToDo" })
             }
         }
     } catch (error) {
@@ -312,7 +315,7 @@ return (
                                 iconL='plus-square-o'
                                 textColor='#fff'
                                 value={subtask.name}
-                                editable={false}
+                                editable={true}
                             />
                         </View>
 
@@ -334,12 +337,13 @@ return (
                             placeholder="Digite a subtarefa"
                             onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) => setNewSubtask(e.nativeEvent.text)}
                             textColor='#fff'
+                            onSubmitEditing={(e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => handleAddSubtask(e.nativeEvent.text)}
                             value={newSubtask}
                         />
                     </View>
                 )}
 
-                <TouchableOpacity onPress={handleAddSubtask} style={{ flexDirection: 'row', marginRight: 40, alignSelf: 'flex-end' }}>
+                <TouchableOpacity onPress={() => handleAddSubtask()} style={{ flexDirection: 'row', marginRight: 40, alignSelf: 'flex-end' }}>
                     {isInputVisible ? (
                         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                             <View style={{ paddingRight: 70 }}>

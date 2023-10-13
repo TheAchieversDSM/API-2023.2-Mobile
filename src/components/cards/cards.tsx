@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import { DatePicker } from '../datepicker';
 import { useAuth } from "../../hooks/auth";
 import React, { View } from 'react-native';
+import { ToastComponent } from '../toast';
 import { Priority } from './priorities';
 import { Divider } from '@rneui/base';
 import { ViewScroll } from './styled';
@@ -96,6 +97,7 @@ export const Cards = (props: ICards) => {
 
             serviceSubtask.createSubtask(newSubtaskObject)
                 .then(() => {
+                    ToastComponent({ type: 'success', title: 'Subtarefa criada!' })
                     setReloadSubtasks(true);
                     setNewSubtask('');
                     setIsInputVisible(false);
@@ -134,6 +136,8 @@ export const Cards = (props: ICards) => {
 
             setNewSubtask('');
 
+            ToastComponent({ type: 'success', title: 'Subtarefa criada!' })
+
             setIsInputVisible(false);
             setReloadSubtasks(true);
         }
@@ -152,6 +156,9 @@ export const Cards = (props: ICards) => {
     const handleDelete = async () => {
         try {
             await serviceTask.deleteTask(props.id)
+
+            ToastComponent({ type: 'error', title: 'Tarefa deletada!' })
+
             setVisible(false)
         }
         catch (error) {
@@ -173,6 +180,8 @@ export const Cards = (props: ICards) => {
         try {
             await serviceSubtask.updateSubtaskName(subtaskId, newName)
 
+            ToastComponent({ type: 'success', title: 'Subtarefa atualizada!' })
+
             setReloadSubtasks(true);
         } catch (error) {
             console.error("Erro ao atualizar o estado da subtarefa:", error)
@@ -188,6 +197,8 @@ export const Cards = (props: ICards) => {
     const handleDeleteSubtask = async (subtaskId: number) => {
         try {
             await serviceSubtask.deleteSubtask(subtaskId)
+
+            ToastComponent({ type: 'error', title: 'Subtarefa deletada!' })
 
             setReloadSubtasks(true);
         } catch (error) {
@@ -210,22 +221,26 @@ export const Cards = (props: ICards) => {
                 deadlineProps.setTime(deadlineProps.getTime() + 24 * 60 * 60 * 1000);
 
                 if (currentDate <= deadlineDate || isNaN(deadlineDate.getTime())) {
-                    await serviceTask.updateTask({
-                        name: name,
-                        description: description,
-                        priority: data?.priority || props.priority,
-                        deadline: date,
-                        status: data?.status,
-                        userId: id,
-                        id: props.id,
-                        timeSpent: props.timeSpent,
-                        done: false
-                    })
+                    if (name != '' && description != '') {
+                        await serviceTask.updateTask({
+                            name: name,
+                            description: description,
+                            priority: data?.priority || props.priority,
+                            deadline: date,
+                            status: data?.status,
+                            userId: id,
+                            id: props.id,
+                            timeSpent: props.timeSpent,
+                            done: false
+                        })
 
-                    setEdit(false)
+                        ToastComponent({ type: 'success', title: 'Tarefa atualizada!' })
 
-                    setDateError(false)
-                    props.reloadTasksData();
+                        setEdit(false)
+
+                        setDateError(false)
+                        props.reloadTasksData();
+                    }
                 } else {
                     setDateError(true)
                 }
@@ -398,7 +413,7 @@ export const Cards = (props: ICards) => {
                     <View style={{ display: "flex", flexDirection: "row", justifyContent: 'space-between', marginRight: 15, marginLeft: 5 }}>
                         <View style={{ display: "flex", flexDirection: "row", justifyContent: 'space-between', marginLeft: 10 }}>
 
-                            {new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() ? (
+                            {new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() && props.value != 'Concluído' ? (
                                 <View style={{ marginTop: 10 }}>
                                     <IconModel
                                         iconName={'exclamationcircleo'}
@@ -410,15 +425,15 @@ export const Cards = (props: ICards) => {
                             ) : null}
 
                             <S.TaskName style={{
-                                color: new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() < new Date().toLocaleDateString() ? "#de0300"
-                                    : new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() ? "#FF4328"
+                                color: new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() < new Date().toLocaleDateString() && props.value != 'Concluído' ? "#de0300"
+                                    : new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() && props.value != 'Concluído' ? "#FF4328"
                                         : "black", fontWeight: "bold", fontSize: 18
                             }}>{props.task}</S.TaskName>
                         </View>
 
                         <S.TaskName style={{
-                            color: new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() < new Date().toLocaleDateString() ? "#de0300"
-                                : new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() ? "#FF4328"
+                            color: new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() < new Date().toLocaleDateString() && props.value != 'Concluído' ? "#de0300"
+                                : new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() && props.value != 'Concluído' ? "#FF4328"
                                     : "black", fontSize: 18
                         }}>{props.priority === "Low" ? "★" : props.priority === "Medium" ? "★★" : "★★★"}</S.TaskName>
                     </View>
@@ -541,7 +556,7 @@ export const Cards = (props: ICards) => {
                                                             />
                                                         </TouchableOpacity>
 
-                                                        <View style={{ marginRight: 30, marginTop: -14, alignItems: 'flex-end' }}>
+                                                        <View style={{ marginRight: 30, marginTop: 0, alignItems: 'flex-end' }}>
                                                             <IconModel
                                                                 onPress={() => { handleDeleteSubtask(item.id), setEditingSubtaskId(null) }}
                                                                 IconColor={"#bd1310"}

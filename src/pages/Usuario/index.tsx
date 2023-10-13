@@ -9,6 +9,7 @@ import serviceUser from "../../service/user";
 import { IGetUserByIdResp } from "../../interfaces/user";
 import { TouchableOpacity } from "react-native";
 import UserModal from "../../components/userModal";
+import { ToastComponent } from "../../components/toast";
 
 export default function Usuario() {
     const { userToken } = useAuth();
@@ -16,12 +17,13 @@ export default function Usuario() {
     const [usuario, setUsuario] = useState<IGetUserByIdResp>();
     const { signOut } = useAuth();
     const [reloadUserData, setReloadUserData] = useState(false);
-    
+
     const handleLogout = async () => {
         await signOut();
-        
+
+        ToastComponent({ type: 'info', title: 'Até logo!' })
     };
-    
+
     useEffect(() => {
         async function fetchUser() {
             try {
@@ -35,19 +37,25 @@ export default function Usuario() {
                 console.error(error);
             }
         }
-            fetchUser();
-        
+        fetchUser();
+
     }, [reloadUserData]);
-    
-    return(
+
+    return (
         <>
-            <View style={{backgroundColor: '#222328'}}><HeaderComponent/></View>
+            <View style={{ backgroundColor: '#222328' }}><HeaderComponent /></View>
             <Container>
 
                 <Nome>{usuario?.name}</Nome>
                 <Email>{usuario?.email}</Email>
-                
-                <UserModal userId={id} name={usuario?.name} email={usuario?.email} password={usuario?.password} reloadUser={() => setReloadUserData(!reloadUserData)}/>
+
+                <UserModal
+                    userId={id}
+                    name={usuario?.name}
+                    email={usuario?.email}
+                    password={usuario?.password}
+                    reloadUser={() => setReloadUserData(!reloadUserData)}
+                />
 
                 <Divider
                     style={{ width: "80%", margin: 20 }}

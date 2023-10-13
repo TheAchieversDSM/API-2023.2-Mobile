@@ -143,9 +143,6 @@ export default function CreateTask() {
         try {
         if (checkFields(data)) {
             setErrorMessage({ name: "Nome é obrigatório", description: "Descrição é obrigatória", deadline: "Data é obrigatória" })
-
-            ToastComponent({ type: 'error', title: 'Favor corrigir os campos obrigatórios!'})
-
             if (!data.priority) {
                 setPrio(true)
             }
@@ -156,7 +153,6 @@ export default function CreateTask() {
             if (recurrency == true) {
                 if (data.customInterval <= 0 || isNaN(data.customInterval)) {
                     setRecurrencyError(true)
-                    ToastComponent({ type: 'error', title: 'Favor corrigir o campo de recorrência!'})
                 }
                 else {
                     setRecurrencyError(false)
@@ -166,10 +162,8 @@ export default function CreateTask() {
             return
         } else if (recurrency == false && data.deadline < formatDate(new Date())) {
             setErrorMessage({ name: "", description: "", deadline: "Data inválida. Selecione uma data futura." })
-            ToastComponent({ type: 'error', title: 'Favor corrigir o campo de data!'})
             return
         } else if ((recurrency == true && data.customInterval <= 0) || (recurrency == true && isNaN(data.customInterval))) {
-            ToastComponent({ type: 'error', title: 'Favor corrigir os campos obrigatórios!'})
             setRecurrencyError(true)
             return
         }

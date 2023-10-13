@@ -4,10 +4,11 @@ import {
   IGetTasksUserDate,
   IGetTasksUserResp,
   IUpdateTask,
+  IUpdateTimeSpent,
 } from "../interfaces/task";
-import { AxiosError, AxiosResponse } from "axios";
-import { comparePriority } from "../utils/utils";
-import { api } from "./api";
+import {AxiosError, AxiosResponse} from "axios";
+import {comparePriority} from "../utils/utils";
+import {api} from "./api";
 
 class Task {
   async createTask(data: ICreateTasks) {
@@ -18,16 +19,16 @@ class Task {
           if (res.status == 200) {
             const taskId = res.data.data.id;
 
-            return { taskId, erro: "", validacao: true };
+            return {taskId, erro: "", validacao: true};
           } else {
-            return { erro: "Erro desconhecido", validacao: false };
+            return {erro: "Erro desconhecido", validacao: false};
           }
         })
         .catch((err: AxiosError | any) => {
           if (err.response) {
             if (err.response.status === 409) {
               const authenticationError = err.response.data.error;
-              return { erro: authenticationError, validacao: false };
+              return {erro: authenticationError, validacao: false};
             }
           }
         });
@@ -38,11 +39,12 @@ class Task {
 
   async getTaskUser(data: IGetTasksUser) {
     try {
-      const response = await api.get(`/task/getNonCyclicTaskByUserId/${data.userId}`);
+      const response = await api.get(
+        `/task/getNonCyclicTaskByUserId/${data.userId}`
+      );
       const tasks: IGetTasksUserResp[] = response.data.data;
       tasks.sort(comparePriority);
       return tasks;
-
     } catch (error) {
       console.error(error);
     }
@@ -62,6 +64,18 @@ class Task {
   async updateTask(data: IUpdateTask) {
     try {
       const response = await api.put(`/task/update/${data.id}`, data);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async tasktimeUpdateDto(data: IUpdateTimeSpent) {
+    try {
+      const response = await api.put(`/task/updateTime/${data.id}`, {
+        timeSpent: data.timeSpent,
+      });
+      console.log(response);
       return response;
     } catch (error) {
       console.error(error);

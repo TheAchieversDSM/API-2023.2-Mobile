@@ -134,7 +134,7 @@ export function monthlyTimeCalculateArray(monthyl: IMonthlyCalculated): IDashboa
     if (monthyl.hasOwnProperty(key)) {
       let value = monthyl[key as keyof IMonthlyCalculated];
       if (typeof value === 'number') {
-        value = value / 3600
+        value = Number((value / 3600).toFixed(1))
         if (maxValue === undefined || value > maxValue) maxValue = value;
 
         barData.push({
@@ -146,7 +146,7 @@ export function monthlyTimeCalculateArray(monthyl: IMonthlyCalculated): IDashboa
     }
   }
 
-  maxValue = Number(maxValue.toFixed(0)) + 25
+  maxValue = Number(maxValue.toFixed(0)) + 50
 
   return { maxValue: maxValue, barData: barData }
 }

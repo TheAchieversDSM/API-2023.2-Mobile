@@ -1,7 +1,7 @@
 import { Cards } from "../../components/cards/cards"
 import { IGetTasksUserResp } from "../../interfaces/task"
 
-export const ViewCards = ({  ...task }: IGetTasksUserResp) => {
+export const ViewCards = ({ ...task }: IGetTasksUserResp) => {
     switch (task.status) {
         case "TO DO":
             return (
@@ -15,6 +15,8 @@ export const ViewCards = ({  ...task }: IGetTasksUserResp) => {
                     statusColor="#de0300"
                     deadline={task.deadline}
                     priority={task.priority}
+                    timeSpent={task.timeSpent}
+                    reloadTasksData={() => { }}
                 />
             )
         case "DOING":
@@ -29,6 +31,8 @@ export const ViewCards = ({  ...task }: IGetTasksUserResp) => {
                     statusColor="#ebae11"
                     deadline={task.deadline}
                     priority={task.priority}
+                    timeSpent={task.timeSpent}
+                    reloadTasksData={() => { }}
                 />
             )
         case "DONE":
@@ -43,6 +47,8 @@ export const ViewCards = ({  ...task }: IGetTasksUserResp) => {
                     statusColor="#67d207"
                     deadline={task.deadline}
                     priority={task.priority}
+                    timeSpent={task.timeSpent}
+                    reloadTasksData={() => { }}
                 />
             )
     }

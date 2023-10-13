@@ -6,7 +6,7 @@ import { Button } from "../button/button";
 import { timeCalculate } from "../../utils/utils";
 import serviceTask from "../../service/task";
 
-export const TimerModal = ({ view, onBackdropPress, task, reload, reloadTasksData }: ITimeModal) => {
+export const TimerModal = ({ view, onBackdropPress, task, reloadTasksData }: ITimeModal) => {
     const [state, setState] = useState({
         time: "",
         newTime: "",
@@ -31,8 +31,8 @@ export const TimerModal = ({ view, onBackdropPress, task, reload, reloadTasksDat
 
     const handleSubmitTime = async () => {
         const newValue = task.timeSpent + state.value
-        await serviceTask.updateTask({
-            ...task,
+        await serviceTask.tasktimeUpdateDto({
+            id: task.id,
             timeSpent: newValue,
         });
         handleCloseModal();

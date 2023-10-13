@@ -160,6 +160,8 @@ export const Cards = (props: ICards) => {
             ToastComponent({ type: 'error', title: 'Tarefa deletada!' })
 
             setVisible(false)
+            setReload(false);
+            props.reloadTasksData();
         }
         catch (error) {
             console.error(error)
@@ -444,14 +446,10 @@ export const Cards = (props: ICards) => {
                 view={timer}
                 onBackdropPress={toggleTimerModal}
                 task={{
-                    ...props,
-                    userId: id,
-                    description: props.descricao,
-                    name: props.task,
-                    status: props.taskStatus,
-                    done: false /* @REVIEW */
+                    id: props.id,
+                    timeSpent: props.timeSpent,
+                    name: props.task
                 }}
-                reload={reload}
                 reloadTasksData={reloadTasksData}
             />
 

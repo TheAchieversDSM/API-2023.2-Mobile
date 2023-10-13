@@ -38,6 +38,7 @@ export const Coluna = (monthly: IMonthlyCalculated) => {
                         barBorderRadius={4}
                         isAnimated
                         width={xAxisWidth}
+                        height={xAxisWidth}
                         xAxisColor={'#ffff'}
                         yAxisColor={'#ffff'}
                         xAxisLabelTextStyle={{
@@ -55,7 +56,7 @@ export const Coluna = (monthly: IMonthlyCalculated) => {
                             return (
                                 <View
                                     style={{
-                                        marginBottom: 15,
+                                        marginBottom: 5,
                                         marginLeft: 0,
                                         backgroundColor: '#ffff',
                                         paddingHorizontal: 6,

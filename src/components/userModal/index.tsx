@@ -22,6 +22,9 @@ export default function UserModal(props: IUpdateUser) {
     const [password, setPassword] = useState("");
 
     const toggleOverlay = () => {
+        setEmail("")
+        setName("")
+        setPassword("")
         setVisible(!visible)
     };
 
@@ -31,7 +34,6 @@ export default function UserModal(props: IUpdateUser) {
 
     const handleSubmit = async (data: IUpdateUser) => {
         const pwd = checkPwdChange(password)
-        console.log(pwd);
         try {
             if (data) {
                 await serviceUser.updateUser({
@@ -52,13 +54,13 @@ export default function UserModal(props: IUpdateUser) {
         } catch (error) {
             console.error(error)
         }
-    }    
+    }
 
     useEffect(() => {
         setEmail(props.email)
         setName(props.name)
         setPassword("")
-    }, [id])
+    }, [visible])
 
     return (
         <>

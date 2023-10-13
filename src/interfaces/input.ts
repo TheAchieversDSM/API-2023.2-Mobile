@@ -1,6 +1,6 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { InputProps } from '@rneui/base';
-import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
+import { NativeSyntheticEvent, TextInputChangeEventData, TextInputSubmitEditingEventData } from 'react-native';
 
 export interface IInput extends InputProps {
     placeholder: string;
@@ -20,5 +20,6 @@ export interface IInput extends InputProps {
     fontSize?: number;
     iconRightSize?: number;
     iconLeftSize?: number;
-    onChange: (e: NativeSyntheticEvent<TextInputChangeEventData>) => void;   
+    onChange?: (e: NativeSyntheticEvent<TextInputChangeEventData>) => void;
+    onSubmitEditing?: (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => void;
 }

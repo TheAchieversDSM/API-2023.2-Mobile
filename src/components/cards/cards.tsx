@@ -1,4 +1,4 @@
-import { NativeSyntheticEvent, TextInputChangeEventData, TouchableOpacity, Text, ScrollView } from 'react-native';
+import { NativeSyntheticEvent, TextInputChangeEventData, TouchableOpacity, Text, ScrollView, TextInputSubmitEditingEventData } from 'react-native';
 import { calculateDateWithTime, checkProgressSubTask, decodeJsonWebToken } from "../../utils/utils";
 import { ICreateSubtasks, IGetSubtasks } from '../../interfaces/subtask';
 import { DropdownComponent } from '../dropdown/dropdown';
@@ -71,6 +71,53 @@ export const Cards = (props: ICards) => {
     const [editingSubtaskId, setEditingSubtaskId] = useState<number | null>(null);
 
     const [dateError, setDateError] = useState(false)
+
+    async function fetchTaskSubtasks() {
+        try {
+            const response = await serviceSubtask.getTaskSubtask(props.id);
+            if (response) {
+                setSubtask(response.data)
+                return response.data;
+            } else {
+                console.error("Erro ao buscar subtarefas da tarefa");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const handleEnterAddSubtask = (e: string) => {
+        if (e) {
+            const newSubtaskObject: ICreateSubtasks = {
+                name: newSubtask,
+                done: false,
+                task: props.id
+            };
+
+            serviceSubtask.createSubtask(newSubtaskObject)
+                .then(() => {
+                    setReloadSubtasks(true);
+                    setNewSubtask('');
+                    setIsInputVisible(false);
+                    console.log('handleEnterAddSubtask')
+                })
+                .catch(error => {
+                    console.error('Erro ao criar subtask:', error);
+                });
+        }
+    }
+
+    useEffect(() => {
+        if (reloadSubtasks) {
+            fetchTaskSubtasks()
+                .then(() => {
+                    setReloadSubtasks(false);
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar subtasks:', error);
+                });
+        }
+    }, [props.id, reloadSubtasks]);
 
     const handleAddSubtask = () => {
         setIsInputVisible(true);
@@ -193,31 +240,6 @@ export const Cards = (props: ICards) => {
         setReload(false);
         if (reload) props.reloadTasksData()
     }, [props, reload])
-
-    useEffect(() => {
-        async function fetchTaskSubtasks() {
-            try {
-                const response = await serviceSubtask.getTaskSubtask(props.id);
-                if (response) {
-                    setSubtask(response.data)
-
-                    return response.data;
-                } else {
-                    console.error("Erro ao buscar subtarefas da tarefa");
-                }
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
-
-        if (reloadSubtasks) {
-            fetchTaskSubtasks()
-            setReloadSubtasks(false);
-        }
-
-        fetchTaskSubtasks();
-    }, [props, newSubtask])
 
     const reloadTasksData = () => {
         setReload(!reload);
@@ -543,6 +565,7 @@ export const Cards = (props: ICards) => {
                                     onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) => setNewSubtask(e.nativeEvent.text)}
                                     textColor='#000'
                                     value={newSubtask}
+                                    onSubmitEditing={(e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => handleEnterAddSubtask(e.nativeEvent.text)}
                                     fontSize={17}
                                     height={5}
                                 />

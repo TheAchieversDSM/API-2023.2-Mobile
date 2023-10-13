@@ -1,5 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { checkTokenValidity } from "../utils/utils";
+import { checkTaskLogs, checkTokenValidity } from "../utils/utils";
 import { StackRoutes } from "./stack.routes";
 import { AuthRoutes } from "./auth.routes";
 import React, { useEffect } from "react";
@@ -18,6 +18,18 @@ export function Routes() {
             clearInterval(intervalId);
         };
     }, [userToken, signOut]);
+
+    useEffect(() => {
+        const intervalId = setInterval(async () => {
+            console.log('\x1b[43m\x1b[31m[CheckTaskLogs]\x1b[0m Checagem das task 1 dia')
+            if (userToken) {
+                await checkTaskLogs(userToken);
+            }
+        }, 86400000);
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [userToken])
 
     return (
         <NavigationContainer>

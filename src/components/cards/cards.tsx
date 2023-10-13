@@ -99,7 +99,6 @@ export const Cards = (props: ICards) => {
                     setReloadSubtasks(true);
                     setNewSubtask('');
                     setIsInputVisible(false);
-                    console.log('handleEnterAddSubtask')
                 })
                 .catch(error => {
                     console.error('Erro ao criar subtask:', error);
@@ -108,6 +107,7 @@ export const Cards = (props: ICards) => {
     }
 
     useEffect(() => {
+        setReloadSubtasks(true)
         if (reloadSubtasks) {
             fetchTaskSubtasks()
                 .then(() => {

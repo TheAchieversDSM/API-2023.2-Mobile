@@ -4,9 +4,10 @@ import * as SecureStore from 'expo-secure-store';
 import { ICreateUser } from '../interfaces/user';
 import { APP_SECRET } from "@env";
 import jwt_decode from 'jwt-decode';
-import { ITaskCheck, ITimeCaculate } from '../interfaces/functions';
+import { IDashboardDivider, ITaskCheck, ITimeCaculate } from '../interfaces/functions';
 import { IGetSubtasks } from '../interfaces/subtask';
 import { apiStatus } from '../service/api';
+import { IMonthly, IMonthlyArray, IMonthlyCalculated } from '../interfaces/dashboard';
 
 export async function getItem(key: string): Promise<string | null> {
   const value = await SecureStore.getItemAsync(key)
@@ -99,9 +100,60 @@ export function timeCalculate(value: string): ITimeCaculate {
   return { msg: mensagem, time: resultadoEmSegundos }
 }
 
+export async function monthlyTimeCalculate({ ...months }: IMonthly): Promise<IMonthlyCalculated> {
+  let monthTimes: { [key: string]: number } = {
+    "January": 0,
+    "February": 0,
+    "March": 0,
+    "April": 0,
+    "May": 0,
+    "June": 0,
+    "July": 0,
+    "August": 0,
+    "September": 0,
+    "October": 0,
+    "November": 0,
+    "December": 0,
+  };
+
+  for (const month of Object.keys(months)) {
+    const key = month as keyof IMonthly;
+    if (key in monthTimes) {
+      monthTimes[key] = parseInt(months[key] || '0', 10);
+    }
+  }
+
+  return monthTimes
+}
+
+export function monthlyTimeCalculateArray(monthyl: IMonthlyCalculated): IDashboardDivider {
+  const barData: { value: number, frontColor: string }[] = [];
+  let maxValue: number = 0;
+
+  for (const key in monthyl) {
+    if (monthyl.hasOwnProperty(key)) {
+      let value = monthyl[key as keyof IMonthlyCalculated];
+      if (typeof value === 'number') {
+        value = value / 3600
+        if (maxValue === undefined || value > maxValue) maxValue = value;
+
+        barData.push({
+          value,
+          frontColor: '#02A8EE'
+        });
+
+      }
+    }
+  }
+
+  maxValue = Number(maxValue.toFixed(0)) + 25
+
+  return { maxValue: maxValue, barData: barData }
+}
+
 export function checkProgressSubTask(subTaskList: IGetSubtasks[]): number {
-  const totalSubTasks = subTaskList.length;
-  const totalSubTasksDone = subTaskList.filter(subTask => subTask.done).length;
+  const totalSubTasks = subTaskList ? subTaskList.length : 0;
+  const totalSubTasksDone = subTaskList ? subTaskList.filter(subTask => subTask.done).length : 0;
   const porcentagem = totalSubTasksDone / totalSubTasks * 100;
   return porcentagem
 }

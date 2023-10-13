@@ -11,10 +11,10 @@ import { Button } from "../../components/button/button";
 import { IGetTasksUserResp } from "../../interfaces/task";
 import { ITaskCheck } from "../../interfaces/functions";
 import { useAuth } from "../../hooks/auth";
-import { checkTaskUser, decodeJsonWebToken } from "../../utils/utils";
+import { checkTaskUser, decodeJsonWebToken, monthlyTimeCalculate } from "../../utils/utils";
 import serviceTask from "../../service/task";
 import { useFocusEffect } from '@react-navigation/native';
-import { months } from "../../interfaces/dashboard";
+import { IMonthlyCalculated, months } from "../../interfaces/dashboard";
 
 
 export default function Dashboard() {
@@ -23,8 +23,15 @@ export default function Dashboard() {
 
     const [values, setValues] = useState<ITaskCheck>()
     const [resp, setResp] = useState<IGetTasksUserResp[]>([])
+    const [yearResp, setYearResp] = useState<IMonthlyCalculated>()
     const { userToken } = useAuth()
     const { id } = decodeJsonWebToken(String(userToken))
+
+
+    async function getMonthTimes(id: number, year: number,) {
+        const resp = await serviceTask.getYearTime(id, year)
+        return monthlyTimeCalculate(resp.data)
+    }
 
     useFocusEffect(
         useCallback(() => {
@@ -42,17 +49,21 @@ export default function Dashboard() {
             }
             fetchUserTasks();
             return () => {
-
                 setValues(undefined);
+                setYearResp(undefined)
             };
         }, [id])
     );
 
-    const handleSearch = () => {
+    const handleSearch = async () => {
         const newErrorStatus = {
             year: selectedYear === undefined || '',
             month: selectedMonth === undefined || ''
         };
+        if (!newErrorStatus.year) {
+            const yeaars = getMonthTimes(id, Number(selectedYear))
+            setYearResp(await yeaars)
+        }
         if (newErrorStatus.month || newErrorStatus.year) return
         const valores = checkTaskUser(resp, selectedYear, selectedMonth)
         setValues(valores)
@@ -120,7 +131,7 @@ export default function Dashboard() {
                         <Expirado>{values?.expirada} tarefas expiraram esse mês</Expirado>
                     </View>
                     <Divider />
-                    <Coluna />
+                    <Coluna {...yearResp} />
                 </ScrollView>
             </Container>
         </>

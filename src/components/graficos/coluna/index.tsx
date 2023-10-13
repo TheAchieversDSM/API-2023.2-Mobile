@@ -2,35 +2,21 @@ import { View, Text } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
 import { Titulo } from "./styled";
 import { useTheme } from "styled-components";
+import { IMonthlyCalculated } from "../../../interfaces/dashboard";
+import { IItem } from "../../../interfaces/dropdown";
+import { monthlyTimeCalculateArray } from "../../../utils/utils";
 
-export const Coluna = () => {
+export const Coluna = (monthly: IMonthlyCalculated) => {
 
     const theme = useTheme()
 
-    const barData = [
-        { value: 30, frontColor: '#02A8EE' },
-        { value: 80, frontColor: '#02A8EE' },
-        { value: 95, frontColor: '#02A8EE' },
-        { value: 50, frontColor: '#02A8EE' },
-        { value: 20, frontColor: '#02A8EE' },
-        { value: 30, frontColor: '#02A8EE' },
-        { value: 80, frontColor: '#02A8EE' },
-        { value: 95, frontColor: '#02A8EE' },
-        { value: 50, frontColor: '#02A8EE' },
-        { value: 20, frontColor: '#02A8EE' },
-        { value: 50, frontColor: '#02A8EE' },
-        { value: 20, frontColor: '#02A8EE' },
-    ];
+    const { barData, maxValue } = monthlyTimeCalculateArray(monthly)
+
+    monthlyTimeCalculateArray(monthly)
 
     const xAxisLabels = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
 
     const xAxisWidth = 250;
-
-    const textStyle = {
-        title: { fontFamily: "YourTitleFont", fontSize: 20, color: "black" },
-        xAxisLabel: { fontFamily: "YourLabelFont", fontSize: 12, color: "gray" },
-        yAxisLabel: { fontFamily: "YourLabelFont", fontSize: 12, color: "gray" },
-    };
 
     return (
         <>
@@ -47,7 +33,7 @@ export const Coluna = () => {
                     <BarChart
                         showYAxisIndices
                         noOfSections={4}
-                        maxValue={100}
+                        maxValue={maxValue}
                         data={barData}
                         barBorderRadius={4}
                         isAnimated
@@ -65,7 +51,7 @@ export const Coluna = () => {
                             fontFamily: theme.FONTS.Poppins_400Regular, // Defina a fonte desejada
                             fontSize: 13, // Defina o tamanho da fonte desejado
                         }}
-                        renderTooltip={() => {
+                        renderTooltip={(t: IItem) => {
                             return (
                                 <View
                                     style={{
@@ -76,7 +62,7 @@ export const Coluna = () => {
                                         paddingVertical: 4,
                                         borderRadius: 4,
                                     }}>
-                                    <Text>20</Text>
+                                    <Text>{t.value}h</Text>
                                 </View>
                             );
                         }}

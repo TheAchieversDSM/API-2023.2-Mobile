@@ -14,3 +14,37 @@ export const months: IItem[] = [
   {label: "Novembro", value: "11"},
   {label: "Dezembro", value: "12"},
 ];
+
+export interface IMonthly {
+  January?: "January";
+  February?: "February";
+  March?: "March";
+  April?: "April";
+  May?: "May";
+  June?: "June";
+  July?: "July";
+  August?: "August";
+  September?: "September";
+  October?: "October";
+  November?: "November";
+  December?: "December";
+}
+export interface IMonthlyCalculated {
+  January?: number;
+  February?: number;
+  March?: number;
+  April?: number;
+  May?: number;
+  June?: number;
+  July?: number;
+  August?: number;
+  September?: number;
+  October?: number;
+  November?: number;
+  December?: number;
+}
+
+export interface IMonthlyArray {
+  value: number;
+  frontColor: string;
+}

@@ -70,8 +70,8 @@ export default function UserModal(props: IUpdateUser) {
                             />
                             <IconModel
                                 onPress={() => {
-                                    toggleOverlay(); // Fecha o modal ao clicar no ícone de fechar
-                                    setEdit(false); // Certifique-se de que também deseja limpar o estado edit quando o modal for fechado
+                                    toggleOverlay();
+                                    setEdit(false);
                                   }}
                                 IconColor={"#000"}
                                 IconSize={25}
@@ -107,7 +107,7 @@ export default function UserModal(props: IUpdateUser) {
                     <A.InputView>
                         <Input
                             value={password}
-                            placeholder={''}
+                            placeholder={'Insira sua nova senha'}
                             textColor='#000'
                             color='#C74634'
                             onChange={(e) => { setPassword(e.nativeEvent.text) }}

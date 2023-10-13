@@ -50,8 +50,14 @@ export default function UserModal(props: IUpdateUser) {
 
     return (
         <>
-            <TouchableOpacity onPress={toggleOverlay}>
-                <A.Logout>Editar</A.Logout>
+            <TouchableOpacity onPress={toggleOverlay} style={{display:"flex", flexDirection: "row", backgroundColor: 'transparent'}}>
+                <IconModel
+                    IconColor={"white"}
+                    IconSize={20}
+                    icon='Feather'
+                    iconName='edit-2'
+                />
+                <A.Logout style={{fontSize: 17, marginLeft: 10, marginBottom: 5}}>Editar</A.Logout>
             </TouchableOpacity>
 
             <A.Modal isVisible={visible} onBackdropPress={toggleOverlay}>
@@ -111,6 +117,7 @@ export default function UserModal(props: IUpdateUser) {
                             textColor='#000'
                             color='#C74634'
                             onChange={(e) => { setPassword(e.nativeEvent.text) }}
+                            password={true}
                             iconL='lock' 
                         />
                     </A.InputView>

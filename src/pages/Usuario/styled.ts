@@ -21,8 +21,20 @@ export const Email = styled(Text)`
   font-size: 15px;
 `;
 
+export const ContainerOptions = styled(View)`
+  justify-content: space-around;
+  flex-direction: row;
+  align-items: center;
+  margin-inline: 20px;
+  margin-top: 20px;
+  width: 200px;
+  height: 50px;
+  border-radius: 8px;
+  border: 1px solid #DE0300;
+`;
+
 export const Logout = styled(Text)`
-  color: #DE0300;
+  color: white;
   font-family: ${( props ) => props.theme.FONTS.Poppins_400Regular};
   font-size: 15px;
   margin-top: 10px;

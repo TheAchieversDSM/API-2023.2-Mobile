@@ -3,7 +3,7 @@ import { View, Text } from "react-native";
 import { Overlay } from "@rneui/themed";
 
 export const Logout = styled(Text)`
-  color: #DE0300;
+  color: #fff;
   font-family: ${( props ) => props.theme.FONTS.Poppins_400Regular};
   font-size: 15px;
   margin-top: 10px;

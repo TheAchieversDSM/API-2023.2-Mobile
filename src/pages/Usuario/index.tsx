@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import { HeaderComponent } from "../../components/header";
-import { Container, Email, Logout, Nome } from "./styled";
+import { Container, ContainerOptions, Email, Logout, Nome } from "./styled";
 import { Divider } from "@rneui/themed";
 import { useAuth } from "../../hooks/auth";
 import { decodeJsonWebToken } from "../../utils/utils";
@@ -10,6 +10,7 @@ import { IGetUserByIdResp } from "../../interfaces/user";
 import { TouchableOpacity } from "react-native";
 import UserModal from "../../components/userModal";
 import { ToastComponent } from "../../components/toast";
+import { IconModel } from "../../components/icons";
 
 export default function Usuario() {
     const { userToken } = useAuth();
@@ -49,14 +50,6 @@ export default function Usuario() {
                 <Nome>{usuario?.name}</Nome>
                 <Email>{usuario?.email}</Email>
 
-                <UserModal
-                    userId={id}
-                    name={usuario?.name}
-                    email={usuario?.email}
-                    password={usuario?.password}
-                    reloadUser={() => setReloadUserData(!reloadUserData)}
-                />
-
                 <Divider
                     style={{ width: "80%", margin: 20 }}
                     color="#747474"
@@ -64,10 +57,27 @@ export default function Usuario() {
                     orientation="horizontal"
                 />
 
-                <TouchableOpacity onPress={handleLogout}>
-                    <Logout>Log out</Logout>
-                </TouchableOpacity>
+                <ContainerOptions>
+                    <UserModal
+                        userId={id}
+                        name={usuario?.name}
+                        email={usuario?.email}
+                        password={usuario?.password}
+                        reloadUser={() => setReloadUserData(!reloadUserData)}
+                    />
+                </ContainerOptions>
 
+                <ContainerOptions style={{ backgroundColor: '#DE0300'}}>
+                    <TouchableOpacity onPress={handleLogout} style={{ display: "flex", flexDirection: "row" }}>
+                        <IconModel
+                            IconColor={"white"}
+                            IconSize={22}
+                            icon='MaterialIcons'
+                            iconName='logout'
+                        />
+                        <Logout style={{ fontSize: 17, marginLeft: 10, marginBottom: 5 }}>Logout</Logout>
+                    </TouchableOpacity>
+                </ContainerOptions>
             </Container>
         </>
     )

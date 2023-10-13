@@ -15,6 +15,12 @@ export const months: IItem[] = [
   {label: "Dezembro", value: "12"},
 ];
 
+export const anos: IItem[] = [
+  {label: "2023", value: "2023"},
+  {label: "2022", value: "2022"},
+  {label: "2021", value: "2021"},
+];
+
 export interface IMonthly {
   January?: "January";
   February?: "February";

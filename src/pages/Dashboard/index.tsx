@@ -14,12 +14,12 @@ import { useAuth } from "../../hooks/auth";
 import { checkTaskUser, decodeJsonWebToken, monthlyTimeCalculate } from "../../utils/utils";
 import serviceTask from "../../service/task";
 import { useFocusEffect } from '@react-navigation/native';
-import { IMonthlyCalculated, months } from "../../interfaces/dashboard";
+import { IMonthlyCalculated, anos, months } from "../../interfaces/dashboard";
 
 
 export default function Dashboard() {
-    const [selectedYear, setSelectedYear] = useState('');
-    const [selectedMonth, setSelectedMonth] = useState('');
+    const [selectedYear, setSelectedYear] = useState<string>("");
+    const [selectedMonth, setSelectedMonth] = useState<string>("");
 
     const [values, setValues] = useState<ITaskCheck>()
     const [resp, setResp] = useState<IGetTasksUserResp[]>([])
@@ -57,8 +57,8 @@ export default function Dashboard() {
 
     const handleSearch = async () => {
         const newErrorStatus = {
-            year: selectedYear === undefined || '',
-            month: selectedMonth === undefined || ''
+            year: selectedYear === '',
+            month: selectedMonth === ''
         };
         if (!newErrorStatus.year) {
             const yeaars = getMonthTimes(id, Number(selectedYear))
@@ -77,11 +77,7 @@ export default function Dashboard() {
                     <Filtro>
                         <Column>
                             <DropdownComponent
-                                data={[
-                                    { label: '2023', value: '2023' },
-                                    { label: '2022', value: '2022' },
-                                    { label: '2021', value: '2021' },
-                                ]}
+                                data={anos}
                                 placeholder="Ano"
                                 onValueChange={(value) => setSelectedYear(value)}
                                 iconColor="#de0300"

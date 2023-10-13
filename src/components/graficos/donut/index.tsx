@@ -70,12 +70,12 @@ export const Donut = (values: ITaskCheck) => {
               marginRight: 20,
             }}>
             {renderDot('#de0300')}
-            <Legenda style={{ color: 'white' }}>A Fazer: {values?.todo}%</Legenda>
+            <Legenda style={{ color: 'white' }}>A Fazer: {Math.trunc(values?.todo)}%</Legenda>
           </View>
           <View
             style={{ flexDirection: 'row', alignItems: 'center', width: 120 }}>
             {renderDot('#ebae11')}
-            <Legenda style={{ color: 'white' }}>Progresso: {values?.doing}%</Legenda>
+            <Legenda style={{ color: 'white' }}>Progresso: {Math.trunc(values?.doing)}%</Legenda>
           </View>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
@@ -87,7 +87,7 @@ export const Donut = (values: ITaskCheck) => {
               marginRight: 20,
             }}>
             {renderDot('#67d207')}
-            <Legenda style={{ color: 'white' }}>Concluído: {values?.done}%</Legenda>
+            <Legenda style={{ color: 'white' }}>Concluído: {Math.trunc(values?.done)}%</Legenda>
           </View>
         </View>
       </View>

@@ -71,6 +71,8 @@ export const Cards = (props: ICards) => {
 
     const [editingSubtaskId, setEditingSubtaskId] = useState<number | null>(null);
 
+    const [dateError, setDateError] = useState(false)
+
     async function fetchTaskSubtasks() {
         try {
             const response = await serviceSubtask.getTaskSubtask(props.id);
@@ -118,7 +120,6 @@ export const Cards = (props: ICards) => {
                 });
         }
     }, [props.id, reloadSubtasks]);
-    const [dateError, setDateError] = useState(false)
 
     const handleAddSubtask = () => {
         setIsInputVisible(true);

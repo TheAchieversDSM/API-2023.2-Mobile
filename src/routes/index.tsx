@@ -7,7 +7,7 @@ import { useAuth } from "../hooks/auth";
 
 export function Routes() {
     const { userToken, signOut } = useAuth();
-    
+
     useEffect(() => {
         const intervalId = setInterval(() => {
             if (userToken) {
@@ -21,7 +21,6 @@ export function Routes() {
 
     useEffect(() => {
         const intervalId = setInterval(async () => {
-            console.log('\x1b[43m\x1b[31m[CheckTaskLogs]\x1b[0m Checagem das task 1 dia')
             if (userToken) {
                 await checkTaskLogs(userToken);
             }

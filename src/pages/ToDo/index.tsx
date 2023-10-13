@@ -66,7 +66,6 @@ export default function ToDo() {
                                 value={"A Fazer"}
                                 statusColor="#de0300"
                                 deadline={task.deadline}
-                                taskStatus={task.status}
                                 priority={task.priority}
                             />
                         )
@@ -89,7 +88,6 @@ export default function ToDo() {
                                 statusColor="#ebae11"
                                 deadline={task.deadline}
                                 priority={task.priority}
-                                taskStatus={task.status}
                             />
                         )
                         )}
@@ -108,7 +106,6 @@ export default function ToDo() {
                                 descricao={task.description}
                                 status='success'
                                 value={"Concluído"}
-                                taskStatus={task.status}
                                 statusColor="#67d207"
                                 deadline={task.deadline}
                                 priority={task.priority}

@@ -41,10 +41,20 @@ class User {
 
   async updateUser(data: IUpdateUser) {
     try {
-      const response = await api.put(`/user/updateUser/${data.userId}`, data);
-      return response;
+      return await api
+        .put(`/user/updateUser/${data.userId}`, data)
+        .then(() => ({
+          data: "Informações atualizadas com sucesso!",
+          status: 200,
+        }))
+        .catch((err: AxiosError | any) => {
+          if (err.response) {
+            if (err.response.status === 400)
+              return {data: err.response.data, status: err.response.status};
+          }
+        });
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   }
 }

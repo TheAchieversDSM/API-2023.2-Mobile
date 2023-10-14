@@ -7,6 +7,7 @@ import { useAuth } from "../../hooks/auth";
 import { IconModel } from "../icons";
 import Input from '../input/input';
 import * as A from "./styled";
+import { ToastComponent } from "../toast";
 
 export default function UserModal(props: IUpdateUser) {
     const [visible, setVisible] = useState(false);
@@ -20,6 +21,8 @@ export default function UserModal(props: IUpdateUser) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const [error, setError] = useState("")
 
     const toggleOverlay = () => {
         setEmail("")
@@ -44,6 +47,9 @@ export default function UserModal(props: IUpdateUser) {
                     reloadUser: function (): void {
                         throw new Error("Function not implemented.");
                     }
+                }).then((e: any) => {
+                    if (e.status === 200) return ToastComponent({ type: 'success', title: e.data })
+                    if (e.status === 400) return ToastComponent({ type: 'error', title: e.data.message })
                 })
                 setReloadUser(true)
                 props.reloadUser();

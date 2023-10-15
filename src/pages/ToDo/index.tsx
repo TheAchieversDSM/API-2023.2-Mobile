@@ -63,6 +63,7 @@ export default function ToDo() {
                                 task={task.name}
                                 descricao={task.description}
                                 status='error'
+                                customInterval={task.customInterval}
                                 value={"A Fazer"}
                                 statusColor="#de0300"
                                 deadline={task.deadline}
@@ -84,6 +85,7 @@ export default function ToDo() {
                                 task={task.name}
                                 descricao={task.description}
                                 status='warning'
+                                customInterval={task.customInterval}
                                 value={"Em Progresso"}
                                 statusColor="#ebae11"
                                 deadline={task.deadline}
@@ -105,6 +107,7 @@ export default function ToDo() {
                                 task={task.name}
                                 descricao={task.description}
                                 status='success'
+                                customInterval={task.customInterval}
                                 value={"Concluído"}
                                 statusColor="#67d207"
                                 deadline={task.deadline}

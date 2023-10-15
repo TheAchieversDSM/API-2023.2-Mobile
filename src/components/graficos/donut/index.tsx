@@ -48,7 +48,7 @@ export const Donut = (values: ITaskCheck) => {
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                   <TextDonut
                     style={{ fontSize: 22, color: 'white', fontWeight: 'bold' }}>
-                    {values?.done}%
+                    {values?.done.toFixed(2)}%
                   </TextDonut>
                   <TextDonut style={{ fontSize: 14, color: 'white' }}>concluídas</TextDonut>
                 </View>

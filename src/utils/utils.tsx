@@ -59,7 +59,7 @@ export const checkTokenValidity = (userToken: string, signOut: Function) => {
 
 export const checkTaskLogs = async (userToken: string) => {
   const { id } = decodeJsonWebToken(userToken);
-  const service = await apiStatus.timeUpdate(id)
+  const service = await apiStatus.checkTasks(id)
   return service;
 }
 

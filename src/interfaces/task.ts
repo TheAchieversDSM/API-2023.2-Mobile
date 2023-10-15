@@ -26,6 +26,13 @@ export interface IGetTasksUserResp {
   timeSpent: number;
 }
 
+export interface IHomeReturn {
+  data: {
+    recorrente: IGetTasksUserResp[];
+    naoRecorrente: IGetTasksUserResp[];
+  }
+}
+
 export interface IGetTasksUserDate {
   userId: number;
   deadline: string;

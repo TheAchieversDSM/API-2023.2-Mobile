@@ -38,5 +38,5 @@ export const NoTasksText = styled(Text)`
   text-align: center;
   font-size: 18px;
   color: #808080ff;
-  margin-top: 120px;
+  margin-top: 90px;
 `;

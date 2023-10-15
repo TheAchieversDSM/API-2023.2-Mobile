@@ -152,10 +152,13 @@ export function monthlyTimeCalculateArray(monthyl: IMonthlyCalculated): IDashboa
 }
 
 export function checkProgressSubTask(subTaskList: IGetSubtasks[]): number {
-  const totalSubTasks = subTaskList ? subTaskList.length : 0;
-  const totalSubTasksDone = subTaskList ? subTaskList.filter(subTask => subTask.done).length : 0;
-  const porcentagem = totalSubTasksDone / totalSubTasks * 100;
-  return porcentagem
+  if (!subTaskList || subTaskList.length === 0) {
+    return 0;
+  }
+  const totalSubTasks = subTaskList.length;
+  const totalSubTasksDone = subTaskList.filter(subTask => subTask.done).length;
+  const percentage = (totalSubTasksDone / totalSubTasks) * 100;
+  return percentage;
 }
 
 export function checkTaskUser(tasks: IGetTasksUserResp[], year: string, month: string): ITaskCheck {

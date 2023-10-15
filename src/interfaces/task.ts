@@ -45,6 +45,7 @@ export interface IUpdateTask {
   description: string;
   priority: string;
   deadline: string /* Date */;
+  customInterval: number;
   status: string;
   timeSpent: number;
   done: boolean;

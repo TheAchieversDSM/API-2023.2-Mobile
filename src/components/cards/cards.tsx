@@ -47,6 +47,8 @@ export const Cards = (props: ICards) => {
 
     const [priorities, setPriorities] = useState<string | undefined>(undefined);
 
+    const [customInterval, setCustomInterval] = useState(props.customInterval);
+
     const [data, setData] = useState({} as IUpdateTask)
 
     const [subtask, setSubtask] = useState<IGetSubtasks[]>([])
@@ -227,6 +229,7 @@ export const Cards = (props: ICards) => {
                         await serviceTask.updateTask({
                             name: name,
                             description: description,
+                            customInterval: data?.customInterval || props.customInterval,
                             priority: data?.priority || props.priority,
                             deadline: date,
                             status: data?.status,
@@ -404,6 +407,25 @@ export const Cards = (props: ICards) => {
                                 height={80}
                             />
                         </S.InputView>
+                        {
+                        props.customInterval > 0 ?
+                        <>
+                            <S.TaskDescT>Frequência em dias:</S.TaskDescT>
+                            <S.InputView>
+                                <Input
+                                    value={customInterval.toString()}
+                                    placeholder={'Insira a frequência em dias'}
+                                    textColor='#000'
+                                    color='#C74634'
+                                    onChange={(e) => { setCustomInterval(Number(e.nativeEvent.text)); setData({ ...data, customInterval: Number(e.nativeEvent.text) })  }}
+                                    iconL='repeat'
+                                    />
+                            </S.InputView> 
+                        </>
+                        : null
+                               
+                        
+                    }
                     </S.GeneralView>
                 </ViewScroll>
             </S.Modal>

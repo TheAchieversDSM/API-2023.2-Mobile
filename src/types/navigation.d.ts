@@ -7,7 +7,7 @@ export declare global {
       CreateTask: undefined;
       ToDo: undefined;
       Tabs: {
-        screen: 'Home' | 'ToDo' | 'CreateTask';
+        screen: 'Home' | 'ToDo' | 'CreateTask' | 'Dashboard';
       };
     }
   }

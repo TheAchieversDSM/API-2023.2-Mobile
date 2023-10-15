@@ -1,7 +1,7 @@
 import { Cards } from "../../components/cards/cards"
 import { IGetTasksUserResp } from "../../interfaces/task"
 
-export const ViewCards = ({  ...task }: IGetTasksUserResp) => {
+export const ViewCards = ({ ...task }: IGetTasksUserResp) => {
     switch (task.status) {
         case "TO DO":
             return (
@@ -14,7 +14,10 @@ export const ViewCards = ({  ...task }: IGetTasksUserResp) => {
                     value={"A Fazer"}
                     statusColor="#de0300"
                     deadline={task.deadline}
+                    customInterval={task.customInterval || 0}
                     priority={task.priority}
+                    timeSpent={task.timeSpent}
+                    reloadTasksData={() => { }}
                 />
             )
         case "DOING":
@@ -28,7 +31,10 @@ export const ViewCards = ({  ...task }: IGetTasksUserResp) => {
                     value={"Em Progresso"}
                     statusColor="#ebae11"
                     deadline={task.deadline}
+                    customInterval={task.customInterval || 0}
                     priority={task.priority}
+                    timeSpent={task.timeSpent}
+                    reloadTasksData={() => { }}
                 />
             )
         case "DONE":
@@ -42,7 +48,10 @@ export const ViewCards = ({  ...task }: IGetTasksUserResp) => {
                     value={"Concluido"}
                     statusColor="#67d207"
                     deadline={task.deadline}
+                    customInterval={task.customInterval || 0}
                     priority={task.priority}
+                    timeSpent={task.timeSpent}
+                    reloadTasksData={() => { }}
                 />
             )
     }

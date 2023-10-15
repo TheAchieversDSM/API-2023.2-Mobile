@@ -1,8 +1,11 @@
 import axios, {AxiosInstance} from "axios";
-import {URL_API} from "@env";
+import {URL_API, APP_MODE, AZURE_API} from "@env";
+
+const url: string = APP_MODE == "main" ? AZURE_API : URL_API;
+
 
 const api: AxiosInstance = axios.create({
-  baseURL: URL_API,
+  baseURL: url,
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",
@@ -17,6 +20,17 @@ class API {
       return response.status;
     } catch (err: any) {
       return err.response?.status;
+    }
+  }
+
+  async checkTasks(userId: number) {
+    try {
+      const response = await api.get(`/status/renewCyclicTasks/${userId}`);
+      console.log(response.data);
+      console.log(response.status);
+      return response;
+    } catch (err: any) {
+      return err.response;
     }
   }
 }

@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Container, NoTasksText, SubTextTitle, TextTitle, ViewContainer } from './styled';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, Text } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { useAuth } from '../../hooks/auth';
 import { decodeJsonWebToken } from '../../utils/utils';
-import { IGetTasksUserResp } from '../../interfaces/task';
+import { IGetTasksUserResp, IHomeReturn } from '../../interfaces/task';
 import serviceTask from '../../service/task';
 import { Cards } from '../../components/cards/cards';
 import { HeaderComponent } from '../../components/header';
 import { ViewCards } from './cards';
+import { useTheme } from 'styled-components';
+import { apiStatus } from '../../service/api';
+import { Divider } from '@rneui/base';
 
 LocaleConfig.defaultLocale = 'br';
 
@@ -29,35 +32,56 @@ LocaleConfig.locales['br'] = {
 }
 
 export default function Home() {
+  const theme = useTheme()
   const [selected, setSelected] = useState<string>(new Date().toISOString().split('T')[0]); // Define a data atual como selecionada
   const [selectedDay, setSelectedDay] = useState<string>('');
   const [selectedMonth, setSelectedMonth] = useState<string>('');
-  const [dateTasks, setDateTasks] = useState<IGetTasksUserResp[]>();
+  const [dateTasks, setDateTasks] = useState<IHomeReturn>({} as IHomeReturn);
   const { userToken } = useAuth();
   const { id } = decodeJsonWebToken(String(userToken));
-  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
+    setDateTasks({} as IHomeReturn)
+
     async function fetchUserDateTasks() {
       try {
-        const response = await serviceTask.getTaskUserDate({ userId: id, deadline: String(selected) });
+        const response: IHomeReturn = await serviceTask.getTaskUserDate({ userId: id, deadline: String(selected) });
+
         if (response) {
-          setDateTasks(response.data);
-        } else {
-          console.error("Erro ao buscar tarefas do usuário");
+          setDateTasks(response);
         }
+
       } catch (error) {
         console.error(error);
       }
     }
 
     fetchUserDateTasks();
-  }, [selected, update]);
+  }, [selected]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await apiStatus.checkTasks(id)
+      } catch (error) {
+        console.error('Erro ao verificar as tarefas ciclicas a serem renovadas: ', error);
+      }
+    };
+
+    const intervalId = setInterval(() => {
+      fetchData();
+    }, 60000);
+
+    fetchData();
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
   return (
     <>
       <Container>
-        <View style={{ backgroundColor: '#393939' }}><HeaderComponent /></View>
+        <View style={{ backgroundColor: '#222328' }}><HeaderComponent /></View>
         <Calendar
           onDayPress={day => {
             setSelected(day.dateString);
@@ -70,8 +94,8 @@ export default function Home() {
           }}
 
           theme={{
-            backgroundColor: '#393939',
-            calendarBackground: '#393939',
+            backgroundColor: '#222328',
+            calendarBackground: '#222328',
             textSectionTitleColor: '#de0300',
             selectedDayBackgroundColor: '#de0300',
             selectedDayTextColor: '#e7e7e7',
@@ -80,9 +104,9 @@ export default function Home() {
             textDisabledColor: '#808080',
             monthTextColor: '#de0300',
             arrowColor: '#E7E7E7',
-            textDayFontFamily: 'Poppins_400Regular',
-            textMonthFontFamily: 'Poppins_600Regular', // Substitua 'SuaFonteMes' pelo nome da fonte para meses
-            textDayHeaderFontFamily: 'Poppins_500Regular',
+            textDayFontFamily: theme.FONTS.Poppins_400Regular,
+            textMonthFontFamily: theme.FONTS.Poppins_500Medium,
+            textDayHeaderFontFamily: theme.FONTS.Poppins_500Medium,
             textDayFontSize: 15,
             textMonthFontSize: 25,
             textDayHeaderFontSize: 18,
@@ -101,19 +125,59 @@ export default function Home() {
               <>
                 <TextTitle>Expira dia {selectedDay}/{selectedMonth}</TextTitle>
                 <ScrollView>
-                  {dateTasks ? dateTasks?.map((task, index) => (
-                    task.deadline === String(selected) && (
-                      <ViewCards {...task} />
+                  <Divider style={{ marginVertical: 5 }} />
+                  {
+                    dateTasks.data ? (
+                      <>
+                        {
+                          dateTasks?.data?.recorrente?.length > 0 ? (
+                            <>
+                              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Tarefas recorrentes</Text>
+                              {
+                                dateTasks.data.recorrente.map((task, index) => (
+                                  task.deadline === String(selected) && (
+                                    <ViewCards
+                                      key={task.id}
+                                      {...task}
+                                    />
+                                  )
+                                ))
+                              }
+                              <Divider
+                                style={{ marginVertical: 15 }}
+                              />
+                            </>
+                          ) : 
+                          null
+                        }
+                        {
+                          dateTasks?.data?.naoRecorrente?.length > 0 ? (
+                            <>
+                              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Tarefas não recorrentes</Text>
+                              {
+                                dateTasks.data.naoRecorrente.map((task, index) => (
+                                  task.deadline === String(selected) && (
+                                    <ViewCards
+                                      key={task.id}
+                                      {...task}
+                                    />
+                                  )
+                                ))
+                              }
+                              <View style={{ marginBottom: 50 }} />
+                            </>
+                          ) : 
+                          null
+                        }
+                      </>
+                    ) : (
+                      <NoTasksText>Não há tarefas para esta data</NoTasksText>
                     )
-
-                  )) : <NoTasksText>Nenhuma tarefa expirada nessa data</NoTasksText>}
+                  }
                 </ScrollView>
               </> :
               <NoTasksText>Selecione uma data</NoTasksText>
             }
-
-            {/* TODO: Checkbox task com repetição para a próxima sprint */}
-            {/* <Checkbox label= "Tarefa 1"/> */}
           </Box>
         </ViewContainer>
       </Container>

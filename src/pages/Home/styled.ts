@@ -1,10 +1,10 @@
 import {Text} from "@rneui/themed";
 import {SafeAreaView, View} from "react-native";
-import {styled} from "styled-components/native";
+import {styled} from "styled-components";
 
 export const Container = styled(SafeAreaView)`
   flex: 1;
-  background-color: #393939;
+  background-color: #222328;
   width: 100%;
 `;
 
@@ -24,7 +24,7 @@ export const ViewContainer = styled(View)`
 export const TextTitle = styled(Text)`
     color: #de0300;
     font-size: 22px;
-    fontWeight: bold;
+    font-family: ${( props ) => props.theme.FONTS.Poppins_600SemiBold};
 `;
 
 export const SubTextTitle = styled(Text)`
@@ -36,7 +36,7 @@ export const SubTextTitle = styled(Text)`
 
 export const NoTasksText = styled(Text)`
   text-align: center;
-  font-size: 18;
-  color: "#808080ff";
-  margin-top: 120px;
+  font-size: 18px;
+  color: #808080ff;
+  margin-top: 90px;
 `;

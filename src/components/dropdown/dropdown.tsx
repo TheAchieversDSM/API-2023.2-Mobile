@@ -3,13 +3,17 @@ import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
-import { styles } from './styled';
+import { createStyles } from './styled';
+import { useTheme } from 'styled-components';
 
 const data = [
     { label: 'Item 1', value: '1' },
 ];
 
 export const DropdownComponent = (props: IDropdown) => {
+    const theme = useTheme();
+    const styles = createStyles(theme);
+
     const [value, setValue] = useState({} as IItem);
     useEffect(() => {
         props.onValueChange(value.value)

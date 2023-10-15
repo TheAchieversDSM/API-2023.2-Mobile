@@ -1,22 +1,16 @@
-import { ScrollView, View } from "react-native";
-import { Overlay, Text } from "@rneui/themed";
+import {ScrollView, View} from "react-native";
+import {Overlay, Text} from "@rneui/themed";
 import styled from "styled-components";
 
-export const CardTask = styled(View).attrs({
-  style: {
-    shadowColor: '#000',
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
-    elevation: 5,
-  }
-})`
+export const CardTask = styled(View)`
   height: 15px;
   background-color: #fff;
   height: 50px;
   border-radius: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
-  `;
+  elevation: 5;
+`;
 
 export const StatusColor = styled(View)`
   height: 8px;
@@ -31,6 +25,10 @@ export const TaskName = styled(Text)`
   font-size: 16px;
   font-family: ${(props) => props.theme.FONTS.Poppins_500Medium};
   color: #393939;
+`;
+
+export const SubtaskDone = styled(Text)`
+  color: #848484;
 `;
 
 export const TaskTitle = styled(Text)`

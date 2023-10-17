@@ -138,8 +138,8 @@ export default function CreateTask() {
     const [prio, setPrio] = useState(false)
 
     const handleSubmit = async (data: ICreateTasks) => {
-        setData({ ...data, deadline: recurrency ? String(formatDate(new Date())) : data.deadline })
-
+        if (recurrency) data.deadline = String(formatDate(new Date()))
+        setData({ ...data})
         try {
         if (checkFields(data)) {
             setErrorMessage({ name: "Nome é obrigatório", description: "Descrição é obrigatória", deadline: "Data é obrigatória" })

@@ -10,6 +10,7 @@ import { Cards } from '../../components/cards/cards';
 import { HeaderComponent } from '../../components/header';
 import { ViewCards } from './cards';
 import { useTheme } from 'styled-components';
+import { apiStatus } from '../../service/api';
 
 LocaleConfig.defaultLocale = 'br';
 
@@ -52,6 +53,25 @@ export default function Home() {
 
     fetchUserDateTasks();
   }, [selected]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await apiStatus.checkTasks(id)
+      } catch (error) {
+        console.error('Erro ao verificar as tarefas ciclicas a serem renovadas: ', error);
+      }
+    };
+
+    const intervalId = setInterval(() => {
+      fetchData();
+    }, 10000);
+
+    fetchData();
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
   return (
     <>

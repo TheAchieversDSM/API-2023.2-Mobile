@@ -21,6 +21,7 @@ export default function UserModal(props: IUpdateUser) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [customInterval, setCustomInterval] = useState(0);
 
     const [error, setError] = useState("")
 

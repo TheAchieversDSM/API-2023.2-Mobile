@@ -8,7 +8,7 @@ export interface ICards {
   priority: string;
   deadline: string;
   timeSpent: number;
-  customInterval?: number;
+  customInterval: number;
   reload?: boolean;
   reloadTasksData: () => void;
 }

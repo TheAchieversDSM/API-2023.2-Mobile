@@ -70,7 +70,7 @@ export default function Home() {
 
     const intervalId = setInterval(() => {
       fetchData();
-    }, 10000);
+    }, 60000);
 
     fetchData();
     return () => {

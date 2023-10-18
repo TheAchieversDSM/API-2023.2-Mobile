@@ -14,6 +14,7 @@ export const ViewCards = ({ ...task }: IGetTasksUserResp) => {
                     value={"A Fazer"}
                     statusColor="#de0300"
                     deadline={task.deadline}
+                    customInterval={task.customInterval || 0}
                     priority={task.priority}
                     timeSpent={task.timeSpent}
                     reloadTasksData={() => { }}
@@ -30,6 +31,7 @@ export const ViewCards = ({ ...task }: IGetTasksUserResp) => {
                     value={"Em Progresso"}
                     statusColor="#ebae11"
                     deadline={task.deadline}
+                    customInterval={task.customInterval || 0}
                     priority={task.priority}
                     timeSpent={task.timeSpent}
                     reloadTasksData={() => { }}
@@ -46,6 +48,7 @@ export const ViewCards = ({ ...task }: IGetTasksUserResp) => {
                     value={"Concluido"}
                     statusColor="#67d207"
                     deadline={task.deadline}
+                    customInterval={task.customInterval || 0}
                     priority={task.priority}
                     timeSpent={task.timeSpent}
                     reloadTasksData={() => { }}

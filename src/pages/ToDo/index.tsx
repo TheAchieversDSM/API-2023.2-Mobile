@@ -8,11 +8,13 @@ import { IGetTasksUserResp } from "../../interfaces/task";
 import { ScrollView, View } from "react-native";
 import { HeaderComponent } from "../../components/header";
 import { useFocusEffect } from "@react-navigation/native";
+import { SearchBar } from "@rneui/themed";
 
 export default function ToDo() {
     const [userTasks, setUserTasks] = useState<IGetTasksUserResp[]>([]);
     const [reload, setReload] = useState(false);
     const { userToken } = useAuth()
+    const [searchText, setSearchText] = useState('');
 
     const { id } = decodeJsonWebToken(String(userToken))
 
@@ -44,15 +46,32 @@ export default function ToDo() {
         setReload(!reload);
     };
 
-
     return (
         <>
             <View style={{ backgroundColor: '#222328' }}><HeaderComponent /></View>
             <Container>
+                <SearchBar
+                    placeholder="Pesquisar..."
+                    containerStyle={{
+                        backgroundColor: '#222328',
+                        borderWidth: 1, 
+                        borderTopColor: '#222328',
+                        borderLeftColor: '#222328',
+                        borderRightColor: '#222328',
+                        borderBottomColor: '#ffff', 
+                        borderRadius: 0,
+                        marginBottom: 20,
+                    }}
+                    inputContainerStyle={{
+                        backgroundColor: '#222328',
+                    }}
+                    onChangeText={text => setSearchText(text)}
+                    value={searchText}
+                />
                 <ScrollView>
                     <TextStatus3>A Fazer</TextStatus3>
                     {userTasks
-                        ?.filter((task) => task.status === "TO DO" && task.customInterval == 0)
+                        ?.filter((task) => task.status === "TO DO" && task.customInterval == 0 && task.name.toLowerCase().includes(searchText.toLowerCase()))
                         .map((task, index) => (
                             <Cards
                                 reloadTasksData={reloadTasksData}
@@ -74,7 +93,7 @@ export default function ToDo() {
 
                     <TextStatus2>Em Progresso</TextStatus2>
                     {userTasks
-                        ?.filter((task) => task.status === "DOING" && task.customInterval == 0)
+                        ?.filter((task) => task.status === "DOING" && task.customInterval == 0 && task.name.toLowerCase().includes(searchText.toLowerCase()))
                         .map((task, index) => (
                             <Cards
                                 reload={reload}
@@ -96,7 +115,7 @@ export default function ToDo() {
 
                     <TextStatus1>Concluído</TextStatus1>
                     {userTasks
-                        ?.filter((task) => task.status === "DONE" && task.customInterval == 0)
+                        ?.filter((task) => task.status === "DONE" && task.customInterval == 0 && task.name.toLowerCase().includes(searchText.toLowerCase()))
                         .map((task, index) => (
                             <Cards
                                 reload={reload}

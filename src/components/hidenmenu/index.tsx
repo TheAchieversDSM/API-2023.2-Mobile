@@ -8,13 +8,6 @@ export const HidenMenu = ({ option, open }: IHidenMenu) => {
 
     return (
         <Container>
-            <IconModel
-                onPress={open}
-                IconColor={"#000"}
-                IconSize={25}
-                icon='Entypo'
-                iconName='chevron-down'
-            />
             <ContainerIcons>
                 {option.map((buttons) => {
                     return (
@@ -28,6 +21,13 @@ export const HidenMenu = ({ option, open }: IHidenMenu) => {
                     )
                 })}
             </ContainerIcons>
+            <IconModel
+                onPress={open}
+                IconColor={"#000"}
+                IconSize={25}
+                icon='Entypo'
+                iconName='chevron-right'
+            />
         </Container>
     )
 }

@@ -80,7 +80,7 @@ export default function CreateTask() {
         done: false,
         userId: id,
         customInterval: 0,
-        last_execution: '2023-02-02'
+        lastExecution: '2023-02-02'
     })
 
     const [errorMessage, setErrorMessage] = useState({
@@ -115,7 +115,7 @@ export default function CreateTask() {
             done: false,
             userId: id,
             customInterval: 0,
-            last_execution: '2023-02-02'
+            lastExecution: '2023-02-02'
         })
 
         setRecurrencyError(false)
@@ -193,7 +193,7 @@ export default function CreateTask() {
                     done: false,
                     userId: id,
                     customInterval: 0,
-                    last_execution: '2023-02-02'
+                    lastExecution: '2023-02-02'
                 })
 
                 setPriorities(undefined)

@@ -3,15 +3,17 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Feather from "@expo/vector-icons/Feather";
+import Entypo from "@expo/vector-icons/Entypo";
 
-type AllIconKeys =
+export type AllIconKeys =
   | keyof typeof FontAwesome.glyphMap
   | keyof typeof FontAwesome5.glyphMap
   | keyof typeof MaterialIcons.glyphMap
   | keyof typeof AntDesign.glyphMap
-  | keyof typeof Feather.glyphMap;
+  | keyof typeof Feather.glyphMap
+  | keyof typeof Entypo.glyphMap
 
-type IconType = "FontAwesome" | "MaterialIcons" | "AntDesign" | "FontAwesome5" | "Feather";
+export type IconType = "FontAwesome" | "MaterialIcons" | "AntDesign" | "FontAwesome5" | "Feather" | "Entypo";
 
 export interface IIcons {
   onPress?: () => void;

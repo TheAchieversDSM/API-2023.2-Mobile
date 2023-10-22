@@ -152,6 +152,7 @@ export function monthlyTimeCalculateArray(monthyl: IMonthlyCalculated): IDashboa
 }
 
 export function checkProgressSubTask(subTaskList: IGetSubtasks[]): number {
+  console.log(subTaskList)
   if (!subTaskList || subTaskList.length === 0) {
     return 0;
   }

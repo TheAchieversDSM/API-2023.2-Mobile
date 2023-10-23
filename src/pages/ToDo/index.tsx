@@ -8,13 +8,17 @@ import { IGetTasksUserResp } from "../../interfaces/task";
 import { ScrollView, View } from "react-native";
 import { HeaderComponent } from "../../components/header";
 import { useFocusEffect } from "@react-navigation/native";
-import { SearchBar } from "@rneui/themed";
+import { ButtonGroup, SearchBar } from "@rneui/themed";
+import { useTheme } from "styled-components";
 
 export default function ToDo() {
     const [userTasks, setUserTasks] = useState<IGetTasksUserResp[]>([]);
     const [reload, setReload] = useState(false);
-    const { userToken } = useAuth()
+    const { userToken } = useAuth();
     const [searchText, setSearchText] = useState('');
+    const [prioridade, setPrioridade] = useState("");
+    const [selectedButton, setSelectedButton] = useState(-1);
+    const theme = useTheme()
 
     const { id } = decodeJsonWebToken(String(userToken))
 
@@ -40,7 +44,6 @@ export default function ToDo() {
             }
         }, [id, reload])
     )
-
 
     const reloadTasksData = () => {
         setReload(!reload);
@@ -68,10 +71,33 @@ export default function ToDo() {
                     onChangeText={text => setSearchText(text)}
                     value={searchText}
                 />
+                <ButtonGroup
+                    buttons={['Baixa', 'Média', 'Alta']}
+                    selectedIndex={selectedButton}
+                    onPress={(selectedIndex) => {
+                        // Se o mesmo botão for clicado novamente, limpe o filtro
+                        if (selectedIndex === selectedButton) {
+                            setPrioridade('');
+                            setSelectedButton(-1);
+                        } else {
+                            // Determine a prioridade com base no índice do botão
+                            const priority = selectedIndex === 0 ? 'Low' : selectedIndex === 1 ? 'Medium' : 'High';
+                            setPrioridade(priority);
+                            setSelectedButton(selectedIndex);
+                        }
+                    }}
+                    textStyle={{ fontFamily: theme.FONTS.Poppins_500Medium, fontSize: 16, fontWeight: '700' }}
+                    containerStyle={{ marginBottom: 20 }}
+                />
                 <ScrollView>
                     <TextStatus3>A Fazer</TextStatus3>
                     {userTasks
-                        ?.filter((task) => task.status === "TO DO" && task.customInterval == 0 && task.name.toLowerCase().includes(searchText.toLowerCase()))
+                        ?.filter(
+                            (task) => task.status === "TO DO" && 
+                            task.customInterval == 0 && 
+                            (prioridade === '' || task.priority === prioridade) && 
+                            task.name.toLowerCase().includes(searchText.toLowerCase())
+                        )
                         .map((task, index) => (
                             <Cards
                                 reloadTasksData={reloadTasksData}
@@ -93,7 +119,12 @@ export default function ToDo() {
 
                     <TextStatus2>Em Progresso</TextStatus2>
                     {userTasks
-                        ?.filter((task) => task.status === "DOING" && task.customInterval == 0 && task.name.toLowerCase().includes(searchText.toLowerCase()))
+                        ?.filter(
+                            (task) => task.status === "DOING" && 
+                            task.customInterval == 0 && 
+                            task.name.toLowerCase().includes(searchText.toLowerCase()) && 
+                            (prioridade === '' || task.priority === prioridade)
+                        )
                         .map((task, index) => (
                             <Cards
                                 reload={reload}
@@ -115,7 +146,12 @@ export default function ToDo() {
 
                     <TextStatus1>Concluído</TextStatus1>
                     {userTasks
-                        ?.filter((task) => task.status === "DONE" && task.customInterval == 0 && task.name.toLowerCase().includes(searchText.toLowerCase()))
+                        ?.filter(
+                            (task) => task.status === "DONE" && 
+                            task.customInterval == 0 && 
+                            task.name.toLowerCase().includes(searchText.toLowerCase()) &&
+                            (prioridade === '' || task.priority === prioridade)
+                        )
                         .map((task, index) => (
                             <Cards
                                 reload={reload}

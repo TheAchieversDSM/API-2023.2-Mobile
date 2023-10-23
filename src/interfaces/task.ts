@@ -8,7 +8,7 @@ export interface ICreateTasks {
   done: boolean;
   userId: number;
   customInterval: number;
-  last_execution: string;
+  lastExecution: string;
 }
 
 export interface IGetTasksUser {

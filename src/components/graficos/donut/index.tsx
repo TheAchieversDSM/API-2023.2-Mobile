@@ -58,7 +58,6 @@ export const Donut = (values: ITaskCheck) => {
         </View>
         <View
           style={{
-            flexDirection: 'row',
             justifyContent: 'center',
             marginBottom: 10,
           }}>
@@ -66,24 +65,24 @@ export const Donut = (values: ITaskCheck) => {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              width: 120,
+              width: "100%",
               marginRight: 20,
             }}>
             {renderDot('#de0300')}
             <Legenda style={{ color: 'white' }}>A Fazer: {values?.todo.toFixed(2)}%</Legenda>
           </View>
           <View
-            style={{ flexDirection: 'row', alignItems: 'center', width: 120 }}>
+            style={{
+              flexDirection: 'row', alignItems: 'center', width: "100%",
+            }}>
             {renderDot('#ebae11')}
             <Legenda style={{ color: 'white' }}>Progresso: {values?.doing.toFixed(2)}%</Legenda>
           </View>
-        </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
           <View
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              width: 120,
+              width: "100%",
               marginRight: 20,
             }}>
             {renderDot('#67d207')}

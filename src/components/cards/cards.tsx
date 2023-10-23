@@ -20,7 +20,8 @@ import { Icon } from '@rneui/themed';
 import { IconModel } from '../icons';
 import Input from '../input/input';
 import * as S from './styled';
-import { set } from 'date-fns';
+import { HidenMenu } from '../hidenmenu';
+import { Options } from '../../interfaces/hidenmenu';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -265,6 +266,36 @@ export const Cards = (props: ICards) => {
         setReload(!reload);
     };
 
+    const ModalDeleteFuncition = () => {
+        handleDelete()
+        setEditingSubtaskId(null)
+    }
+
+    const ModalEditFunction = () => {
+        setEdit(!edit);
+        setEditingSubtaskId(null);
+    }
+
+    const ModalCloseFuncion = () => {
+        setVisible(false);
+        setEditingSubtaskId(null)
+    }
+
+    const [openModal, setOpenModal] = useState(false)
+
+    const handleOpenModal = () => {
+        setOpenModal(!openModal)
+    }
+
+
+    const options: Options[] = [
+        { color: "#bd1310", name: "trash-o", function: ModalDeleteFuncition, icon: "FontAwesome" },
+        { color: "#000", name: "hourglass-o", function: toggleTimerModal, icon: "FontAwesome" },
+        { color: "#000", name: "edit-2", function: ModalEditFunction, icon: "Feather" },
+    ]
+
+
+
     return edit ? (
         <View>
             <TouchableOpacity onPress={toggleOverlay}>
@@ -408,24 +439,22 @@ export const Cards = (props: ICards) => {
                             />
                         </S.InputView>
                         {
-                        props.customInterval > 0 ?
-                        <>
-                            <S.TaskDescT>Frequência em dias:</S.TaskDescT>
-                            <S.InputView>
-                                <Input
-                                    value={customInterval.toString()}
-                                    placeholder={'Insira a frequência em dias'}
-                                    textColor='#000'
-                                    color='#C74634'
-                                    onChange={(e) => { setCustomInterval(Number(e.nativeEvent.text)); setData({ ...data, customInterval: Number(e.nativeEvent.text) })  }}
-                                    iconL='repeat'
-                                    />
-                            </S.InputView> 
-                        </>
-                        : null
-                               
-                        
-                    }
+                            props.customInterval > 0 ?
+                                <>
+                                    <S.TaskDescT>Frequência em dias:</S.TaskDescT>
+                                    <S.InputView>
+                                        <Input
+                                            value={customInterval.toString()}
+                                            placeholder={'Insira a frequência em dias'}
+                                            textColor='#000'
+                                            color='#C74634'
+                                            onChange={(e) => { setCustomInterval(Number(e.nativeEvent.text)); setData({ ...data, customInterval: Number(e.nativeEvent.text) }) }}
+                                            iconL='repeat'
+                                        />
+                                    </S.InputView>
+                                </>
+                                : null
+                        }
                     </S.GeneralView>
                 </ViewScroll>
             </S.Modal>
@@ -480,29 +509,18 @@ export const Cards = (props: ICards) => {
                     <S.ViewCard>
                         <S.ViewIcons>
                             <S.ViewIcon>
+                                {openModal ?
+                                    <HidenMenu option={options} open={handleOpenModal} /> :
+                                    <IconModel
+                                        onPress={() => handleOpenModal()}
+                                        IconColor={"#000"}
+                                        IconSize={26}
+                                        icon='FontAwesome'
+                                        iconName='ellipsis-h'
+                                    />
+                                }
                                 <IconModel
-                                    onPress={() => { handleDelete(), setEditingSubtaskId(null) }}
-                                    IconColor={"#bd1310"}
-                                    IconSize={26}
-                                    icon='FontAwesome'
-                                    iconName='trash-o'
-                                />
-                                <IconModel
-                                    onPress={toggleTimerModal}
-                                    IconColor={"#000"}
-                                    IconSize={22}
-                                    icon={"FontAwesome"}
-                                    iconName={"hourglass-o"}
-                                />
-                                <IconModel
-                                    onPress={() => { setEdit(!edit), setEditingSubtaskId(null) }}
-                                    IconColor={"#000"}
-                                    IconSize={24}
-                                    icon='Feather'
-                                    iconName='edit-2'
-                                />
-                                <IconModel
-                                    onPress={() => { setVisible(false), setEditingSubtaskId(null) }}
+                                    onPress={ModalCloseFuncion}
                                     IconColor={"#000"}
                                     IconSize={25}
                                     icon='AntDesign'

@@ -68,6 +68,7 @@ export default function ToDo() {
                     inputContainerStyle={{
                         backgroundColor: '#222328',
                     }}
+                    inputStyle={{ fontFamily: theme.FONTS.Poppins_500Medium }}
                     onChangeText={text => setSearchText(text)}
                     value={searchText}
                 />
@@ -86,7 +87,7 @@ export default function ToDo() {
                             setSelectedButton(selectedIndex);
                         }
                     }}
-                    textStyle={{ fontFamily: theme.FONTS.Poppins_500Medium, fontSize: 16, fontWeight: '700' }}
+                    textStyle={{ fontFamily: theme.FONTS.Poppins_500Medium, fontSize: 16 }}
                     containerStyle={{ marginBottom: 20 }}
                 />
                 <ScrollView>

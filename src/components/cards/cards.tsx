@@ -22,6 +22,7 @@ import Input from '../input/input';
 import * as S from './styled';
 import { HidenMenu } from '../hidenmenu';
 import { Options } from '../../interfaces/hidenmenu';
+import Multiselect from '../multiselect';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -455,6 +456,9 @@ export const Cards = (props: ICards) => {
                                 </>
                                 : null
                         }
+
+                        <S.InputView><Multiselect/></S.InputView>
+
                     </S.GeneralView>
                 </ViewScroll>
             </S.Modal>

@@ -44,7 +44,7 @@ export default function Usuario() {
 
     return (
         <>
-            <View style={{ backgroundColor: '#222328' }}><HeaderComponent /></View>
+            <View style={{ backgroundColor: '#222328', paddingBottom: 20 }}><HeaderComponent /></View>
             <Container>
 
                 <Nome>{usuario?.name}</Nome>

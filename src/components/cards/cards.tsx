@@ -22,6 +22,7 @@ import Input from '../input/input';
 import * as S from './styled';
 import { HidenMenu } from '../hidenmenu';
 import { Options } from '../../interfaces/hidenmenu';
+import { UpdateModal } from '../updateModal';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -532,6 +533,8 @@ export const Cards = (props: ICards) => {
                             <S.TaskTitle>{props.task}</S.TaskTitle>
                         </S.ViewName>
                     </S.ViewCard>
+
+                    <UpdateModal />
 
                     <S.TaskDescT>Tempo Gasto: {calculateDateWithTime(props.timeSpent)}</S.TaskDescT>
 

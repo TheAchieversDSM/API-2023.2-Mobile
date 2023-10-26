@@ -28,6 +28,7 @@ export default function ToDo() {
                 try {
                     const response = await serviceTask.getTaskUser({ userId: id });
                     if (response) {
+                        console.log(response)
                         setUserTasks(response);
                     } else {
                         console.error("Erro ao buscar tarefas do usuário");
@@ -113,6 +114,7 @@ export default function ToDo() {
                                 value={"A Fazer"}
                                 statusColor="#de0300"
                                 deadline={task.deadline}
+                                sharedUsersIds={task.sharedUsersIds}
                                 priority={task.priority}
                             />
                         )
@@ -140,6 +142,7 @@ export default function ToDo() {
                                 value={"Em Progresso"}
                                 statusColor="#ebae11"
                                 deadline={task.deadline}
+                                sharedUsersIds={task.sharedUsersIds}
                                 priority={task.priority}
                             />
                         )
@@ -167,6 +170,7 @@ export default function ToDo() {
                                 value={"Concluído"}
                                 statusColor="#67d207"
                                 deadline={task.deadline}
+                                sharedUsersIds={task.sharedUsersIds}
                                 priority={task.priority}
                             />
                         )

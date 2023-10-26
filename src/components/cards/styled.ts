@@ -103,3 +103,13 @@ export const ViewName = styled(View)`
   width: 100%;
   height: fit-content;
 `;
+
+export const MultiView = styled(View)`
+    flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
+`
+
+export const MultiCont = styled(View)`
+    margin: 30px;
+`

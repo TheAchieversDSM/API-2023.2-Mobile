@@ -63,6 +63,7 @@ class Task {
 
   async updateTask(data: IUpdateTask) {
     try {
+      console.log(data.id)
       const response = await api.put(`/task/update/${data.id}`, data);
       return response;
     } catch (error) {

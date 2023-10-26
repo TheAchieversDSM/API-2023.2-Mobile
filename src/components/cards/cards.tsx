@@ -16,13 +16,16 @@ import { ToastComponent } from '../toast';
 import { Priority } from './priorities';
 import { Divider } from '@rneui/base';
 import { ViewScroll } from './styled';
-import { Icon } from '@rneui/themed';
+import { Icon, ListItem } from '@rneui/themed';
 import { IconModel } from '../icons';
 import Input from '../input/input';
 import * as S from './styled';
 import { HidenMenu } from '../hidenmenu';
 import { Options } from '../../interfaces/hidenmenu';
-import Multiselect from '../multiselect';
+import * as M from "./styled";
+import { MultipleSelectList } from 'react-native-dropdown-select-list';
+import serviceUser from '../../service/user';
+import { useTheme } from 'styled-components';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -38,6 +41,8 @@ const stts = [
 
 export const Cards = (props: ICards) => {
     const { userToken } = useAuth()
+
+    const theme = useTheme()
 
     const { id } = decodeJsonWebToken(String(userToken))
 
@@ -77,6 +82,10 @@ export const Cards = (props: ICards) => {
 
     const [dateError, setDateError] = useState(false)
 
+    const [users, setUsers] = useState([]);
+
+    const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
+
     async function fetchTaskSubtasks() {
         try {
             const response = await serviceSubtask.getTaskSubtask(props.id);
@@ -90,6 +99,7 @@ export const Cards = (props: ICards) => {
             console.error(error);
         }
     }
+
 
     const handleEnterAddSubtask = (e: string) => {
         if (e) {
@@ -124,6 +134,34 @@ export const Cards = (props: ICards) => {
                 });
         }
     }, [props.id, reloadSubtasks]);
+
+    useEffect(() => {
+        if (data) {
+            data.sharedUsersIds = selectedUsers;
+        }
+    }, [selectedUsers, data]);
+
+    useEffect(() =>{
+        
+        async function fetchAllUsers() {
+            try {
+                const response = await serviceUser.getAllUsers();
+                if (response) {
+                    const users = response.data;
+                    let newArray = users.map((item: { id: any; email: any; }) => {
+                        return { key: item.id, value: item.email }
+                    });
+                    setUsers(newArray);
+                    console.log(users);
+                } else {
+                    console.error("Erro ao buscar usuários");
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        fetchAllUsers();
+    }, [])
 
     const handleAddSubtask = () => {
         setIsInputVisible(true);
@@ -184,6 +222,7 @@ export const Cards = (props: ICards) => {
 
     const handleSubtaskName = async (subtaskId: number, newName: string) => {
         try {
+            
             await serviceSubtask.updateSubtaskName(subtaskId, newName)
 
             ToastComponent({ type: 'success', title: 'Subtarefa atualizada!' })
@@ -226,6 +265,8 @@ export const Cards = (props: ICards) => {
                 deadlineDate.setTime(deadlineDate.getTime() + 24 * 60 * 60 * 1000);
                 deadlineProps.setTime(deadlineProps.getTime() + 24 * 60 * 60 * 1000);
 
+                await serviceTask.updateTask(data);
+
                 if (currentDate <= deadlineDate || isNaN(deadlineDate.getTime())) {
                     if (name != '' && description != '') {
                         await serviceTask.updateTask({
@@ -238,7 +279,8 @@ export const Cards = (props: ICards) => {
                             userId: id,
                             id: props.id,
                             timeSpent: props.timeSpent,
-                            done: false
+                            done: false,
+                            sharedUsersIds: selectedUsers  
                         })
 
                         ToastComponent({ type: 'success', title: 'Tarefa atualizada!' })
@@ -288,14 +330,11 @@ export const Cards = (props: ICards) => {
         setOpenModal(!openModal)
     }
 
-
     const options: Options[] = [
         { color: "#bd1310", name: "trash-o", function: ModalDeleteFuncition, icon: "FontAwesome" },
         { color: "#000", name: "hourglass-o", function: toggleTimerModal, icon: "FontAwesome" },
         { color: "#000", name: "edit-2", function: ModalEditFunction, icon: "Feather" },
     ]
-
-
 
     return edit ? (
         <View>
@@ -457,7 +496,29 @@ export const Cards = (props: ICards) => {
                                 : null
                         }
 
-                        <S.InputView><Multiselect/></S.InputView>
+                        <S.InputView>
+                            
+            <M.MultiView>
+                <M.MultiCont>
+                    <MultipleSelectList
+                    setSelected={(val: any[]) => setSelectedUsers(val)}
+                        data={users}
+                        save="key"
+                        
+                        label="Compartilhar tarefa com"
+                        notFoundText='Usuário não encontrado'
+                        fontFamily="theme.FONTS.Poppins_400Regular"
+                        labelStyles={{
+                            fontFamily: theme.FONTS.Poppins_400Regular,
+                            fontSize: 18
+                        }}
+                        badgeStyles={{backgroundColor: "#de0300"}}
+                        badgeTextStyles={{fontFamily: theme.FONTS.Poppins_500Medium,}}
+                        itemStyles={{ fontFamily: theme.FONTS.Poppins_400Regular, fontSize: 16 }}
+                    />
+                </M.MultiCont>
+            </M.MultiView>
+                        </S.InputView>
 
                     </S.GeneralView>
                 </ViewScroll>
@@ -545,6 +606,15 @@ export const Cards = (props: ICards) => {
 
                     <S.ViewData>
                         <S.TaskDescT>Expira em: {props.deadline}</S.TaskDescT>
+                    </S.ViewData>
+
+                    <S.ViewData>
+                        <S.TaskDescT>Compartilhado com: </S.TaskDescT>
+                        {props.sharedUsersIds?.map(userId => (
+                            <ListItem key={userId.id}>
+                                <ListItem.Title>{userId.email}</ListItem.Title>
+                            </ListItem>
+                        ))}
                     </S.ViewData>
 
                     <S.ViewData>

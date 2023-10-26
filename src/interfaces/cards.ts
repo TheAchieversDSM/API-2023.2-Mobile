@@ -9,6 +9,7 @@ export interface ICards {
   deadline: string;
   timeSpent: number;
   customInterval: number;
+  sharedUsersIds: any[];
   reload?: boolean;
   reloadTasksData: () => void;
 }

@@ -289,9 +289,9 @@ export const Cards = (props: ICards) => {
 
 
     const options: Options[] = [
-        { color: "#bd1310", name: "trash-o", function: ModalDeleteFuncition, icon: "FontAwesome" },
-        { color: "#000", name: "hourglass-o", function: toggleTimerModal, icon: "FontAwesome" },
-        { color: "#000", name: "edit-2", function: ModalEditFunction, icon: "Feather" },
+        { color: "#bd1310", name: "trash-o", size: 27, function: ModalDeleteFuncition, icon: "FontAwesome" },
+        { color: "#000", name: "hourglass-o", size: 23, function: toggleTimerModal, icon: "FontAwesome" },
+        { color: "#000", name: "edit-2", size: 23, function: ModalEditFunction, icon: "Feather" },
     ]
 
 
@@ -514,9 +514,9 @@ export const Cards = (props: ICards) => {
                                     <IconModel
                                         onPress={() => handleOpenModal()}
                                         IconColor={"#000"}
-                                        IconSize={26}
-                                        icon='FontAwesome'
-                                        iconName='ellipsis-h'
+                                        IconSize={30}
+                                        icon='AntDesign'
+                                        iconName='ellipsis1'
                                     />
                                 }
                                 <IconModel
@@ -545,7 +545,7 @@ export const Cards = (props: ICards) => {
 
                     <S.ViewData>
                         <S.TaskDescT>Descrição:</S.TaskDescT>
-                        <S.TaskDescT>{props.descricao}</S.TaskDescT>
+                        <S.TaskDesc style={{fontSize: 17}}>{props.descricao}</S.TaskDesc>
 
                         <Divider />
                         <View style={{ height: 20 }}></View>

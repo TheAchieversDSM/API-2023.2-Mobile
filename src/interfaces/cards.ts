@@ -11,6 +11,7 @@ export interface ICards {
   customInterval: number;
   sharedUsersIds: any[];
   reload?: boolean;
+  users: any[];
   reloadTasksData: () => void;
 }
 

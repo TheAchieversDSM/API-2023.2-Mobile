@@ -82,9 +82,11 @@ export const Cards = (props: ICards) => {
 
     const [dateError, setDateError] = useState(false)
 
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState<Array<{key: number, value: string}>>([]);
 
-    const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
+    const [selectedUsers, setSelectedUsers] = useState<number[]>(props.sharedUsersIds || []);
+
+    const [expanded, setExpanded] = useState(false);
 
     async function fetchTaskSubtasks() {
         try {
@@ -99,7 +101,6 @@ export const Cards = (props: ICards) => {
             console.error(error);
         }
     }
-
 
     const handleEnterAddSubtask = (e: string) => {
         if (e) {
@@ -152,7 +153,6 @@ export const Cards = (props: ICards) => {
                         return { key: item.id, value: item.email }
                     });
                     setUsers(newArray);
-                    console.log(users);
                 } else {
                     console.error("Erro ao buscar usuários");
                 }
@@ -264,6 +264,8 @@ export const Cards = (props: ICards) => {
 
                 deadlineDate.setTime(deadlineDate.getTime() + 24 * 60 * 60 * 1000);
                 deadlineProps.setTime(deadlineProps.getTime() + 24 * 60 * 60 * 1000);
+
+                data.sharedUsersIds = selectedUsers;
 
                 await serviceTask.updateTask(data);
 
@@ -497,27 +499,28 @@ export const Cards = (props: ICards) => {
                         }
 
                         <S.InputView>
-                            
-            <M.MultiView>
-                <M.MultiCont>
-                    <MultipleSelectList
-                    setSelected={(val: any[]) => setSelectedUsers(val)}
-                        data={users}
-                        save="key"
-                        
-                        label="Compartilhar tarefa com"
-                        notFoundText='Usuário não encontrado'
-                        fontFamily="theme.FONTS.Poppins_400Regular"
-                        labelStyles={{
-                            fontFamily: theme.FONTS.Poppins_400Regular,
-                            fontSize: 18
-                        }}
-                        badgeStyles={{backgroundColor: "#de0300"}}
-                        badgeTextStyles={{fontFamily: theme.FONTS.Poppins_500Medium,}}
-                        itemStyles={{ fontFamily: theme.FONTS.Poppins_400Regular, fontSize: 16 }}
-                    />
-                </M.MultiCont>
-            </M.MultiView>
+                            <M.MultiView>
+                                <M.MultiCont>
+                                    <MultipleSelectList
+                                        setSelected={(val: any[]) => {
+                                            setSelectedUsers(val);
+                                        }}
+                                        data={users}
+                                        save="key"
+                                        value={selectedUsers}
+                                        label="Compartilhar tarefa com"
+                                        notFoundText='Usuário não encontrado'
+                                        fontFamily="theme.FONTS.Poppins_400Regular"
+                                        labelStyles={{
+                                            fontFamily: theme.FONTS.Poppins_400Regular,
+                                            fontSize: 18
+                                        }}
+                                        badgeStyles={{backgroundColor: "#de0300"}}
+                                        badgeTextStyles={{fontFamily: theme.FONTS.Poppins_500Medium,}}
+                                        itemStyles={{ fontFamily: theme.FONTS.Poppins_400Regular, fontSize: 16 }}
+                                    />
+                                </M.MultiCont>
+                            </M.MultiView>
                         </S.InputView>
 
                     </S.GeneralView>
@@ -569,173 +572,173 @@ export const Cards = (props: ICards) => {
                 reloadTasksData={reloadTasksData}
             />
 
-            <S.Modal isVisible={visible} onBackdropPress={toggleOverlay}>
-                <S.GeneralView>
-                    <S.ViewCard>
-                        <S.ViewIcons>
-                            <S.ViewIcon>
-                                {openModal ?
-                                    <HidenMenu option={options} open={handleOpenModal} /> :
+            <S.ModalPadrao isVisible={visible} onBackdropPress={toggleOverlay}>
+                    <S.GeneralView>
+                        <S.ViewCard>
+                            <S.ViewIcons>
+                                <S.ViewIcon>
+                                    {openModal ?
+                                        <HidenMenu option={options} open={handleOpenModal} /> :
+                                        <IconModel
+                                            onPress={() => handleOpenModal()}
+                                            IconColor={"#000"}
+                                            IconSize={26}
+                                            icon='FontAwesome'
+                                            iconName='ellipsis-h'
+                                        />
+                                    }
                                     <IconModel
-                                        onPress={() => handleOpenModal()}
+                                        onPress={ModalCloseFuncion}
                                         IconColor={"#000"}
-                                        IconSize={26}
-                                        icon='FontAwesome'
-                                        iconName='ellipsis-h'
+                                        IconSize={25}
+                                        icon='AntDesign'
+                                        iconName='close'
                                     />
+                                </S.ViewIcon>
+                            </S.ViewIcons>
+                            <S.ViewName>
+                                <S.TaskTitle>{props.task}</S.TaskTitle>
+                            </S.ViewName>
+                        </S.ViewCard>
+                        <S.TaskDescT>Tempo Gasto: {calculateDateWithTime(props.timeSpent)}</S.TaskDescT>
+                        <S.TaskDescT>Status: {props.value}</S.TaskDescT>
+                        <Priority priority={props.priority} />
+                        <S.ViewData>
+                            <S.TaskDescT>Expira em: {props.deadline}</S.TaskDescT>
+                        </S.ViewData>
+                        <S.ViewData>
+                            <S.TaskDescT>Descrição:</S.TaskDescT>
+                            <S.TaskDescT>{props.descricao}</S.TaskDescT>
+                        </S.ViewData>
+                        <Divider />
+                        <S.ViewComp>
+                            <ListItem.Accordion
+                                content={
+                                    <S.TaskDescT>Compartilhado com:</S.TaskDescT>
                                 }
-                                <IconModel
-                                    onPress={ModalCloseFuncion}
-                                    IconColor={"#000"}
-                                    IconSize={25}
-                                    icon='AntDesign'
-                                    iconName='close'
-                                />
-                            </S.ViewIcon>
-                        </S.ViewIcons>
-                        <S.ViewName>
-                            <S.TaskTitle>{props.task}</S.TaskTitle>
-                        </S.ViewName>
-                    </S.ViewCard>
-
-                    <S.TaskDescT>Tempo Gasto: {calculateDateWithTime(props.timeSpent)}</S.TaskDescT>
-
-                    <S.TaskDescT>Status: {props.value}</S.TaskDescT>
-
-                    <Priority priority={props.priority} />
-
-                    <S.ViewData>
-                        <S.TaskDescT>Expira em: {props.deadline}</S.TaskDescT>
-                    </S.ViewData>
-
-                    <S.ViewData>
-                        <S.TaskDescT>Compartilhado com: </S.TaskDescT>
-                        {props.sharedUsersIds?.map(userId => (
-                            <ListItem key={userId.id}>
-                                <ListItem.Title>{userId.email}</ListItem.Title>
-                            </ListItem>
-                        ))}
-                    </S.ViewData>
-
-                    <S.ViewData>
-                        <S.TaskDescT>Descrição:</S.TaskDescT>
-                        <S.TaskDescT>{props.descricao}</S.TaskDescT>
-
+                                isExpanded={expanded}
+                                onPress={() => {
+                                    setExpanded(!expanded);
+                                }}
+                            >
+                                {props.users?.map(userId => (
+                                    <ListItem key={userId.id}>
+                                        <ListItem.Title>
+                                            <S.TaskComp>{userId.name} - {userId.email}</S.TaskComp>
+                                        </ListItem.Title>
+                                    </ListItem>
+                                ))}
+                            </ListItem.Accordion>
+                        </S.ViewComp>
                         <Divider />
                         <View style={{ height: 20 }}></View>
-
-                        {subtask?.length === 0 ? (
-                            <S.TaskDescT>Não há subtarefas</S.TaskDescT>
-                        ) : (
-                            <View>
-                                <S.TaskDescT>Subtarefas:</S.TaskDescT>
-                                <S.SubtaskDone style={{ marginTop: -10 }}>
-                                    Total: {checkProgressSubTask(subtask).toFixed(2)}%
-                                </S.SubtaskDone>
-
-                                <ScrollView style={{ maxHeight: 200, width: 300 }}>
-                                    {subtask &&
-                                        subtask.map((item: IGetSubtasks) => (
-                                            <View key={item.id} style={{ marginBottom: -20 }}>
-                                                {!editingSubtaskId || editingSubtaskId !== item.id ? (
-                                                    <Checkbox
-                                                        label={item.name}
-                                                        check={item.done}
-                                                        onCheck={() => handleCheck(item.id, !item.done)}
-                                                        onLongPress={() => {
-                                                            setEditingSubtaskId(item.id),
-                                                                setSubtaskName(item.name)
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <S.InputView style={{ marginTop: 5, display: 'flex', flexDirection: 'row' }}>
-                                                        <TouchableOpacity
-                                                            onPressOut={() => { setEditingSubtaskId(null), handleSubtaskName(item.id, subtaskName) }}
-                                                            onLongPress={() => { setEditingSubtaskId(null), handleSubtaskName(item.id, subtaskName) }}
-                                                            style={{ paddingVertical: 7, width: 300 }}
-                                                        >
-                                                            <Input
-                                                                placeholder={''}
-                                                                value={subtaskName}
-                                                                onChange={(e) => {
-                                                                    setSubtaskName(e.nativeEvent.text);
-                                                                }}
-                                                                textColor="#000"
-                                                                color="#C74634"
-                                                                iconL="bookmark-o"
-                                                                height={5}
-                                                                fontSize={17}
-                                                            />
-                                                        </TouchableOpacity>
-
-                                                        <View style={{ marginRight: 30, marginTop: 0, alignItems: 'flex-end' }}>
-                                                            <IconModel
-                                                                onPress={() => { handleDeleteSubtask(item.id), setEditingSubtaskId(null) }}
-                                                                IconColor={"#bd1310"}
-                                                                IconSize={28}
-                                                                icon='FontAwesome'
-                                                                iconName='trash-o'
-                                                            />
-                                                        </View>
-                                                    </S.InputView>
-                                                )}
-                                            </View>
-                                        ))}
-                                </ScrollView>
-                            </View>
-                        )}
-
-                        {isInputVisible && (
-                            <S.InputView style={{ marginTop: -10 }}>
-                                <Input
-                                    placeholder="Insira a nova subtarefa"
-                                    onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) => setNewSubtask(e.nativeEvent.text)}
-                                    textColor='#000'
-                                    value={newSubtask}
-                                    onSubmitEditing={(e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => handleEnterAddSubtask(e.nativeEvent.text)}
-                                    fontSize={17}
-                                    height={5}
-                                />
-                            </S.InputView>
-                        )}
-
-                        <TouchableOpacity onPress={handleAddSubtask} style={{ flexDirection: 'row', marginRight: 40, alignSelf: 'flex-end', marginTop: 10 }}>
-
-                            {isInputVisible ? (
-                                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
-                                    <View style={{ paddingRight: 35 }}>
-                                        <Icon
-                                            name='close'
-                                            color='#de0300'
-                                            size={28}
-                                            onPress={handleCloseSubtask}
-                                        />
+                    
+                        <S.ViewData>
+                            {subtask?.length === 0 ? (
+                                <S.TaskDescT>Não há subtarefas</S.TaskDescT>
+                            ) : (
+                                <View>
+                                    <S.TaskDescT>Subtarefas:</S.TaskDescT>
+                                    <S.SubtaskDone style={{ marginTop: -10 }}>
+                                        Total: {checkProgressSubTask(subtask).toFixed(2)}%
+                                    </S.SubtaskDone>
+                                    <ScrollView style={{ maxHeight: 200, width: 300 }}>
+                                        {subtask &&
+                                            subtask.map((item: IGetSubtasks) => (
+                                                <View key={item.id} style={{ marginBottom: -20 }}>
+                                                    {!editingSubtaskId || editingSubtaskId !== item.id ? (
+                                                        <Checkbox
+                                                            label={item.name}
+                                                            check={item.done}
+                                                            onCheck={() => handleCheck(item.id, !item.done)}
+                                                            onLongPress={() => {
+                                                                setEditingSubtaskId(item.id),
+                                                                    setSubtaskName(item.name)
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <S.InputView style={{ marginTop: 5, display: 'flex', flexDirection: 'row' }}>
+                                                            <TouchableOpacity
+                                                                onPressOut={() => { setEditingSubtaskId(null), handleSubtaskName(item.id, subtaskName) }}
+                                                                onLongPress={() => { setEditingSubtaskId(null), handleSubtaskName(item.id, subtaskName) }}
+                                                                style={{ paddingVertical: 7, width: 300 }}
+                                                            >
+                                                                <Input
+                                                                    placeholder={''}
+                                                                    value={subtaskName}
+                                                                    onChange={(e) => {
+                                                                        setSubtaskName(e.nativeEvent.text);
+                                                                    }}
+                                                                    textColor="#000"
+                                                                    color="#C74634"
+                                                                    iconL="bookmark-o"
+                                                                    height={5}
+                                                                    fontSize={17}
+                                                                />
+                                                            </TouchableOpacity>
+                                                            <View style={{ marginRight: 30, marginTop: 0, alignItems: 'flex-end' }}>
+                                                                <IconModel
+                                                                    onPress={() => { handleDeleteSubtask(item.id), setEditingSubtaskId(null) }}
+                                                                    IconColor={"#bd1310"}
+                                                                    IconSize={28}
+                                                                    icon='FontAwesome'
+                                                                    iconName='trash-o'
+                                                                />
+                                                            </View>
+                                                        </S.InputView>
+                                                    )}
+                                                </View>
+                                            ))}
+                                    </ScrollView>
+                                </View>
+                            )}
+                            {isInputVisible && (
+                                <S.InputView style={{ marginTop: -10 }}>
+                                    <Input
+                                        placeholder="Insira a nova subtarefa"
+                                        onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) => setNewSubtask(e.nativeEvent.text)}
+                                        textColor='#000'
+                                        value={newSubtask}
+                                        onSubmitEditing={(e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => handleEnterAddSubtask(e.nativeEvent.text)}
+                                        fontSize={17}
+                                        height={5}
+                                    />
+                                </S.InputView>
+                            )}
+                            <TouchableOpacity onPress={handleAddSubtask} style={{ flexDirection: 'row', marginRight: 40, alignSelf: 'flex-end', marginTop: 10 }}>
+                                {isInputVisible ? (
+                                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+                                        <View style={{ paddingRight: 35 }}>
+                                            <Icon
+                                                name='close'
+                                                color='#de0300'
+                                                size={28}
+                                                onPress={handleCloseSubtask}
+                                            />
+                                        </View>
+                                        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginLeft: 0 }}>
+                                            <Icon
+                                                name='check'
+                                                color='grey'
+                                                size={26}
+                                            />
+                                            <Text style={{ color: 'grey', fontSize: 20, marginLeft: 10 }}>Confirmar subtarefa</Text>
+                                        </View>
                                     </View>
-
-                                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginLeft: 0 }}>
+                                ) :
+                                    <>
                                         <Icon
-                                            name='check'
+                                            name='add'
                                             color='grey'
                                             size={26}
                                         />
-                                        <Text style={{ color: 'grey', fontSize: 20, marginLeft: 10 }}>Confirmar subtarefa</Text>
-                                    </View>
-                                </View>
-                            ) :
-                                <>
-                                    <Icon
-                                        name='add'
-                                        color='grey'
-                                        size={26}
-                                    />
-
-                                    <Text style={{ color: 'grey', fontSize: 20, marginLeft: 5, marginBottom: 10 }}>Adicionar subtarefa</Text>
-                                </>
-                            }
-                        </TouchableOpacity>
-                    </S.ViewData>
-                </S.GeneralView>
-            </S.Modal>
+                                        <Text style={{ color: 'grey', fontSize: 20, marginLeft: 5, marginBottom: 10 }}>Adicionar subtarefa</Text>
+                                    </>
+                                }
+                            </TouchableOpacity>
+                        </S.ViewData>
+                    </S.GeneralView>
+            </S.ModalPadrao>
         </View>
         )
 }

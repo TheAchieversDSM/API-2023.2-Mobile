@@ -28,7 +28,6 @@ export default function ToDo() {
                 try {
                     const response = await serviceTask.getTaskUser({ userId: id });
                     if (response) {
-                        console.log(response)
                         setUserTasks(response);
                     } else {
                         console.error("Erro ao buscar tarefas do usuário");
@@ -95,10 +94,21 @@ export default function ToDo() {
                     <TextStatus3>A Fazer</TextStatus3>
                     {userTasks
                         ?.filter(
-                            (task) => task.status === "TO DO" && 
-                            task.customInterval == 0 && 
-                            (prioridade === '' || task.priority === prioridade) && 
-                            task.name.toLowerCase().includes(searchText.toLowerCase())
+                            (task) =>
+                                task.status === "TO DO" && 
+                                task.customInterval === 0 && 
+                                (
+                                    prioridade === '' || task.priority === prioridade
+                                ) && 
+                                (
+                                    // Verificar se o searchText está presente no nome ou email de qualquer usuário
+                                    task.users.some((user: { name: string; email: string; }) => 
+                                        user.name.toLowerCase().includes(searchText.toLowerCase()) || 
+                                        user.email.toLowerCase().includes(searchText.toLowerCase())
+                                    ) ||
+                                    // Verificar se o searchText está presente no nome da tarefa
+                                    task.name.toLowerCase().includes(searchText.toLowerCase())
+                                )
                         )
                         .map((task, index) => (
                             <Cards
@@ -116,6 +126,7 @@ export default function ToDo() {
                                 deadline={task.deadline}
                                 sharedUsersIds={task.sharedUsersIds}
                                 priority={task.priority}
+                                users={task.users}  
                             />
                         )
                         )}
@@ -124,9 +135,19 @@ export default function ToDo() {
                     {userTasks
                         ?.filter(
                             (task) => task.status === "DOING" && 
-                            task.customInterval == 0 && 
-                            task.name.toLowerCase().includes(searchText.toLowerCase()) && 
-                            (prioridade === '' || task.priority === prioridade)
+                            task.customInterval === 0 && 
+                            (
+                                prioridade === '' || task.priority === prioridade
+                            ) && 
+                            (
+                                // Verificar se o searchText está presente no nome ou email de qualquer usuário
+                                task.users.some((user: { name: string; email: string; }) => 
+                                    user.name.toLowerCase().includes(searchText.toLowerCase()) || 
+                                    user.email.toLowerCase().includes(searchText.toLowerCase())
+                                ) ||
+                                // Verificar se o searchText está presente no nome da tarefa
+                                task.name.toLowerCase().includes(searchText.toLowerCase())
+                            )
                         )
                         .map((task, index) => (
                             <Cards
@@ -144,6 +165,7 @@ export default function ToDo() {
                                 deadline={task.deadline}
                                 sharedUsersIds={task.sharedUsersIds}
                                 priority={task.priority}
+                                users={task.users}  
                             />
                         )
                         )}
@@ -153,8 +175,18 @@ export default function ToDo() {
                         ?.filter(
                             (task) => task.status === "DONE" && 
                             task.customInterval == 0 && 
-                            task.name.toLowerCase().includes(searchText.toLowerCase()) &&
-                            (prioridade === '' || task.priority === prioridade)
+                            (
+                                prioridade === '' || task.priority === prioridade
+                            ) && 
+                            (
+                                // Verificar se o searchText está presente no nome ou email de qualquer usuário
+                                task.users.some((user: { name: string; email: string; }) => 
+                                    user.name.toLowerCase().includes(searchText.toLowerCase()) || 
+                                    user.email.toLowerCase().includes(searchText.toLowerCase())
+                                ) ||
+                                // Verificar se o searchText está presente no nome da tarefa
+                                task.name.toLowerCase().includes(searchText.toLowerCase())
+                            )
                         )
                         .map((task, index) => (
                             <Cards
@@ -171,7 +203,8 @@ export default function ToDo() {
                                 statusColor="#67d207"
                                 deadline={task.deadline}
                                 sharedUsersIds={task.sharedUsersIds}
-                                priority={task.priority}
+                                priority={task.priority} 
+                                users={task.users}                            
                             />
                         )
                         )}

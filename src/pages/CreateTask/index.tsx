@@ -256,6 +256,7 @@ return (
                         iconColor='#de0300'
                         iconSize={28}
                         width={335}
+                        showIcon={true}
                     />
 
                     {prio ? <ErrorText>Prioridade é obrigatória</ErrorText> : null}

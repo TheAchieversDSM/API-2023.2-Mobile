@@ -394,6 +394,7 @@ export const Cards = (props: ICards) => {
                                 iconColor='#C74634'
                                 iconSelectedName='tags'
                                 iconName='tagso'
+                                showIcon={true}
                             />
                             <S.TaskDescT>Prioridade: </S.TaskDescT>
                             <DropdownComponent
@@ -412,6 +413,7 @@ export const Cards = (props: ICards) => {
                                 iconSelectedName='star'
                                 iconColor='#C74634'
                                 iconName='staro'
+                                showIcon={true}
                             />
                             <S.ViewData>
                                 <S.TaskDescT>Prazo:</S.TaskDescT>

@@ -62,9 +62,19 @@ class Task {
   }
 
   async updateTask(data: IUpdateTask) {
-    console.log(data)
     try {
       const response = await api.put(`/task/update/${data.id}`, data);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async shareTask(taskId: number, usersIds: number[]) {
+
+    try {
+      const response = await api.post(`/task/shareTask/${taskId}`, {usersIds});
+      console.log(response)
       return response;
     } catch (error) {
       console.error(error);

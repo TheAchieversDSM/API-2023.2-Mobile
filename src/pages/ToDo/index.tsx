@@ -54,7 +54,7 @@ export default function ToDo() {
             <View style={{ backgroundColor: '#222328' }}><HeaderComponent /></View>
             <Container>
                 <SearchBar
-                    placeholder="Pesquisar..."
+                    placeholder="Pesquisar tarefa..."
                     containerStyle={{
                         backgroundColor: '#222328',
                         borderWidth: 1, 
@@ -101,12 +101,9 @@ export default function ToDo() {
                                     prioridade === '' || task.priority === prioridade
                                 ) && 
                                 (
-                                    // Verificar se o searchText está presente no nome ou email de qualquer usuário
-                                    task.users.some((user: { name: string; email: string; }) => 
-                                        user.name.toLowerCase().includes(searchText.toLowerCase()) || 
+                                    task.users?.some((user: { name: string; email: string; }) => 
                                         user.email.toLowerCase().includes(searchText.toLowerCase())
                                     ) ||
-                                    // Verificar se o searchText está presente no nome da tarefa
                                     task.name.toLowerCase().includes(searchText.toLowerCase())
                                 )
                         )
@@ -125,7 +122,7 @@ export default function ToDo() {
                                 value={"A Fazer"}
                                 statusColor="#de0300"
                                 deadline={task.deadline}
-                                sharedUsersIds={task.sharedUsersIds}
+                                sharedUsersIds={task.sharedUsersIds as number[]}
                                 priority={task.priority}
                                 users={task.users}  
                             />
@@ -141,12 +138,9 @@ export default function ToDo() {
                                 prioridade === '' || task.priority === prioridade
                             ) && 
                             (
-                                // Verificar se o searchText está presente no nome ou email de qualquer usuário
-                                task.users.some((user: { name: string; email: string; }) => 
-                                    user.name.toLowerCase().includes(searchText.toLowerCase()) || 
+                                task.users?.some((user: { name: string; email: string; }) => 
                                     user.email.toLowerCase().includes(searchText.toLowerCase())
                                 ) ||
-                                // Verificar se o searchText está presente no nome da tarefa
                                 task.name.toLowerCase().includes(searchText.toLowerCase())
                             )
                         )
@@ -165,7 +159,7 @@ export default function ToDo() {
                                 value={"Em Progresso"}
                                 statusColor="#ebae11"
                                 deadline={task.deadline}
-                                sharedUsersIds={task.sharedUsersIds}
+                                sharedUsersIds={task.sharedUsersIds as number[]}
                                 priority={task.priority}
                                 users={task.users}  
                             />
@@ -181,12 +175,9 @@ export default function ToDo() {
                                 prioridade === '' || task.priority === prioridade
                             ) && 
                             (
-                                // Verificar se o searchText está presente no nome ou email de qualquer usuário
-                                task.users.some((user: { name: string; email: string; }) => 
-                                    user.name.toLowerCase().includes(searchText.toLowerCase()) || 
+                                task?.users?.some((user: { name: string; email: string; }) => 
                                     user.email.toLowerCase().includes(searchText.toLowerCase())
                                 ) ||
-                                // Verificar se o searchText está presente no nome da tarefa
                                 task.name.toLowerCase().includes(searchText.toLowerCase())
                             )
                         )
@@ -205,7 +196,7 @@ export default function ToDo() {
                                 value={"Concluído"}
                                 statusColor="#67d207"
                                 deadline={task.deadline}
-                                sharedUsersIds={task.sharedUsersIds}
+                                sharedUsersIds={task.sharedUsersIds as number[]}
                                 priority={task.priority} 
                                 users={task.users}                            
                             />

@@ -16,7 +16,7 @@ export interface IGetTasksUser {
 }
 
 export interface IGetTasksUserResp {
-  users: any;
+  users: [];
   id: number;
   status: "TO DO" | "DOING" | "DONE" | "EXPIRED";
   deadline: string;
@@ -25,7 +25,7 @@ export interface IGetTasksUserResp {
   priority: "High" | "Medium" | "Low";
   customInterval: number;
   timeSpent: number;
-  sharedUsersIds: number[];
+  sharedUsersIds?: number[];
 }
 
 export interface IHomeReturn {
@@ -51,7 +51,6 @@ export interface IUpdateTask {
   status: string;
   timeSpent: number;
   done: boolean;
-  sharedUsersIds: any[];
 }
 
 export interface IUpdateTimeSpent {

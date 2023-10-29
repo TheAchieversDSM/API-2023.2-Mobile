@@ -17,9 +17,9 @@ export const CompModal = ({view, onBackdropPress, reloadTasksData, taskid, useri
     const [searchText, setSearchText] = useState('');
     const { id } = decodeJsonWebToken(String(userToken))
 
-    const defaultChecked = userids.map((user:any) => user?.id)
+    const defaultChecked = userids?.map((user:any) => user?.id) || []
 
-    const [selectedItems, setSelectedItems] = useState(defaultChecked.map(() => true));
+    const [selectedItems, setSelectedItems] = useState(defaultChecked?.map(() => true));
 
     useEffect(() =>{
         async function fetchAllUsers() {
@@ -48,7 +48,7 @@ export const CompModal = ({view, onBackdropPress, reloadTasksData, taskid, useri
       };
 
     const handleSubmitComp = async () => {
-        const ids = getSelectedItems().map((user: any) => user.id)
+        const ids = getSelectedItems()?.map((user: any) => user.id)
         await serviceTask.shareTask(taskid, ids)
         handleCloseModal();
         reloadTasksData();
@@ -106,7 +106,7 @@ export const CompModal = ({view, onBackdropPress, reloadTasksData, taskid, useri
             <S.Texto>Usuários selecionados: </S.Texto>
             <S.ContLista>
                 <ScrollView>
-                    {getSelectedItems().map((selectedItem:any, index) => (
+                    {getSelectedItems()?.map((selectedItem:any, index) => (
                     <S.UsersList key={index}>{selectedItem?.email}</S.UsersList>
                     ))}
                 </ScrollView>

@@ -1,6 +1,7 @@
 import {AxiosError, AxiosResponse} from "axios";
 import {
   ICreateUser,
+  IGetAllUsers,
   IGetUser,
   IGetUserByIdResp,
   IUpdateUser,
@@ -27,6 +28,15 @@ class User {
         });
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async getAllUsers() {
+    try {
+      const response = await api.get(`/user/getAll`);
+      return response;
+    } catch (error) {
+      console.error(error);
     }
   }
 

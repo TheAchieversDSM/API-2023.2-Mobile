@@ -70,20 +70,21 @@ export const TimerModal = ({ view, onBackdropPress, task, reloadTasksData }: ITi
             <ButtonCotainer>
                 <Button
                     width={100}
-                    color="#000"
                     title="Salvar"
-                    type="clear"
+                    backgroundColor="#DE0300"
                     borderColor="transparent"
-                    backgroundColor="transparent"
                     onPress={handleSubmitTime}
                     disable={state.send}
+                    type="solid"
                 />
                 <Button
                     width={100}
                     title="Cancelar"
                     onPress={handleCloseModal}
-                    backgroundColor="#DE0300"
+                    type="clear"
                     borderColor="transparent"
+                    backgroundColor="transparent"
+                    color="#000"
                 />
             </ButtonCotainer>
         </OverlaySyld>

@@ -27,6 +27,7 @@ import { MultipleSelectList } from 'react-native-dropdown-select-list';
 import serviceUser from '../../service/user';
 import { useTheme } from 'styled-components';
 
+
 const priority = [
     { label: 'Alta', value: 'High' },
     { label: 'Média', value: 'Medium' },
@@ -41,11 +42,10 @@ const stts = [
 
 export const Cards = (props: ICards) => {
     const { userToken } = useAuth()
-
     const theme = useTheme()
 
     const { id } = decodeJsonWebToken(String(userToken))
-
+ 
     const [name, setName] = useState(props.task);
 
     const [description, setDescription] = useState(props.descricao);
@@ -84,7 +84,7 @@ export const Cards = (props: ICards) => {
 
     const [users, setUsers] = useState<Array<{key: number, value: string}>>([]);
 
-    const [selectedUsers, setSelectedUsers] = useState<number[]>(props.sharedUsersIds || []);
+    const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
 
     const [expanded, setExpanded] = useState(false);
 
@@ -149,10 +149,13 @@ export const Cards = (props: ICards) => {
                 const response = await serviceUser.getAllUsers();
                 if (response) {
                     const users = response.data;
-                    let newArray = users.map((item: { id: any; email: any; }) => {
+                    console.log(props.sharedUsersIds)
+                    let notSharedUsers = users.filter((user: any) => !props.sharedUsersIds.includes(user.id.toString()))
+                    let newArray = notSharedUsers.map((item: { id: any; email: any; }) => {
                         return { key: item.id, value: item.email }
-                    });
+                    })
                     setUsers(newArray);
+
                 } else {
                     console.error("Erro ao buscar usuários");
                 }
@@ -277,7 +280,7 @@ export const Cards = (props: ICards) => {
                             customInterval: data?.customInterval || props.customInterval,
                             priority: data?.priority || props.priority,
                             deadline: date,
-                            status: data?.status,
+                            status: data?.status || props.statusEnum,
                             userId: id,
                             id: props.id,
                             timeSpent: props.timeSpent,
@@ -502,12 +505,13 @@ export const Cards = (props: ICards) => {
                             <M.MultiView>
                                 <M.MultiCont>
                                     <MultipleSelectList
-                                        setSelected={(val: any[]) => {
+                                        setSelected={(val: number[]) => {  
                                             setSelectedUsers(val);
                                         }}
                                         data={users}
                                         save="key"
                                         value={selectedUsers}
+                                        selected = {selectedUsers}
                                         label="Compartilhar tarefa com"
                                         notFoundText='Usuário não encontrado'
                                         fontFamily="theme.FONTS.Poppins_400Regular"
@@ -518,9 +522,12 @@ export const Cards = (props: ICards) => {
                                         badgeStyles={{backgroundColor: "#de0300"}}
                                         badgeTextStyles={{fontFamily: theme.FONTS.Poppins_500Medium,}}
                                         itemStyles={{ fontFamily: theme.FONTS.Poppins_400Regular, fontSize: 16 }}
+                                        placeholder='Selecionar usuários para compartilhar'
+                                        dropdownTextStyles = {{ fontFamily: theme.FONTS.Poppins_400Regular, fontSize: 15 }}
                                     />
                                 </M.MultiCont>
                             </M.MultiView>
+
                         </S.InputView>
 
                     </S.GeneralView>
@@ -622,7 +629,7 @@ export const Cards = (props: ICards) => {
                                 }}
                             >
                                 {props.users?.map(userId => (
-                                    <ListItem key={userId.id}>
+                                    <ListItem key={userId.id} style={{marginTop: -20 }}>
                                         <ListItem.Title>
                                             <S.TaskComp>{userId.name} - {userId.email}</S.TaskComp>
                                         </ListItem.Title>

@@ -119,6 +119,7 @@ export default function ToDo() {
                                 key={task.id}
                                 task={task.name}
                                 descricao={task.description}
+                                statusEnum={task.status}
                                 status='error'
                                 customInterval={task.customInterval}
                                 value={"A Fazer"}
@@ -157,6 +158,7 @@ export default function ToDo() {
                                 id={task.id}
                                 key={task.id}
                                 task={task.name}
+                                statusEnum={task.status}
                                 descricao={task.description}
                                 status='warning'
                                 customInterval={task.customInterval}
@@ -197,6 +199,7 @@ export default function ToDo() {
                                 key={task.id}
                                 task={task.name}
                                 descricao={task.description}
+                                statusEnum={task.status}
                                 status='success'
                                 customInterval={task.customInterval}
                                 value={"Concluído"}

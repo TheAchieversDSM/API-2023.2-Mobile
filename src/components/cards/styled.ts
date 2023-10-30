@@ -60,8 +60,18 @@ export const Modal = styled(Overlay)`
   padding: 60px;
 `;
 
+export const ModalPadrao = styled(Overlay)`
+  width: 320px;
+  padding: 60px;
+  height: 300px !important;
+`;
+
 export const ViewScroll = styled(ScrollView)`
   width: 320px;
+`;
+
+export const ViewScrollComp = styled(ScrollView)`
+  height: 500px;
 `;
 
 export const ViewIcons = styled(View)`
@@ -102,4 +112,24 @@ export const InputView = styled(View)`
 export const ViewName = styled(View)`
   width: 100%;
   height: fit-content;
+`;
+
+export const MultiView = styled(View)`
+    flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
+`
+
+export const MultiCont = styled(View)`
+    margin: 30px;
+`
+
+export const TaskComp = styled(Text)`
+  font-family: ${(props) => props.theme.FONTS.Poppins_400Regular};
+  font-size: 16px;
+`;
+
+export const ViewComp = styled(View)`
+  width: 310px;
+  left: -14px;
 `;

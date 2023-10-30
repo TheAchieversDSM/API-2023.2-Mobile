@@ -1,4 +1,4 @@
-import { Container, TextStatus1, TextStatus2, TextStatus3 } from "./styled";
+import * as S from "./styled";
 import { Cards } from "../../components/cards/cards";
 import React, { useCallback, useEffect, useState } from "react";
 import serviceTask from "../../service/task";
@@ -10,6 +10,8 @@ import { HeaderComponent } from "../../components/header";
 import { useFocusEffect } from "@react-navigation/native";
 import { ButtonGroup, SearchBar } from "@rneui/themed";
 import { useTheme } from "styled-components";
+import { DropdownComponent } from "../../components/dropdown/dropdown";
+import { opcoes } from "../../interfaces/compartilhado";
 
 export default function ToDo() {
     const [userTasks, setUserTasks] = useState<IGetTasksUserResp[]>([]);
@@ -18,6 +20,7 @@ export default function ToDo() {
     const [searchText, setSearchText] = useState('');
     const [prioridade, setPrioridade] = useState("");
     const [selectedButton, setSelectedButton] = useState(-1);
+    const [filtro, setFiltro] = useState("nomeTarefa");
     const theme = useTheme()
 
     const { id } = decodeJsonWebToken(String(userToken))
@@ -45,33 +48,73 @@ export default function ToDo() {
         }, [id, reload])
     )
 
+    useEffect(() => {
+        setFiltro(filtro);
+      }, [filtro]);
+
     const reloadTasksData = () => {
         setReload(!reload);
     };
 
+    const filterTasks = (task: IGetTasksUserResp) => {
+        if (filtro === "nomeTarefa") {
+          // Filtra pelo nome da tarefa
+          return (
+            task.name.toLowerCase().includes(searchText.toLowerCase())
+          );
+        } else if (filtro === "emailUser") {
+          // Filtra pelo email do usuário compartilhado
+          return (
+            task.users?.some((user: { name: string; email: string }) =>
+              user.email.toLowerCase().includes(searchText.toLowerCase())
+            )
+          );
+        } else {
+          // Outros tipos de filtro podem ser adicionados aqui
+          return true;
+        }
+      };
+
     return (
         <>
             <View style={{ backgroundColor: '#222328' }}><HeaderComponent /></View>
-            <Container>
-                <SearchBar
-                    placeholder="Pesquisar..."
-                    containerStyle={{
-                        backgroundColor: '#222328',
-                        borderWidth: 1, 
-                        borderTopColor: '#222328',
-                        borderLeftColor: '#222328',
-                        borderRightColor: '#222328',
-                        borderBottomColor: '#ffff', 
-                        borderRadius: 0,
-                        marginBottom: 20,
-                    }}
-                    inputContainerStyle={{
-                        backgroundColor: '#222328',
-                    }}
-                    inputStyle={{ fontFamily: theme.FONTS.Poppins_500Medium }}
-                    onChangeText={text => setSearchText(text)}
-                    value={searchText}
-                />
+            <S.Container>
+                <S.Filtro>
+                    <S.Column1>
+                        <SearchBar
+                            placeholder="Pesquisar tarefa..."
+                            containerStyle={{
+                                backgroundColor: '#222328',
+                                borderWidth: 1,
+                                borderTopColor: '#222328',
+                                borderLeftColor: '#222328',
+                                borderRightColor: '#222328',
+                                borderBottomColor: '#ffff',
+                                borderRadius: 0,
+                                marginBottom: 20,
+                            }}
+                            inputContainerStyle={{
+                                backgroundColor: '#222328',
+                            }}
+                            inputStyle={{ fontFamily: theme.FONTS.Poppins_400Regular}}
+                            onChangeText={text => setSearchText(text)}
+                            value={searchText}
+                        />
+                    </S.Column1>
+                    <S.Column2>
+                        <DropdownComponent
+                            data={opcoes}
+                            placeholder="Tipo"
+                            iconSelectedName="check"
+                            value={filtro}
+                            borderColor='#fff'
+                            color='#86939E'
+                            width={120} 
+                            onValueChange={(value) => setFiltro(value)}   
+                            showIcon={false}              
+                        />
+                    </S.Column2>
+                </S.Filtro>
                 <ButtonGroup
                     buttons={['Baixa', 'Média', 'Alta']}
                     selectedIndex={selectedButton}
@@ -88,16 +131,17 @@ export default function ToDo() {
                         }
                     }}
                     textStyle={{ fontFamily: theme.FONTS.Poppins_500Medium, fontSize: 16 }}
-                    containerStyle={{ marginBottom: 20 }}
+                    containerStyle={{ marginBottom: 20, marginTop: -15, width: "100%", marginLeft: 0 }}
                 />
                 <ScrollView>
-                    <TextStatus3>A Fazer</TextStatus3>
+                    <S.TextStatus3>A Fazer</S.TextStatus3>
                     {userTasks
                         ?.filter(
-                            (task) => task.status === "TO DO" && 
-                            task.customInterval == 0 && 
-                            (prioridade === '' || task.priority === prioridade) && 
-                            task.name.toLowerCase().includes(searchText.toLowerCase())
+                            (task) =>
+                            task.status === "TO DO" &&
+                            task.customInterval === 0 &&
+                            (prioridade === "" || task.priority === prioridade) &&
+                            filterTasks(task)
                         )
                         .map((task, index) => (
                             <Cards
@@ -108,23 +152,27 @@ export default function ToDo() {
                                 key={task.id}
                                 task={task.name}
                                 descricao={task.description}
+                                statusEnum={task.status}
                                 status='error'
                                 customInterval={task.customInterval}
                                 value={"A Fazer"}
                                 statusColor="#de0300"
                                 deadline={task.deadline}
+                                sharedUsersIds={task.sharedUsersIds as number[]}
                                 priority={task.priority}
+                                users={task.users}  
                             />
                         )
                         )}
 
-                    <TextStatus2>Em Progresso</TextStatus2>
+                    <S.TextStatus2>Em Progresso</S.TextStatus2>
                     {userTasks
                         ?.filter(
-                            (task) => task.status === "DOING" && 
-                            task.customInterval == 0 && 
-                            task.name.toLowerCase().includes(searchText.toLowerCase()) && 
-                            (prioridade === '' || task.priority === prioridade)
+                            (task) =>
+                                task.status === "DOING" &&
+                                task.customInterval === 0 &&
+                                (prioridade === "" || task.priority === prioridade) &&
+                                filterTasks(task)
                         )
                         .map((task, index) => (
                             <Cards
@@ -134,24 +182,28 @@ export default function ToDo() {
                                 id={task.id}
                                 key={task.id}
                                 task={task.name}
+                                statusEnum={task.status}
                                 descricao={task.description}
                                 status='warning'
                                 customInterval={task.customInterval}
                                 value={"Em Progresso"}
                                 statusColor="#ebae11"
                                 deadline={task.deadline}
+                                sharedUsersIds={task.sharedUsersIds as number[]}
                                 priority={task.priority}
+                                users={task.users}  
                             />
                         )
                         )}
 
-                    <TextStatus1>Concluído</TextStatus1>
+                    <S.TextStatus1>Concluído</S.TextStatus1>
                     {userTasks
                         ?.filter(
-                            (task) => task.status === "DONE" && 
-                            task.customInterval == 0 && 
-                            task.name.toLowerCase().includes(searchText.toLowerCase()) &&
-                            (prioridade === '' || task.priority === prioridade)
+                            (task) => 
+                            task.status === "DONE" &&
+                            task.customInterval === 0 &&
+                            (prioridade === "" || task.priority === prioridade) &&
+                            filterTasks(task)
                         )
                         .map((task, index) => (
                             <Cards
@@ -162,17 +214,20 @@ export default function ToDo() {
                                 key={task.id}
                                 task={task.name}
                                 descricao={task.description}
+                                statusEnum={task.status}
                                 status='success'
                                 customInterval={task.customInterval}
                                 value={"Concluído"}
                                 statusColor="#67d207"
                                 deadline={task.deadline}
-                                priority={task.priority}
+                                sharedUsersIds={task.sharedUsersIds as number[]}
+                                priority={task.priority} 
+                                users={task.users}                            
                             />
                         )
                         )}
                 </ScrollView>
-            </Container>
+            </S.Container>
         </>
     );
 }

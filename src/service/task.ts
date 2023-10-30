@@ -70,6 +70,17 @@ class Task {
     }
   }
 
+  async shareTask(taskId: number, usersIds: number[]) {
+
+    try {
+      const response = await api.post(`/task/shareTask/${taskId}`, {usersIds});
+      console.log(response)
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async tasktimeUpdateDto(data: IUpdateTimeSpent) {
     try {
       const response = await api.put(`/task/updateTime/${data.id}`, {

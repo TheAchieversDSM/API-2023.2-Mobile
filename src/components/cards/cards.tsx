@@ -2,27 +2,29 @@ import { NativeSyntheticEvent, TextInputChangeEventData, TouchableOpacity, Text,
 import { calculateDateWithTime, checkProgressSubTask, decodeJsonWebToken } from "../../utils/utils";
 import { ICreateSubtasks, IGetSubtasks } from '../../interfaces/subtask';
 import { DropdownComponent } from '../dropdown/dropdown';
+import { Options } from '../../interfaces/hidenmenu';
 import { IUpdateTask } from "../../interfaces/task";
 import serviceSubtask from '../../service/subtask';
 import { ICards } from '../../interfaces/cards';
 import { Checkbox } from '../checkbox/checkbox';
+import { Icon, ListItem } from '@rneui/themed';
+import { useTheme } from 'styled-components';
 import serviceTask from "../../service/task";
 import { TimerModal } from '../timecontroll';
+import { UpdateModal } from '../updateModal';
+import { CompModal } from '../compartilhado';
 import { useEffect, useState } from 'react';
 import { DatePicker } from '../datepicker';
 import { useAuth } from "../../hooks/auth";
 import React, { View } from 'react-native';
 import { ToastComponent } from '../toast';
+import { HidenMenu } from '../hidenmenu';
 import { Priority } from './priorities';
 import { Divider } from '@rneui/base';
 import { ViewScroll } from './styled';
-import { Icon } from '@rneui/themed';
 import { IconModel } from '../icons';
 import Input from '../input/input';
 import * as S from './styled';
-import { HidenMenu } from '../hidenmenu';
-import { Options } from '../../interfaces/hidenmenu';
-import { UpdateModal } from '../updateModal';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -38,6 +40,7 @@ const stts = [
 
 export const Cards = (props: ICards) => {
     const { userToken } = useAuth()
+    const theme = useTheme()
 
     const { id } = decodeJsonWebToken(String(userToken))
 
@@ -46,6 +49,8 @@ export const Cards = (props: ICards) => {
     const [description, setDescription] = useState(props.descricao);
 
     const [visible, setVisible] = useState(false);
+
+    const [visibleC, setVisibleC] = useState(false);
 
     const [priorities, setPriorities] = useState<string | undefined>(undefined);
 
@@ -58,6 +63,8 @@ export const Cards = (props: ICards) => {
     const [date, setDate] = useState(props.deadline)
 
     const [edit, setEdit] = useState(false);
+
+    const [compartilhar, setCompartilhar] = useState(false);
 
     const [reloadSubtasks, setReloadSubtasks] = useState(false);
 
@@ -76,6 +83,8 @@ export const Cards = (props: ICards) => {
     const [editingSubtaskId, setEditingSubtaskId] = useState<number | null>(null);
 
     const [dateError, setDateError] = useState(false)
+
+    const [expanded, setExpanded] = useState(false);
 
     async function fetchTaskSubtasks() {
         try {
@@ -157,6 +166,11 @@ export const Cards = (props: ICards) => {
         setVisible(!visible)
     }
 
+    const toggleCompModal = () => {
+        setCompartilhar(!compartilhar)
+        setVisibleC(!visibleC)
+    }
+
     const handleDelete = async () => {
         try {
             await serviceTask.deleteTask(props.id)
@@ -184,6 +198,7 @@ export const Cards = (props: ICards) => {
 
     const handleSubtaskName = async (subtaskId: number, newName: string) => {
         try {
+
             await serviceSubtask.updateSubtaskName(subtaskId, newName)
 
             ToastComponent({ type: 'success', title: 'Subtarefa atualizada!' })
@@ -226,6 +241,8 @@ export const Cards = (props: ICards) => {
                 deadlineDate.setTime(deadlineDate.getTime() + 24 * 60 * 60 * 1000);
                 deadlineProps.setTime(deadlineProps.getTime() + 24 * 60 * 60 * 1000);
 
+                await serviceTask.updateTask(data);
+
                 if (currentDate <= deadlineDate || isNaN(deadlineDate.getTime())) {
                     if (name != '' && description != '') {
                         await serviceTask.updateTask({
@@ -234,11 +251,11 @@ export const Cards = (props: ICards) => {
                             customInterval: data?.customInterval || props.customInterval,
                             priority: data?.priority || props.priority,
                             deadline: date,
-                            status: data?.status,
+                            status: data?.status || props.statusEnum,
                             userId: id,
                             id: props.id,
                             timeSpent: props.timeSpent,
-                            done: false
+                            done: false,
                         })
 
                         ToastComponent({ type: 'success', title: 'Tarefa atualizada!' })
@@ -300,6 +317,7 @@ export const Cards = (props: ICards) => {
         { color: "#000", name: "history", size: 30, function: handleOpenUpdateModal, icon: "MaterialIcons" },
         { color: "#000", name: "hourglass-o", size: 23, function: toggleTimerModal, icon: "FontAwesome" },
         { color: "#000", name: "edit-2", size: 23, function: ModalEditFunction, icon: "Feather" },
+        { color: "#000", name: "users", size: 23, function: toggleCompModal, icon: "Feather" },
     ]
 
     return edit ? (
@@ -324,19 +342,12 @@ export const Cards = (props: ICards) => {
                             <S.TaskName style={{
                                 color: new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() < new Date().toLocaleDateString() ? "#de0300"
                                     : new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() ? "#FF4328"
-                                        : "black", fontWeight: "bold", fontSize: 18
-                            }}>{props.task}</S.TaskName>
+                                        : "black", fontSize: 18
+                            }}>{props.priority === "Low" ? "★" : props.priority === "Medium" ? "★★" : "★★★"}</S.TaskName>
                         </View>
-
-                        <S.TaskName style={{
-                            color: new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() < new Date().toLocaleDateString() ? "#de0300"
-                                : new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() ? "#FF4328"
-                                    : "black", fontSize: 18
-                        }}>{props.priority === "Low" ? "★" : props.priority === "Medium" ? "★★" : "★★★"}</S.TaskName>
                     </View>
                 </S.CardTask>
             </TouchableOpacity>
-
             <S.Modal isVisible={visible} onBackdropPress={toggleOverlay} >
                 <ViewScroll>
                     <S.GeneralView>
@@ -350,7 +361,6 @@ export const Cards = (props: ICards) => {
                                         icon='AntDesign'
                                         iconName='check'
                                     />
-
                                     <IconModel
                                         onPress={() => { setEdit(!edit), setDateError(false), setDate(props.deadline), setName(props.task), setDescription(props.descricao), setPriorities(props.priority) }}
                                         IconColor={"#000"}
@@ -364,7 +374,6 @@ export const Cards = (props: ICards) => {
                                 <S.TaskTitle>{props.task}</S.TaskTitle>
                             </S.ViewName>
                         </S.ViewCard>
-
                         <S.TaskDescT>Nome:</S.TaskDescT>
                         <S.InputView>
                             <Input
@@ -376,7 +385,6 @@ export const Cards = (props: ICards) => {
                                 iconL='file-text-o'
                             />
                         </S.InputView>
-
                         <S.TaskDescT>Status: </S.TaskDescT>
                         <DropdownComponent
                             placeholder={props.value}
@@ -389,8 +397,8 @@ export const Cards = (props: ICards) => {
                             iconColor='#C74634'
                             iconSelectedName='tags'
                             iconName='tagso'
+                            showIcon={true}
                         />
-
                         <S.TaskDescT>Prioridade: </S.TaskDescT>
                         <DropdownComponent
                             placeholder={
@@ -408,8 +416,8 @@ export const Cards = (props: ICards) => {
                             iconSelectedName='star'
                             iconColor='#C74634'
                             iconName='staro'
+                            showIcon={true}
                         />
-
                         <S.ViewData>
                             <S.TaskDescT>Prazo:</S.TaskDescT>
                             <DatePicker
@@ -423,12 +431,10 @@ export const Cards = (props: ICards) => {
                                 title='Data de expiração'
                                 value={date}
                             />
-
                             {dateError && (
                                 <Text style={{ color: 'red', fontSize: 14, marginTop: -10, marginBottom: 10 }}>A data não pode ser menor que o dia de hoje.</Text>
                             )}
                         </S.ViewData>
-
                         <S.TaskDescT>Descrição:</S.TaskDescT>
                         <S.InputView>
                             <Input
@@ -464,14 +470,12 @@ export const Cards = (props: ICards) => {
                     </S.GeneralView>
                 </ViewScroll>
             </S.Modal>
-        </View>) :
-        (<View>
+        </View>) : (<View>
             <TouchableOpacity onPress={toggleOverlay}>
                 <S.CardTask>
                     <S.StatusColor style={{ backgroundColor: props.statusColor }}></S.StatusColor>
                     <View style={{ display: "flex", flexDirection: "row", justifyContent: 'space-between', marginRight: 15, marginLeft: 5 }}>
                         <View style={{ display: "flex", flexDirection: "row", justifyContent: 'space-between', marginLeft: 10 }}>
-
                             {new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() && props.value != 'Concluído' ? (
                                 <View style={{ marginTop: 10 }}>
                                     <IconModel
@@ -482,14 +486,12 @@ export const Cards = (props: ICards) => {
                                     />
                                 </View>
                             ) : null}
-
                             <S.TaskName style={{
                                 color: new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() < new Date().toLocaleDateString() && props.value != 'Concluído' ? "#de0300"
                                     : new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() && props.value != 'Concluído' ? "#FF4328"
                                         : "black", fontWeight: "bold", fontSize: 18
                             }}>{props.task}</S.TaskName>
                         </View>
-
                         <S.TaskName style={{
                             color: new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() < new Date().toLocaleDateString() && props.value != 'Concluído' ? "#de0300"
                                 : new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() && props.value != 'Concluído' ? "#FF4328"
@@ -498,6 +500,12 @@ export const Cards = (props: ICards) => {
                     </View>
                 </S.CardTask>
             </TouchableOpacity>
+
+            {updateModal ?
+                <UpdateModal id={props.id} view={updateModal} onBackdropPress={handleOpenUpdateModal} />
+                :
+                <></>
+            }
 
             <TimerModal
                 view={timer}
@@ -510,7 +518,15 @@ export const Cards = (props: ICards) => {
                 reloadTasksData={reloadTasksData}
             />
 
-            <S.Modal isVisible={visible} onBackdropPress={toggleOverlay}>
+            <CompModal
+                view={compartilhar}
+                onBackdropPress={toggleCompModal}
+                reloadTasksData={reloadTasksData}
+                taskid={props.id}
+                userids={props.users}
+            />
+
+            <S.ModalPadrao isVisible={visible} onBackdropPress={toggleOverlay}>
                 <S.GeneralView>
                     <S.ViewCard>
                         <S.ViewIcons>
@@ -520,9 +536,9 @@ export const Cards = (props: ICards) => {
                                     <IconModel
                                         onPress={() => handleOpenModal()}
                                         IconColor={"#000"}
-                                        IconSize={30}
-                                        icon='AntDesign'
-                                        iconName='ellipsis1'
+                                        IconSize={26}
+                                        icon='FontAwesome'
+                                        iconName='ellipsis-h'
                                     />
                                 }
                                 <IconModel
@@ -538,30 +554,40 @@ export const Cards = (props: ICards) => {
                             <S.TaskTitle>{props.task}</S.TaskTitle>
                         </S.ViewName>
                     </S.ViewCard>
-
-                    {updateModal ?
-                        <UpdateModal id={props.id} view={updateModal} onBackdropPress={handleOpenUpdateModal} />
-                        :
-                        <></>
-                    }
-
                     <S.TaskDescT>Tempo Gasto: {calculateDateWithTime(props.timeSpent)}</S.TaskDescT>
-
                     <S.TaskDescT>Status: {props.value}</S.TaskDescT>
-
                     <Priority priority={props.priority} />
-
                     <S.ViewData>
                         <S.TaskDescT>Expira em: {props.deadline}</S.TaskDescT>
                     </S.ViewData>
-
                     <S.ViewData>
                         <S.TaskDescT>Descrição:</S.TaskDescT>
-                        <S.TaskDesc style={{ fontSize: 17 }}>{props.descricao}</S.TaskDesc>
+                        <S.TaskDescT>{props.descricao}</S.TaskDescT>
+                    </S.ViewData>
+                    <Divider />
+                    <S.ViewComp>
+                        <ListItem.Accordion
+                            content={
+                                <S.TaskDescT>Compartilhado com:</S.TaskDescT>
+                            }
+                            isExpanded={expanded}
+                            onPress={() => {
+                                setExpanded(!expanded);
+                            }}
+                        >
+                            {props.users?.map(userId => (
+                                <ListItem key={userId.id} style={{ marginTop: -20 }}>
+                                    <ListItem.Title>
+                                        <S.TaskComp>{userId.name} - {userId.email}</S.TaskComp>
+                                    </ListItem.Title>
+                                </ListItem>
+                            ))}
+                        </ListItem.Accordion>
+                    </S.ViewComp>
+                    <Divider />
+                    <View style={{ height: 20 }}></View>
 
-                        <Divider />
-                        <View style={{ height: 20 }}></View>
-
+                    <S.ViewData>
                         {subtask?.length === 0 ? (
                             <S.TaskDescT>Não há subtarefas</S.TaskDescT>
                         ) : (
@@ -570,7 +596,6 @@ export const Cards = (props: ICards) => {
                                 <S.SubtaskDone style={{ marginTop: -10 }}>
                                     Total: {checkProgressSubTask(subtask).toFixed(2)}%
                                 </S.SubtaskDone>
-
                                 <ScrollView style={{ maxHeight: 200, width: 300 }}>
                                     {subtask &&
                                         subtask.map((item: IGetSubtasks) => (
@@ -605,7 +630,6 @@ export const Cards = (props: ICards) => {
                                                                 fontSize={17}
                                                             />
                                                         </TouchableOpacity>
-
                                                         <View style={{ marginRight: 30, marginTop: 0, alignItems: 'flex-end' }}>
                                                             <IconModel
                                                                 onPress={() => { handleDeleteSubtask(item.id), setEditingSubtaskId(null) }}
@@ -622,7 +646,6 @@ export const Cards = (props: ICards) => {
                                 </ScrollView>
                             </View>
                         )}
-
                         {isInputVisible && (
                             <S.InputView style={{ marginTop: -10 }}>
                                 <Input
@@ -636,9 +659,7 @@ export const Cards = (props: ICards) => {
                                 />
                             </S.InputView>
                         )}
-
                         <TouchableOpacity onPress={handleAddSubtask} style={{ flexDirection: 'row', marginRight: 40, alignSelf: 'flex-end', marginTop: 10 }}>
-
                             {isInputVisible ? (
                                 <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
                                     <View style={{ paddingRight: 35 }}>
@@ -649,7 +670,6 @@ export const Cards = (props: ICards) => {
                                             onPress={handleCloseSubtask}
                                         />
                                     </View>
-
                                     <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginLeft: 0 }}>
                                         <Icon
                                             name='check'
@@ -666,14 +686,14 @@ export const Cards = (props: ICards) => {
                                         color='grey'
                                         size={26}
                                     />
-
                                     <Text style={{ color: 'grey', fontSize: 20, marginLeft: 5, marginBottom: 10 }}>Adicionar subtarefa</Text>
                                 </>
                             }
                         </TouchableOpacity>
                     </S.ViewData>
                 </S.GeneralView>
-            </S.Modal>
+            </S.ModalPadrao>
+
         </View>
-        )
+    )
 }

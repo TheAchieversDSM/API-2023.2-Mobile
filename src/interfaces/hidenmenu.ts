@@ -4,6 +4,7 @@ export interface Options {
   name: AllIconKeys;
   icon: IconType;
   color: string;
+  size: number;
   function: () => void;
 }
 

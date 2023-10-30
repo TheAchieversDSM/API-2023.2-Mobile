@@ -2,31 +2,34 @@ import { useState } from "react"
 import { IHidenMenu } from "../../interfaces/hidenmenu"
 import { IconModel } from "../icons"
 import { Container, ContainerIcons } from "./style"
+import { View } from "react-native"
 
 export const HidenMenu = ({ option, open }: IHidenMenu) => {
-
-
     return (
         <Container>
             <ContainerIcons>
                 {option.map((buttons) => {
                     return (
-                        <IconModel
-                            onPress={() => { buttons.function() }}
-                            IconColor={buttons.color}
-                            iconName={buttons.name}
-                            IconSize={25}
-                            icon={buttons.icon}
-                        />
+                        <>
+                            <IconModel
+                                onPress={() => { buttons.function() }}
+                                IconColor={buttons.color}
+                                iconName={buttons.name}
+                                IconSize={buttons.size}
+                                icon={buttons.icon}
+                            />
+                            <View style={{ marginHorizontal: 10 }} />
+                        </>
                     )
                 })}
+                <View style={{ marginRight: -10 }} />
             </ContainerIcons>
             <IconModel
                 onPress={open}
                 IconColor={"#000"}
-                IconSize={25}
+                IconSize={23}
                 icon='Entypo'
-                iconName='chevron-right'
+                iconName='chevron-thin-right'
             />
         </Container>
     )

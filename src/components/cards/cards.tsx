@@ -22,6 +22,7 @@ import Input from '../input/input';
 import * as S from './styled';
 import { HidenMenu } from '../hidenmenu';
 import { Options } from '../../interfaces/hidenmenu';
+import { UpdateModal } from '../updateModal';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -287,14 +288,19 @@ export const Cards = (props: ICards) => {
         setOpenModal(!openModal)
     }
 
+    const [updateModal, setUpdateModal] = useState(false)
+
+    const handleOpenUpdateModal = () => {
+        setUpdateModal(!updateModal)
+    }
+
 
     const options: Options[] = [
-        { color: "#bd1310", name: "trash-o", function: ModalDeleteFuncition, icon: "FontAwesome" },
-        { color: "#000", name: "hourglass-o", function: toggleTimerModal, icon: "FontAwesome" },
-        { color: "#000", name: "edit-2", function: ModalEditFunction, icon: "Feather" },
+        { color: "#bd1310", name: "trash-o", size: 27, function: ModalDeleteFuncition, icon: "FontAwesome" },
+        { color: "#000", name: "history", size: 30, function: handleOpenUpdateModal, icon: "MaterialIcons" },
+        { color: "#000", name: "hourglass-o", size: 23, function: toggleTimerModal, icon: "FontAwesome" },
+        { color: "#000", name: "edit-2", size: 23, function: ModalEditFunction, icon: "Feather" },
     ]
-
-
 
     return edit ? (
         <View>
@@ -514,9 +520,9 @@ export const Cards = (props: ICards) => {
                                     <IconModel
                                         onPress={() => handleOpenModal()}
                                         IconColor={"#000"}
-                                        IconSize={26}
-                                        icon='FontAwesome'
-                                        iconName='ellipsis-h'
+                                        IconSize={30}
+                                        icon='AntDesign'
+                                        iconName='ellipsis1'
                                     />
                                 }
                                 <IconModel
@@ -533,6 +539,12 @@ export const Cards = (props: ICards) => {
                         </S.ViewName>
                     </S.ViewCard>
 
+                    {updateModal ?
+                        <UpdateModal id={props.id} view={updateModal} onBackdropPress={handleOpenUpdateModal} />
+                        :
+                        <></>
+                    }
+
                     <S.TaskDescT>Tempo Gasto: {calculateDateWithTime(props.timeSpent)}</S.TaskDescT>
 
                     <S.TaskDescT>Status: {props.value}</S.TaskDescT>
@@ -545,7 +557,7 @@ export const Cards = (props: ICards) => {
 
                     <S.ViewData>
                         <S.TaskDescT>Descrição:</S.TaskDescT>
-                        <S.TaskDescT>{props.descricao}</S.TaskDescT>
+                        <S.TaskDesc style={{ fontSize: 17 }}>{props.descricao}</S.TaskDesc>
 
                         <Divider />
                         <View style={{ height: 20 }}></View>

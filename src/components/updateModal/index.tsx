@@ -1,24 +1,24 @@
 import { IDynamicHistoric, IHistoricUpdate } from "../../interfaces/updatemodal"
-import { TouchableOpacity } from "react-native";
 import serviceTask from "../../service/task"
 import { useEffect, useState } from "react"
 import { Divider } from "@rneui/base"
-import { IconModel } from "../icons"
 import Collapse from "../collapse"
 import { Modal } from "./style"
 
 interface IUpdate {
     id: number
     view: boolean
+    onBackdropPress: () => void
 }
 
-export const UpdateModal = (props: IUpdate) => {
+export const UpdateModal = ({onBackdropPress, ...props}: IUpdate) => {
     const [historic, setHistoric] = useState<IDynamicHistoric>({} as IDynamicHistoric)
     const [dates, setDates] = useState<IHistoricUpdate[]>([])
     const [visible, setVisible] = useState(props.view);
 
     const toggleOverlay = () => {
         setVisible(!visible)
+        onBackdropPress()
     };
 
     useEffect(() => {

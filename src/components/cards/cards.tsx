@@ -540,7 +540,7 @@ export const Cards = (props: ICards) => {
                     </S.ViewCard>
 
                     {updateModal ?
-                        <UpdateModal id={props.id} view={updateModal} />
+                        <UpdateModal id={props.id} view={updateModal} onBackdropPress={handleOpenUpdateModal} />
                         :
                         <></>
                     }

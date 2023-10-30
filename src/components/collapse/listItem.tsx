@@ -1,7 +1,8 @@
 import { ListItem } from "@rneui/base";
-import { IItems } from "../../interfaces/updatemodal";
+import { IHistoricUpdate } from "../../interfaces/updatemodal";
+import { Field } from "./fields";
 
-export const ListItemC = (props: IItems) => {
+export const ListItemC = (props: IHistoricUpdate) => {
     const ObjectList = ["name", "description", "priority", "status", "done", "customInterval", "lastExecution", "timeSpent", "deadline"];
     return (
         <ListItem style={{ marginTop: -15 }}>
@@ -11,7 +12,7 @@ export const ListItemC = (props: IItems) => {
                     if (props.campo[itens]) {
                         return (
                             <>
-                                <ListItem.Title style={{ fontFamily: "Poppins_600SemiBold" }}>{itens}</ListItem.Title>
+                                <Field field={itens} />
 
                                 <ListItem.Subtitle style={{ fontSize: 15, fontFamily: "Poppins_400Regular", marginTop: -2 }}>Valor anterior: </ListItem.Subtitle>
 
@@ -24,8 +25,6 @@ export const ListItemC = (props: IItems) => {
                         )
                     }
                 })}
-
-
             </ListItem.Content>
         </ListItem>
     )

@@ -1,45 +1,28 @@
-import { IUpdate } from "../../interfaces/updatemodal";
+import { IDynamicHistoric, IHistoricUpdate, IUpdate } from "../../interfaces/updatemodal";
+import { api } from "../../service/api";
 import { ListItemC } from "./listItem";
 import { ListItem } from "@rneui/base";
 import { useState } from "react";
 
-export default function Collapse(props: IUpdate) {
+export default function Collapse(props: IHistoricUpdate) {    
     const [expanded, setExpanded] = useState(false);
-    const valor = {
-        "taskId": 1,
-        "user": {
-            "id": 3,
-            "name": "Tais Salomão "
-        },
-        "data": "2023-10-27T12:50:23.170Z",
-        "campo": {
-            "name": {
-                "old": "Tarefa de Exemplo",
-                "new": "tty"
-            },
-            "description": {
-                "old": "Esta é uma tarefa de exemplo.",
-                "new": "zzz"
-            }
-        },
-        "id": "653a608f0dfb3416fb6e5f41"
-    }
+    
     return (
         <>
             <ListItem.Accordion
                 content={
                     <ListItem.Content>
-                        <ListItem.Title style={{ fontSize: 18, fontFamily: "Poppins_400Regular" }}>{props.data}</ListItem.Title>
-                        <ListItem.Subtitle style={{ fontSize: 16, fontFamily: "Poppins_300Light" }}>{props.subtitle}</ListItem.Subtitle>
+                        <ListItem.Title style={{ fontSize: 18, fontFamily: "Poppins_400Regular" }}>{props.data.slice(0, 10)}</ListItem.Title>
+                        <ListItem.Subtitle style={{ fontSize: 16, fontFamily: "Poppins_300Light" }}>Ver mais detalhes</ListItem.Subtitle>
                     </ListItem.Content>
                 }
                 isExpanded={expanded}
                 onPress={() => {
                     setExpanded(!expanded);
                 }}
-                style={{ width: 330, marginLeft: -16 }}
+                style={{ width: 330, marginLeft: -5 }}
             >
-                <ListItemC {...valor} />
+                <ListItemC {...props} />
             </ListItem.Accordion>
         </>
     );

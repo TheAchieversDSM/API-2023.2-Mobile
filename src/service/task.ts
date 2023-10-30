@@ -98,6 +98,15 @@ class Task {
       console.log(error);
     }
   }
+
+  async getHistoricTask(id: number) {
+    try {
+      const response = await api.get(`/task/getHistoricTask/${id}`);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 const serviceTask = new Task();

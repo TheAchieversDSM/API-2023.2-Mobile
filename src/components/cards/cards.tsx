@@ -288,14 +288,19 @@ export const Cards = (props: ICards) => {
         setOpenModal(!openModal)
     }
 
+    const [updateModal, setUpdateModal] = useState(false)
+
+    const handleOpenUpdateModal = () => {
+        setUpdateModal(!updateModal)
+    }
+
 
     const options: Options[] = [
         { color: "#bd1310", name: "trash-o", size: 27, function: ModalDeleteFuncition, icon: "FontAwesome" },
+        { color: "#000", name: "history", size: 30, function: handleOpenUpdateModal, icon: "MaterialIcons" },
         { color: "#000", name: "hourglass-o", size: 23, function: toggleTimerModal, icon: "FontAwesome" },
         { color: "#000", name: "edit-2", size: 23, function: ModalEditFunction, icon: "Feather" },
     ]
-
-
 
     return edit ? (
         <View>
@@ -534,7 +539,11 @@ export const Cards = (props: ICards) => {
                         </S.ViewName>
                     </S.ViewCard>
 
-                    <UpdateModal />
+                    {updateModal ?
+                        <UpdateModal id={props.id} view={updateModal} />
+                        :
+                        <></>
+                    }
 
                     <S.TaskDescT>Tempo Gasto: {calculateDateWithTime(props.timeSpent)}</S.TaskDescT>
 
@@ -548,7 +557,7 @@ export const Cards = (props: ICards) => {
 
                     <S.ViewData>
                         <S.TaskDescT>Descrição:</S.TaskDescT>
-                        <S.TaskDesc style={{fontSize: 17}}>{props.descricao}</S.TaskDesc>
+                        <S.TaskDesc style={{ fontSize: 17 }}>{props.descricao}</S.TaskDesc>
 
                         <Divider />
                         <View style={{ height: 20 }}></View>

@@ -241,8 +241,6 @@ export const Cards = (props: ICards) => {
                 deadlineDate.setTime(deadlineDate.getTime() + 24 * 60 * 60 * 1000);
                 deadlineProps.setTime(deadlineProps.getTime() + 24 * 60 * 60 * 1000);
 
-                await serviceTask.updateTask(data);
-
                 if (currentDate <= deadlineDate || isNaN(deadlineDate.getTime())) {
                     if (name != '' && description != '') {
                         await serviceTask.updateTask({
@@ -353,7 +351,7 @@ export const Cards = (props: ICards) => {
                     <S.GeneralView>
                         <S.ViewCard>
                             <S.ViewIcons>
-                                <S.ViewIcon>
+                                <S.ViewIcon >
                                     <IconModel
                                         onPress={() => { handleSubmit(data) }}
                                         IconColor={"#000"}
@@ -361,13 +359,15 @@ export const Cards = (props: ICards) => {
                                         icon='AntDesign'
                                         iconName='check'
                                     />
-                                    <IconModel
-                                        onPress={() => { setEdit(!edit), setDateError(false), setDate(props.deadline), setName(props.task), setDescription(props.descricao), setPriorities(props.priority) }}
-                                        IconColor={"#000"}
-                                        IconSize={25}
-                                        icon='AntDesign'
-                                        iconName='close'
-                                    />
+                                    <View >
+                                        <IconModel
+                                            onPress={() => { setEdit(!edit), setDateError(false), setDate(props.deadline), setName(props.task), setDescription(props.descricao), setPriorities(props.priority) }}
+                                            IconColor={"#000"}
+                                            IconSize={25}
+                                            icon='AntDesign'
+                                            iconName='close'
+                                        />
+                                    </View>
                                 </S.ViewIcon>
                             </S.ViewIcons>
                             <S.ViewName>
@@ -534,14 +534,16 @@ export const Cards = (props: ICards) => {
                                 {openModal ?
                                     <HidenMenu option={options} open={handleOpenModal} /> :
                                     <IconModel
+
                                         onPress={() => handleOpenModal()}
                                         IconColor={"#000"}
-                                        IconSize={26}
-                                        icon='FontAwesome'
-                                        iconName='ellipsis-h'
+                                        IconSize={34}
+                                        icon='AntDesign'
+                                        iconName='ellipsis1'
                                     />
                                 }
                                 <IconModel
+                                    style={{ marginTop: 3}}
                                     onPress={ModalCloseFuncion}
                                     IconColor={"#000"}
                                     IconSize={25}

@@ -64,14 +64,14 @@ class Task {
   async updateTask(data: IUpdateTask) {
     try {
       const response = await api.put(`/task/update/${data.id}`, data);
-      return response;
+      const update = await api.post(`/task/UpdateHistorico/${data.id}/${data.userId}`)      
+      return { response, update };
     } catch (error) {
       console.error(error);
     }
   }
 
   async shareTask(taskId: number, usersIds: number[]) {
-
     try {
       const response = await api.post(`/task/shareTask/${taskId}`, {usersIds});
       console.log(response)

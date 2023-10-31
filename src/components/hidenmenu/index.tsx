@@ -24,13 +24,17 @@ export const HidenMenu = ({ option, open }: IHidenMenu) => {
                 })}
                 <View style={{ marginRight: -10 }} />
             </ContainerIcons>
-            <IconModel
-                onPress={open}
-                IconColor={"#000"}
-                IconSize={23}
-                icon='Entypo'
-                iconName='chevron-thin-right'
-            />
+
+            <View style={{ marginBottom: 15 }}>
+                <IconModel
+                    style={{ justifyContent: "center" }}
+                    onPress={open}
+                    IconColor={"#000"}
+                    IconSize={23}
+                    icon='Entypo'
+                    iconName='chevron-thin-right'
+                />
+            </View>
         </Container>
     )
 }

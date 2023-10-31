@@ -3,7 +3,8 @@ import serviceTask from "../../service/task"
 import { useEffect, useState } from "react"
 import { Divider } from "@rneui/base"
 import Collapse from "../collapse"
-import { Modal } from "./style"
+import { Modal, NoUpdate } from "./style"
+import { Text } from "react-native"
 
 interface IUpdate {
     id: number
@@ -11,7 +12,7 @@ interface IUpdate {
     onBackdropPress: () => void
 }
 
-export const UpdateModal = ({onBackdropPress, ...props}: IUpdate) => {
+export const UpdateModal = ({ onBackdropPress, ...props }: IUpdate) => {
     const [historic, setHistoric] = useState<IDynamicHistoric>({} as IDynamicHistoric)
     const [dates, setDates] = useState<IHistoricUpdate[]>([])
     const [visible, setVisible] = useState(props.view);
@@ -44,11 +45,20 @@ export const UpdateModal = ({onBackdropPress, ...props}: IUpdate) => {
     return (
         <>
             <Modal isVisible={visible} onBackdropPress={toggleOverlay}>
-                {dates?.map(tasks => {
-                    return <Collapse {...tasks} />
-                })}
+                {dates.length > 0 ?
+                    dates?.map(tasks => {
+                        return (
+                            <>
+                                <Collapse {...tasks} />
+                                <Divider style={{ marginBottom: 10 }} />
+                            </>
+                        )
+                    })
+                    :
+                    <NoUpdate>Não há histórico de atualização para essa tarefa.</NoUpdate>
+                }
 
-                <Divider style={{ marginBottom: 10 }} />
+
             </Modal>
         </>
     )

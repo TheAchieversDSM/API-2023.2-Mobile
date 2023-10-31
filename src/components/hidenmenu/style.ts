@@ -13,4 +13,5 @@ export const ContainerIcons = styled(View)`
   justify-content: flex-end;
   width: 100%;
   background-color: white;
+  padding-bottom: 10px;
 `;

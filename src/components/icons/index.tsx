@@ -19,6 +19,7 @@ const iconComponents: Record<string, React.ComponentType<any>> = {
 };
 
 export const IconModel = ({
+    style,
     icon,
     iconName,
     IconColor,
@@ -32,7 +33,7 @@ export const IconModel = ({
     }
 
     return (
-        <TouchableOpacity onPress={onPress} style={{ justifyContent: "center" }}>
+        <TouchableOpacity onPress={onPress} style={style}>
             <IconComponent color={IconColor} size={IconSize} name={iconName} />
         </TouchableOpacity>
     );

@@ -17,9 +17,9 @@ export const CompModal = ({view, onBackdropPress, reloadTasksData, taskid, useri
     const [searchText, setSearchText] = useState('');
     const { id } = decodeJsonWebToken(String(userToken))
 
-    const defaultChecked = userids?.map((user:any) => user?.id) || []
+    // const defaultChecked = userids?.map((user:any) => user?.id) || []
 
-    const [selectedItems, setSelectedItems] = useState(defaultChecked?.map(() => true));
+    const [selectedItems, setSelectedItems] = useState<any[]>([]);
 
     useEffect(() =>{
         async function fetchAllUsers() {
@@ -28,6 +28,15 @@ export const CompModal = ({view, onBackdropPress, reloadTasksData, taskid, useri
                 if (response) {
                     let users = response.data;
                     users = users.filter((user: any) => user.id !== id);
+                    
+                    if(userids){
+                        let select: any[] = []
+                        select = users.map((userSelected: any) => {
+                            return userids.some((user: any) => user.id === userSelected.id);
+                        })                        
+                        setSelectedItems(select)
+                    }
+            
                     setUsuarios(users)
                 } else {
                     console.error("Erro ao buscar usuários");
@@ -84,19 +93,19 @@ export const CompModal = ({view, onBackdropPress, reloadTasksData, taskid, useri
                 <ScrollView>
                     {usuarios?.filter((user:any)=> user?.email.toLowerCase().includes(searchText.toLowerCase())).map((usuario: any, index) => (
                         <ListItem bottomDivider key={index}>
+                            <ListItem.CheckBox
+                                checked={selectedItems[index]}
+                                onPress={() => {
+                                    const updatedSelectedItems = [...selectedItems];
+                                    updatedSelectedItems[index] = !selectedItems[index];
+                                    setSelectedItems(updatedSelectedItems);
+                                }}
+                                checkedColor='#DE0300'
+                                key={usuario.id}
+                                textStyle={{fontFamily: theme.FONTS.Poppins_400Regular,}}
+                            />
                             <ListItem.Content>
-                                <ListItem.CheckBox
-                                    checked={selectedItems[index]}
-                                    title={usuario.email}
-                                    onPress={() => {
-                                        const updatedSelectedItems = [...selectedItems];
-                                        updatedSelectedItems[index] = !selectedItems[index];
-                                        setSelectedItems(updatedSelectedItems);
-                                    }}
-                                    checkedColor='#DE0300'
-                                    key={usuario.id}
-                                    textStyle={{fontFamily: theme.FONTS.Poppins_400Regular,}}
-                                />
+                                <ListItem.Title style={{fontFamily: theme.FONTS.Poppins_400Regular,}}>{usuario.email}</ListItem.Title>
                             </ListItem.Content>
                         </ListItem>
                     ))}

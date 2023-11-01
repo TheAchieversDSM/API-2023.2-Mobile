@@ -16,9 +16,6 @@ export const CompModal = ({view, onBackdropPress, reloadTasksData, taskid, useri
     const [usuarios, setUsuarios] = useState([]);
     const [searchText, setSearchText] = useState('');
     const { id } = decodeJsonWebToken(String(userToken))
-
-    // const defaultChecked = userids?.map((user:any) => user?.id) || []
-
     const [selectedItems, setSelectedItems] = useState<any[]>([]);
 
     useEffect(() =>{

@@ -39,6 +39,7 @@ export default function Home() {
   const [dateTasks, setDateTasks] = useState<IHomeReturn>({} as IHomeReturn);
   const { userToken } = useAuth();
   const { id } = decodeJsonWebToken(String(userToken));
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     setDateTasks({} as IHomeReturn)
@@ -57,7 +58,12 @@ export default function Home() {
     }
 
     fetchUserDateTasks();
-  }, [selected]);
+  }, [selected, reload]);
+
+  const reloadTasksData = () => {
+    setReload(!reload);
+};
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -137,6 +143,8 @@ export default function Home() {
                                 dateTasks.data.recorrente.map((task, index) => (
                                   task.deadline === String(selected) && (
                                     <ViewCards
+                                      reloadTasksData={reloadTasksData}
+                                      reload={reload}
                                       key={task.id}
                                       {...task}
                                     />
@@ -158,6 +166,8 @@ export default function Home() {
                                 dateTasks.data.naoRecorrente.map((task, index) => (
                                   task.deadline === String(selected) && (
                                     <ViewCards
+                                      reloadTasksData={reloadTasksData}
+                                      reload={reload}
                                       key={task.id}
                                       {...task}
                                     />

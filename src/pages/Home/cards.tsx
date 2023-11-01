@@ -1,18 +1,14 @@
 import { useState } from "react";
 import { Cards } from "../../components/cards/cards"
 import { IGetTasksUserResp } from "../../interfaces/task"
+import { ICards } from "../../interfaces/cards";
 
-export const ViewCards = ({ ...task }: IGetTasksUserResp) => {
-    const [reload, setReload] = useState(false);
-    const reloadTasksData = () => {
-        setReload(!reload);
-    };
+export const ViewCards = ({ reloadTasksData, ...task }: any) => {
     switch (task.status) {
         case "TO DO":
             return (
                 <Cards
                     reloadTasksData={reloadTasksData}
-                    reload={reload}
                     timeSpent={task.timeSpent}
                     id={task.id}
                     key={task.id}
@@ -32,7 +28,6 @@ export const ViewCards = ({ ...task }: IGetTasksUserResp) => {
         case "DOING":
             return (
                 <Cards
-                    reload={reload}
                     reloadTasksData={reloadTasksData}
                     timeSpent={task.timeSpent}
                     id={task.id}
@@ -53,7 +48,6 @@ export const ViewCards = ({ ...task }: IGetTasksUserResp) => {
         case "DONE":
             return (
                 <Cards
-                    reload={reload}
                     reloadTasksData={reloadTasksData}
                     timeSpent={task.timeSpent}
                     id={task.id}

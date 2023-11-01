@@ -340,7 +340,7 @@ export const Cards = (props: ICards) => {
                             <S.TaskName style={{
                                 color: new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() < new Date().toLocaleDateString() ? "#de0300"
                                     : new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() ? "#FF4328"
-                                        : "black", fontSize: 18
+                                        : "black", fontSize: 18, fontFamily: theme.FONTS.Poppins_600SemiBold,
                             }}>{props.priority === "Low" ? "★" : props.priority === "Medium" ? "★★" : "★★★"}</S.TaskName>
                         </View>
                     </View>
@@ -489,7 +489,7 @@ export const Cards = (props: ICards) => {
                             <S.TaskName style={{
                                 color: new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() < new Date().toLocaleDateString() && props.value != 'Concluído' ? "#de0300"
                                     : new Date(new Date(props.deadline).getTime() + 24 * 60 * 60 * 1000).toLocaleDateString() == new Date().toLocaleDateString() && props.value != 'Concluído' ? "#FF4328"
-                                        : "black", fontWeight: "bold", fontSize: 18
+                                        : "black", fontFamily: theme.FONTS.Poppins_600SemiBold, fontSize: 18
                             }}>{props.task}</S.TaskName>
                         </View>
                         <S.TaskName style={{
@@ -566,26 +566,31 @@ export const Cards = (props: ICards) => {
                         <S.TaskDescT>Descrição:</S.TaskDescT>
                         <S.TaskDescT>{props.descricao}</S.TaskDescT>
                     </S.ViewData>
-                    <Divider />
-                    <S.ViewComp>
-                        <ListItem.Accordion
-                            content={
-                                <S.TaskDescT>Compartilhado com:</S.TaskDescT>
-                            }
-                            isExpanded={expanded}
-                            onPress={() => {
-                                setExpanded(!expanded);
-                            }}
-                        >
-                            {props.users?.map(userId => (
-                                <ListItem key={userId.id} style={{ marginTop: -20 }}>
-                                    <ListItem.Title>
-                                        <S.TaskComp>{userId.name} - {userId.email}</S.TaskComp>
-                                    </ListItem.Title>
-                                </ListItem>
-                            ))}
-                        </ListItem.Accordion>
-                    </S.ViewComp>
+                    {
+                        props.users.length > 0 ?
+                        <>
+                            <Divider />
+                            <S.ViewComp>
+                                <ListItem.Accordion
+                                    content={
+                                        <S.TaskDescT>Compartilhado com:</S.TaskDescT>
+                                    }
+                                    isExpanded={expanded}
+                                    onPress={() => {
+                                        setExpanded(!expanded);
+                                    }}
+                                >
+                                    {props.users?.map(userId => (
+                                        <ListItem key={userId.id} style={{ marginTop: -20 }}>
+                                            <ListItem.Title>
+                                                <S.TaskComp>{userId.name} - {userId.email}</S.TaskComp>
+                                            </ListItem.Title>
+                                        </ListItem>
+                                    ))}
+                                </ListItem.Accordion>
+                            </S.ViewComp>
+                        </> : null
+                    }
                     <Divider />
                     <View style={{ height: 20 }}></View>
 
@@ -678,7 +683,7 @@ export const Cards = (props: ICards) => {
                                             color='grey'
                                             size={26}
                                         />
-                                        <Text style={{ color: 'grey', fontSize: 20, marginLeft: 10 }}>Confirmar subtarefa</Text>
+                                        <Text style={{ color: 'grey', fontSize: 20, marginLeft: 10, fontFamily: theme.FONTS.Poppins_400Regular }}>Confirmar subtarefa</Text>
                                     </View>
                                 </View>
                             ) :
@@ -688,7 +693,7 @@ export const Cards = (props: ICards) => {
                                         color='grey'
                                         size={26}
                                     />
-                                    <Text style={{ color: 'grey', fontSize: 20, marginLeft: 5, marginBottom: 10 }}>Adicionar subtarefa</Text>
+                                    <Text style={{ color: 'grey', fontSize: 20, marginLeft: 5, marginBottom: 10, fontFamily: theme.FONTS.Poppins_400Regular }}>Adicionar subtarefa</Text>
                                 </>
                             }
                         </TouchableOpacity>

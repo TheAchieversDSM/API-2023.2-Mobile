@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { Text } from "react-native"
 
 export const Modal = styled(Overlay)`
+  display: flex;
   width: 320px;
-  padding: 60px;
   align-items: center;
 `;
 

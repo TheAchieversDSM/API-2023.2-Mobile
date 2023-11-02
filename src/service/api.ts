@@ -26,8 +26,6 @@ class API {
   async checkTasks(userId: number) {
     try {
       const response = await api.get(`/status/renewCyclicTasks/${userId}`);
-      console.log(response.data);
-      console.log(response.status);
       return response;
     } catch (err: any) {
       return err.response;

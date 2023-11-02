@@ -1,18 +1,21 @@
-import { View } from "react-native";
-import { HeaderComponent } from "../../components/header";
 import { Container, ContainerOptions, Email, Logout, Nome } from "./styled";
-import { Divider } from "@rneui/themed";
-import { useAuth } from "../../hooks/auth";
-import { decodeJsonWebToken } from "../../utils/utils";
-import { useEffect, useState } from "react";
-import serviceUser from "../../service/user";
+import { HeaderComponent } from "../../components/header";
 import { IGetUserByIdResp } from "../../interfaces/user";
-import { TouchableOpacity } from "react-native";
-import UserModal from "../../components/userModal";
+import { useNavigation } from "@react-navigation/native";
 import { ToastComponent } from "../../components/toast";
+import { decodeJsonWebToken } from "../../utils/utils";
+import UserModal from "../../components/userModal";
 import { IconModel } from "../../components/icons";
+import { TouchableOpacity } from "react-native";
+import serviceUser from "../../service/user";
+import { useEffect, useState } from "react";
+import { useAuth } from "../../hooks/auth";
+import { Divider } from "@rneui/themed";
+import { View } from "react-native";
 
 export default function Usuario() {
+    const navigate = useNavigation()
+
     const { userToken } = useAuth();
     const { id } = decodeJsonWebToken(String(userToken));
     const [usuario, setUsuario] = useState<IGetUserByIdResp>();
@@ -68,6 +71,19 @@ export default function Usuario() {
                         />
                         : null
                 }
+
+                <TouchableOpacity onPress={() => navigate.navigate("UpdateHistoric")} style={{ display: "flex", flexDirection: "row", backgroundColor: 'transparent' }}>
+                    <ContainerOptions>
+                        <IconModel
+                            IconColor={"white"}
+                            IconSize={24}
+                            icon='MaterialIcons'
+                            iconName='history'
+                            onPress={() => navigate.navigate("UpdateHistoric") }
+                        />
+                        <Logout style={{ fontSize: 17, marginLeft: -80, marginBottom: 5 }}>Histórico</Logout>
+                    </ContainerOptions>
+                </TouchableOpacity>
 
                 <TouchableOpacity onPress={handleLogout} style={{ display: "flex", flexDirection: "row" }}>
                     <ContainerOptions style={{ backgroundColor: '#DE0300' }}>

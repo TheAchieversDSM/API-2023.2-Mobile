@@ -62,9 +62,9 @@ class Task {
   }
 
   async updateTask(data: IUpdateTask) {
-    try {
-      const response = await api.put(`/task/update/${data.id}`, data);
-      const update = await api.post(`/task/UpdateHistorico/${data.id}/${data.userId}`)      
+    try {      
+      const update = await api.post(`/task/UpdateHistorico/${data.id}/${data.userId}`, data)      
+      const response = await api.put(`/task/update/${data.id}`, data);      
       return { response, update };
     } catch (error) {
       console.error(error);
@@ -74,7 +74,6 @@ class Task {
   async shareTask(taskId: number, usersIds: number[]) {
     try {
       const response = await api.post(`/task/shareTask/${taskId}`, {usersIds});
-      console.log(response)
       return response;
     } catch (error) {
       console.error(error);
@@ -113,6 +112,24 @@ class Task {
   async getHistoricTask(id: number) {
     try {
       const response = await api.get(`/task/getHistoricTask/${id}`);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getHistoricByUser(id: number) {
+    try {
+      const response = await api.get(`/task/getHistoricTaskByUser/${id}`);      
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getHistoricByOwner(id: number) {
+    try {
+      const response = await api.get(`/task/getHisotricTaskByOwner/${id}`);      
       return response.data;
     } catch (error) {
       console.log(error);

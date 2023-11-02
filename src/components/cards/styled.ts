@@ -68,6 +68,7 @@ export const ModalPadrao = styled(Overlay)`
 
 export const ViewScroll = styled(ScrollView)`
   width: 320px;
+  maxHeight: 500px;
 `;
 
 export const ViewScrollComp = styled(ScrollView)`

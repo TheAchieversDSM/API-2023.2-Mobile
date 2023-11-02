@@ -1,31 +1,24 @@
-import { IDynamicHistoric, IHistoricUpdate } from "../../interfaces/updatemodal"
-import serviceTask from "../../service/task"
-import { useEffect, useState } from "react"
-import { Modal, NoUpdate } from "./style"
-import { ScrollView } from "react-native"
-import { Divider } from "@rneui/base"
-import Collapse from "../collapse"
+import { IDynamicHistoric, IHistoricUpdate, IUpdate } from '../../interfaces/updatemodal';
+import { decodeJsonWebToken } from '../../utils/utils';
+import Collapse from '../../components/collapse';
+import { View, ScrollView } from 'react-native';
+import { Container, NoUpdate } from './style';
+import serviceTask from '../../service/task';
+import { useState, useEffect } from 'react';
+import { useAuth } from "../../hooks/auth";
+import { Divider } from '@rneui/base';
 
-interface IUpdate {
-    id: number
-    view: boolean
-    onBackdropPress: () => void
-}
+export default function CreatedByMe() {
+    const { userToken } = useAuth();
+    const { id } = decodeJsonWebToken(String(userToken));
 
-export const UpdateModal = ({ onBackdropPress, ...props }: IUpdate) => {
     const [historic, setHistoric] = useState<IDynamicHistoric>({} as IDynamicHistoric)
     const [names, setNames] = useState<Array<string>>()
-    const [visible, setVisible] = useState(props.view);
-
-    const toggleOverlay = () => {
-        setVisible(!visible)
-        onBackdropPress()
-    };
 
     useEffect(() => {
         async function fetchUpdate() {
             try {
-                const request = await serviceTask.getHistoricTask(props.id)
+                const request = await serviceTask.getHistoricByUser(id)
                 if (request) setHistoric(request)
             } catch (error) {
                 console.log(error);
@@ -33,7 +26,7 @@ export const UpdateModal = ({ onBackdropPress, ...props }: IUpdate) => {
         }
 
         fetchUpdate()
-    }, [props.id])
+    }, [id])
 
     useEffect(() => {
         for (const date in historic) {
@@ -52,25 +45,26 @@ export const UpdateModal = ({ onBackdropPress, ...props }: IUpdate) => {
     }, [historic])
 
     return (
-        <Modal isVisible={visible} onBackdropPress={toggleOverlay}>
-            <ScrollView style={names ? { maxHeight: 500 } : { maxHeight: 100 }}>
+        <>
+            <View style={{ marginTop: 20 }} />
+            <ScrollView style={{ marginBottom: 50 }}>
                 {names ?
                     names?.map(tasks => {
                         return (
                             historic[tasks].map(values => {
                                 return (
-                                    <>
+                                    <Container style={{ margin: 0 }}>
                                         <Collapse {...values} />
                                         <Divider style={{ marginBottom: 10 }} />
-                                    </>
+                                    </Container>
                                 )
                             })
                         )
                     })
                     :
-                    <NoUpdate>Não há histórico de atualização para essa tarefa.</NoUpdate>
+                    <NoUpdate>Não há histórico de atualização para as tarefas.</NoUpdate>
                 }
             </ScrollView>
-        </Modal>
+        </>
     )
 }

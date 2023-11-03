@@ -14,6 +14,7 @@ export interface ICards {
   reload?: boolean;
   users: any[];
   reloadTasksData: () => void;
+  userId: number;
 }
 
 export interface IPriority {

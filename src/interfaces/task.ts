@@ -26,6 +26,7 @@ export interface IGetTasksUserResp {
   customInterval: number;
   timeSpent: number;
   sharedUsersIds?: number[];
+  userId: number;
 }
 
 export interface IHomeReturn {

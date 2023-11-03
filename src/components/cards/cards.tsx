@@ -1,4 +1,4 @@
-import { NativeSyntheticEvent, TextInputChangeEventData, TouchableOpacity, Text, ScrollView, TextInputSubmitEditingEventData } from 'react-native';
+import React, { NativeSyntheticEvent, TextInputChangeEventData, TouchableOpacity, Text, View, TextInputSubmitEditingEventData, ScrollView } from 'react-native';
 import { calculateDateWithTime, checkProgressSubTask, decodeJsonWebToken } from "../../utils/utils";
 import { ICreateSubtasks, IGetSubtasks } from '../../interfaces/subtask';
 import { DropdownComponent } from '../dropdown/dropdown';
@@ -16,7 +16,6 @@ import { CompModal } from '../compartilhado';
 import { useEffect, useState } from 'react';
 import { DatePicker } from '../datepicker';
 import { useAuth } from "../../hooks/auth";
-import React, { View } from 'react-native';
 import { ToastComponent } from '../toast';
 import { HidenMenu } from '../hidenmenu';
 import { Priority } from './priorities';
@@ -420,26 +419,26 @@ export const Cards = (props: ICards) => {
                         />
                         {
                             props.customInterval <= 0 ?
-                            <>
-                                <S.ViewData>
-                                    <S.TaskDescT>Prazo:</S.TaskDescT>
-                                    <DatePicker
-                                        onDateChange={(date) => { setDate(date); setData({ ...data, deadline: date }) }}
-                                        style={{ width: 300, color: 'black' }}
-                                        iconNameL='calendar-o'
-                                        iconColorL='#C74634'
-                                        iconColorR='grey'
-                                        iconNameR='angle-down'
-                                        color='black'
-                                        title='Data de expiração'
-                                        value={date}
-                                    />
-                                    {dateError && (
-                                        <Text style={{ color: 'red', fontSize: 14, marginTop: -10, marginBottom: 10 }}>A data não pode ser menor que o dia de hoje.</Text>
-                                    )}
-                                </S.ViewData>
-                            </>
-                            : null
+                                <>
+                                    <S.ViewData>
+                                        <S.TaskDescT>Prazo:</S.TaskDescT>
+                                        <DatePicker
+                                            onDateChange={(date) => { setDate(date); setData({ ...data, deadline: date }) }}
+                                            style={{ width: 300, color: 'black' }}
+                                            iconNameL='calendar-o'
+                                            iconColorL='#C74634'
+                                            iconColorR='grey'
+                                            iconNameR='angle-down'
+                                            color='black'
+                                            title='Data de expiração'
+                                            value={date}
+                                        />
+                                        {dateError && (
+                                            <Text style={{ color: 'red', fontSize: 14, marginTop: -10, marginBottom: 10 }}>A data não pode ser menor que o dia de hoje.</Text>
+                                        )}
+                                    </S.ViewData>
+                                </>
+                                : null
                         }
                         <S.TaskDescT>Descrição:</S.TaskDescT>
                         <S.InputView>
@@ -533,177 +532,180 @@ export const Cards = (props: ICards) => {
             />
 
             <S.ModalPadrao isVisible={visible} onBackdropPress={toggleOverlay}>
-                <S.GeneralView>
-                    <S.ViewCard>
-                        <S.ViewIcons>
-                            <S.ViewIcon>
-                                {openModal ?
-                                    <HidenMenu option={options} open={handleOpenModal} /> :
-                                    <IconModel
+                <S.GeneralView style={{ maxHeight: 500 }}>
+                    <ScrollView>
+                        <S.ViewCard>
+                            <S.ViewIcons>
+                                <S.ViewIcon>
+                                    {openModal ?
+                                        <HidenMenu option={options} open={handleOpenModal} /> :
+                                        <IconModel
 
-                                        onPress={() => handleOpenModal()}
-                                        IconColor={"#000"}
-                                        IconSize={34}
-                                        icon='AntDesign'
-                                        iconName='ellipsis1'
-                                    />
-                                }
-                                <IconModel
-                                    style={{ marginTop: 3}}
-                                    onPress={ModalCloseFuncion}
-                                    IconColor={"#000"}
-                                    IconSize={25}
-                                    icon='AntDesign'
-                                    iconName='close'
-                                />
-                            </S.ViewIcon>
-                        </S.ViewIcons>
-                        <S.ViewName>
-                            <S.TaskTitle>{props.task}</S.TaskTitle>
-                        </S.ViewName>
-                    </S.ViewCard>
-                    <S.TaskDescT>Tempo Gasto: {calculateDateWithTime(props.timeSpent)}</S.TaskDescT>
-                    <S.TaskDescT>Status: {props.value}</S.TaskDescT>
-                    <Priority priority={props.priority} />
-                    <S.ViewData>
-                        <S.TaskDescT>Expira em: {props.deadline}</S.TaskDescT>
-                    </S.ViewData>
-                    <S.ViewData>
-                        <S.TaskDescT>Descrição:</S.TaskDescT>
-                        <S.TaskDescT>{props.descricao}</S.TaskDescT>
-                    </S.ViewData>
-                    {
-                        props.users.length > 0 ?
-                        <>
-                            <Divider />
-                            <S.ViewComp>
-                                <ListItem.Accordion
-                                    content={
-                                        <S.TaskDescT>Compartilhado com:</S.TaskDescT>
-                                    }
-                                    isExpanded={expanded}
-                                    onPress={() => {
-                                        setExpanded(!expanded);
-                                    }}
-                                >
-                                    {props.users?.map(userId => (
-                                        <ListItem key={userId.id} style={{ marginTop: -20 }}>
-                                            <ListItem.Title>
-                                                <S.TaskComp>{userId.name} - {userId.email}</S.TaskComp>
-                                            </ListItem.Title>
-                                        </ListItem>
-                                    ))}
-                                </ListItem.Accordion>
-                            </S.ViewComp>
-                        </> : null
-                    }
-                    <Divider />
-                    <View style={{ height: 20 }}></View>
-
-                    <S.ViewData>
-                        {subtask?.length === 0 ? (
-                            <S.TaskDescT>Não há subtarefas</S.TaskDescT>
-                        ) : (
-                            <View>
-                                <S.TaskDescT>Subtarefas:</S.TaskDescT>
-                                <S.SubtaskDone style={{ marginTop: -10 }}>
-                                    Total: {checkProgressSubTask(subtask).toFixed(2)}%
-                                </S.SubtaskDone>
-                                <ScrollView style={{ maxHeight: 200, width: 300 }}>
-                                    {subtask &&
-                                        subtask.map((item: IGetSubtasks) => (
-                                            <View key={item.id} style={{ marginBottom: -20 }}>
-                                                {!editingSubtaskId || editingSubtaskId !== item.id ? (
-                                                    <Checkbox
-                                                        label={item.name}
-                                                        check={item.done}
-                                                        onCheck={() => handleCheck(item.id, !item.done)}
-                                                        onLongPress={() => {
-                                                            setEditingSubtaskId(item.id),
-                                                                setSubtaskName(item.name)
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <S.InputView style={{ marginTop: 5, display: 'flex', flexDirection: 'row' }}>
-                                                        <TouchableOpacity
-                                                            onPressOut={() => { setEditingSubtaskId(null), handleSubtaskName(item.id, subtaskName) }}
-                                                            onLongPress={() => { setEditingSubtaskId(null), handleSubtaskName(item.id, subtaskName) }}
-                                                            style={{ paddingVertical: 7, width: 300 }}
-                                                        >
-                                                            <Input
-                                                                placeholder={''}
-                                                                value={subtaskName}
-                                                                onChange={(e) => {
-                                                                    setSubtaskName(e.nativeEvent.text);
-                                                                }}
-                                                                textColor="#000"
-                                                                color="#C74634"
-                                                                iconL="bookmark-o"
-                                                                height={5}
-                                                                fontSize={17}
-                                                            />
-                                                        </TouchableOpacity>
-                                                        <View style={{ marginRight: 30, marginTop: 0, alignItems: 'flex-end' }}>
-                                                            <IconModel
-                                                                onPress={() => { handleDeleteSubtask(item.id), setEditingSubtaskId(null) }}
-                                                                IconColor={"#bd1310"}
-                                                                IconSize={28}
-                                                                icon='FontAwesome'
-                                                                iconName='trash-o'
-                                                            />
-                                                        </View>
-                                                    </S.InputView>
-                                                )}
-                                            </View>
-                                        ))}
-                                </ScrollView>
-                            </View>
-                        )}
-                        {isInputVisible && (
-                            <S.InputView style={{ marginTop: -10 }}>
-                                <Input
-                                    placeholder="Insira a nova subtarefa"
-                                    onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) => setNewSubtask(e.nativeEvent.text)}
-                                    textColor='#000'
-                                    value={newSubtask}
-                                    onSubmitEditing={(e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => handleEnterAddSubtask(e.nativeEvent.text)}
-                                    fontSize={17}
-                                    height={5}
-                                />
-                            </S.InputView>
-                        )}
-                        <TouchableOpacity onPress={handleAddSubtask} style={{ flexDirection: 'row', marginRight: 40, alignSelf: 'flex-end', marginTop: 10 }}>
-                            {isInputVisible ? (
-                                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
-                                    <View style={{ paddingRight: 35 }}>
-                                        <Icon
-                                            name='close'
-                                            color='#de0300'
-                                            size={28}
-                                            onPress={handleCloseSubtask}
+                                            onPress={() => handleOpenModal()}
+                                            IconColor={"#000"}
+                                            IconSize={34}
+                                            icon='AntDesign'
+                                            iconName='ellipsis1'
                                         />
+                                    }
+                                    <IconModel
+                                        style={{ marginTop: 3 }}
+                                        onPress={ModalCloseFuncion}
+                                        IconColor={"#000"}
+                                        IconSize={25}
+                                        icon='AntDesign'
+                                        iconName='close'
+                                    />
+                                </S.ViewIcon>
+                            </S.ViewIcons>
+                            <S.ViewName>
+                                <S.TaskTitle>{props.task}</S.TaskTitle>
+                            </S.ViewName>
+                        </S.ViewCard>
+                        <S.TaskDescT>Tempo Gasto: {calculateDateWithTime(props.timeSpent)}</S.TaskDescT>
+                        <S.TaskDescT>Status: {props.value}</S.TaskDescT>
+                        <Priority priority={props.priority} />
+                        <S.ViewData>
+                            <S.TaskDescT>Expira em: {props.deadline}</S.TaskDescT>
+                        </S.ViewData>
+                        <S.ViewData>
+                            <S.TaskDescT>Descrição:</S.TaskDescT>
+                            <S.TaskDescT>{props.descricao}</S.TaskDescT>
+                        </S.ViewData>
+                        {
+                            props.users.length > 0 ?
+                                <>
+                                    <Divider />
+                                    <S.ViewComp>
+                                        <ListItem.Accordion
+                                            content={
+                                                <S.TaskDescT>Compartilhado com:</S.TaskDescT>
+                                            }
+                                            isExpanded={expanded}
+                                            onPress={() => {
+                                                setExpanded(!expanded);
+                                            }}
+                                        >
+                                            {props.users?.map(userId => (
+                                                <ListItem key={userId.id} style={{ marginTop: -20 }}>
+                                                    <ListItem.Title>
+                                                        <S.TaskComp>{userId.name} - {userId.email}</S.TaskComp>
+                                                    </ListItem.Title>
+                                                </ListItem>
+                                            ))}
+                                        </ListItem.Accordion>
+                                    </S.ViewComp>
+                                </> : null
+                        }
+                        <Divider />
+                        <View style={{ height: 20 }}></View>
+
+                        <S.ViewData>
+                            {subtask?.length === 0 ? (
+                                <S.TaskDescT>Não há subtarefas</S.TaskDescT>
+                            ) : (
+                                <View>
+                                    <S.TaskDescT>Subtarefas:</S.TaskDescT>
+                                    <S.SubtaskDone style={{ marginTop: -10 }}>
+                                        Total: {checkProgressSubTask(subtask).toFixed(2)}%
+                                    </S.SubtaskDone>
+                                    <ScrollView style={{ maxHeight: 200, width: 300 }}>
+                                        {subtask &&
+                                            subtask.map((item: IGetSubtasks) => (
+                                                <View key={item.id} style={{ marginBottom: -20 }}>
+                                                    {!editingSubtaskId || editingSubtaskId !== item.id ? (
+                                                        <Checkbox
+                                                            label={item.name}
+                                                            check={item.done}
+                                                            onCheck={() => handleCheck(item.id, !item.done)}
+                                                            onLongPress={() => {
+                                                                setEditingSubtaskId(item.id),
+                                                                    setSubtaskName(item.name)
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <S.InputView style={{ marginTop: 5, display: 'flex', flexDirection: 'row' }}>
+                                                            <TouchableOpacity
+                                                                onPressOut={() => { setEditingSubtaskId(null), handleSubtaskName(item.id, subtaskName) }}
+                                                                onLongPress={() => { setEditingSubtaskId(null), handleSubtaskName(item.id, subtaskName) }}
+                                                                style={{ paddingVertical: 7, width: 300 }}
+                                                            >
+                                                                <Input
+                                                                    placeholder={''}
+                                                                    value={subtaskName}
+                                                                    onChange={(e) => {
+                                                                        setSubtaskName(e.nativeEvent.text);
+                                                                    }}
+                                                                    textColor="#000"
+                                                                    color="#C74634"
+                                                                    iconL="bookmark-o"
+                                                                    height={5}
+                                                                    fontSize={17}
+                                                                />
+                                                            </TouchableOpacity>
+                                                            <View style={{ marginRight: 30, marginTop: 0, alignItems: 'flex-end' }}>
+                                                                <IconModel
+                                                                    onPress={() => { handleDeleteSubtask(item.id), setEditingSubtaskId(null) }}
+                                                                    IconColor={"#bd1310"}
+                                                                    IconSize={28}
+                                                                    icon='FontAwesome'
+                                                                    iconName='trash-o'
+                                                                />
+                                                            </View>
+                                                        </S.InputView>
+                                                    )}
+                                                </View>
+                                            ))}
+                                    </ScrollView>
+                                </View>
+                            )}
+                            {isInputVisible && (
+                                <S.InputView style={{ marginTop: -10 }}>
+                                    <Input
+                                        placeholder="Insira a nova subtarefa"
+                                        onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) => setNewSubtask(e.nativeEvent.text)}
+                                        textColor='#000'
+                                        value={newSubtask}
+                                        onSubmitEditing={(e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => handleEnterAddSubtask(e.nativeEvent.text)}
+                                        fontSize={17}
+                                        height={5}
+                                    />
+                                </S.InputView>
+                            )}
+                            <TouchableOpacity onPress={handleAddSubtask} style={{ flexDirection: 'row', marginRight: 40, alignSelf: 'flex-end', marginTop: 10 }}>
+                                {isInputVisible ? (
+                                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+                                        <View style={{ paddingRight: 35 }}>
+                                            <Icon
+                                                name='close'
+                                                color='#de0300'
+                                                size={28}
+                                                onPress={handleCloseSubtask}
+                                            />
+                                        </View>
+                                        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginLeft: 0 }}>
+                                            <Icon
+                                                name='check'
+                                                color='grey'
+                                                size={26}
+                                            />
+                                            <Text style={{ color: 'grey', fontSize: 20, marginLeft: 10, fontFamily: theme.FONTS.Poppins_400Regular }}>Confirmar subtarefa</Text>
+                                        </View>
                                     </View>
-                                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginLeft: 0 }}>
+                                ) :
+                                    <>
                                         <Icon
-                                            name='check'
+                                            name='add'
                                             color='grey'
                                             size={26}
                                         />
-                                        <Text style={{ color: 'grey', fontSize: 20, marginLeft: 10, fontFamily: theme.FONTS.Poppins_400Regular }}>Confirmar subtarefa</Text>
-                                    </View>
-                                </View>
-                            ) :
-                                <>
-                                    <Icon
-                                        name='add'
-                                        color='grey'
-                                        size={26}
-                                    />
-                                    <Text style={{ color: 'grey', fontSize: 20, marginLeft: 5, marginBottom: 10, fontFamily: theme.FONTS.Poppins_400Regular }}>Adicionar subtarefa</Text>
-                                </>
-                            }
-                        </TouchableOpacity>
-                    </S.ViewData>
+                                        <Text style={{ color: 'grey', fontSize: 20, marginLeft: 5, marginBottom: 10, fontFamily: theme.FONTS.Poppins_400Regular }}>Adicionar subtarefa</Text>
+                                    </>
+                                }
+                            </TouchableOpacity>
+                        </S.ViewData>
+                    </ScrollView>
+
                 </S.GeneralView>
             </S.ModalPadrao>
 

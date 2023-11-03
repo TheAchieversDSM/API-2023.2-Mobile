@@ -418,23 +418,29 @@ export const Cards = (props: ICards) => {
                             iconName='staro'
                             showIcon={true}
                         />
-                        <S.ViewData>
-                            <S.TaskDescT>Prazo:</S.TaskDescT>
-                            <DatePicker
-                                onDateChange={(date) => { setDate(date); setData({ ...data, deadline: date }) }}
-                                style={{ width: 300, color: 'black' }}
-                                iconNameL='calendar-o'
-                                iconColorL='#C74634'
-                                iconColorR='grey'
-                                iconNameR='angle-down'
-                                color='black'
-                                title='Data de expiração'
-                                value={date}
-                            />
-                            {dateError && (
-                                <Text style={{ color: 'red', fontSize: 14, marginTop: -10, marginBottom: 10 }}>A data não pode ser menor que o dia de hoje.</Text>
-                            )}
-                        </S.ViewData>
+                        {
+                            props.customInterval <= 0 ?
+                            <>
+                                <S.ViewData>
+                                    <S.TaskDescT>Prazo:</S.TaskDescT>
+                                    <DatePicker
+                                        onDateChange={(date) => { setDate(date); setData({ ...data, deadline: date }) }}
+                                        style={{ width: 300, color: 'black' }}
+                                        iconNameL='calendar-o'
+                                        iconColorL='#C74634'
+                                        iconColorR='grey'
+                                        iconNameR='angle-down'
+                                        color='black'
+                                        title='Data de expiração'
+                                        value={date}
+                                    />
+                                    {dateError && (
+                                        <Text style={{ color: 'red', fontSize: 14, marginTop: -10, marginBottom: 10 }}>A data não pode ser menor que o dia de hoje.</Text>
+                                    )}
+                                </S.ViewData>
+                            </>
+                            : null
+                        }
                         <S.TaskDescT>Descrição:</S.TaskDescT>
                         <S.InputView>
                             <Input

@@ -39,6 +39,7 @@ export default function Home() {
   const [dateTasks, setDateTasks] = useState<IHomeReturn>({} as IHomeReturn);
   const { userToken } = useAuth();
   const { id } = decodeJsonWebToken(String(userToken));
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     setDateTasks({} as IHomeReturn)
@@ -57,7 +58,12 @@ export default function Home() {
     }
 
     fetchUserDateTasks();
-  }, [selected]);
+  }, [selected, reload]);
+
+  const reloadTasksData = () => {
+    setReload(!reload);
+};
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -132,11 +138,13 @@ export default function Home() {
                         {
                           dateTasks?.data?.recorrente?.length > 0 ? (
                             <>
-                              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Tarefas recorrentes</Text>
+                              <Text style={{ fontSize: 18, fontFamily: theme.FONTS.Poppins_600SemiBold, }}>Tarefas recorrentes</Text>
                               {
                                 dateTasks.data.recorrente.map((task, index) => (
                                   task.deadline === String(selected) && (
                                     <ViewCards
+                                      reloadTasksData={reloadTasksData}
+                                      reload={reload}
                                       key={task.id}
                                       {...task}
                                     />
@@ -153,11 +161,13 @@ export default function Home() {
                         {
                           dateTasks?.data?.naoRecorrente?.length > 0 ? (
                             <>
-                              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Tarefas não recorrentes</Text>
+                              <Text style={{ fontSize: 18, fontFamily: theme.FONTS.Poppins_600SemiBold }}>Tarefas não recorrentes</Text>
                               {
                                 dateTasks.data.naoRecorrente.map((task, index) => (
                                   task.deadline === String(selected) && (
                                     <ViewCards
+                                      reloadTasksData={reloadTasksData}
+                                      reload={reload}
                                       key={task.id}
                                       {...task}
                                     />
@@ -171,12 +181,12 @@ export default function Home() {
                         }
                       </>
                     ) : (
-                      <NoTasksText>Não há tarefas para esta data</NoTasksText>
+                      <NoTasksText style={{fontFamily: theme.FONTS.Poppins_400Regular,}}>Não há tarefas para esta data</NoTasksText>
                     )
                   }
                 </ScrollView>
               </> :
-              <NoTasksText>Selecione uma data</NoTasksText>
+              <NoTasksText style={{fontFamily: theme.FONTS.Poppins_400Regular,}}>Selecione uma data</NoTasksText>
             }
           </Box>
         </ViewContainer>

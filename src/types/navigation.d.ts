@@ -5,6 +5,7 @@ export declare global {
       SignUp: undefined;
       Home: undefined;
       CreateTask: undefined;
+      UpdateHistoric: undefined;
       ToDo: undefined;
       Tabs: {
         screen: 'Home' | 'ToDo' | 'CreateTask' | 'Dashboard';

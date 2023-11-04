@@ -1,4 +1,4 @@
-import {SafeAreaView} from "react-native";
+import {SafeAreaView, View} from "react-native";
 import styled from "styled-components";
 import {Text} from "@rneui/themed";
 
@@ -8,6 +8,21 @@ export const Container = styled(SafeAreaView)`
   justify-content: flex-start;
   width: 100%;
   padding: 20px;
+`;
+
+export const Column1 = styled(View)`
+  width: 70%; /* Defina a largura máxima desejada, como 50% para duas colunas */
+`;
+
+export const Column2 = styled(View)`
+  margin-top: 15px;
+  width: 30%; /* Defina a largura máxima desejada, como 50% para duas colunas */
+`;
+
+export const Filtro = styled(View)`
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
 `;
 
 export const TextStatus1 = styled(Text)`

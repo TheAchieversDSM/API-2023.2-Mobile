@@ -87,6 +87,7 @@ export default function Dashboard() {
                                 borderColor='#9a9999'
                                 color='#fff'
                                 width={160}
+                                showIcon={true}    
                             />
                             <View style={{ marginBottom: -40 }}></View>
                         </Column>
@@ -102,6 +103,7 @@ export default function Dashboard() {
                                 borderColor='#9a9999'
                                 color='#fff'
                                 width={160}
+                                showIcon={true}
                             />
                             <View style={{ marginBottom: -40 }}></View>
                         </Column>

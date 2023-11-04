@@ -8,8 +8,11 @@ export interface ICards {
   priority: string;
   deadline: string;
   timeSpent: number;
+  statusEnum:  "TO DO" | "DOING" | "DONE" | "EXPIRED";
   customInterval: number;
+  sharedUsersIds: any[];
   reload?: boolean;
+  users: any[];
   reloadTasksData: () => void;
 }
 

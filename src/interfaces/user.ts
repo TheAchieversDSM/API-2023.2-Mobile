@@ -9,6 +9,11 @@ export interface IGetUser {
   userId: number;
 }
 
+export interface IGetAllUsers {
+  userId: number;
+  email: string;
+}
+
 export interface IGetUserByIdResp {
   name: string;
   email: string;

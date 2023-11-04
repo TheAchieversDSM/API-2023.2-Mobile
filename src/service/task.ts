@@ -62,8 +62,18 @@ class Task {
   }
 
   async updateTask(data: IUpdateTask) {
+    try {      
+      const update = await api.post(`/task/UpdateHistorico/${data.id}/${data.userId}`, data)      
+      const response = await api.put(`/task/update/${data.id}`, data);      
+      return { response, update };
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async shareTask(taskId: number, usersIds: number[]) {
     try {
-      const response = await api.put(`/task/update/${data.id}`, data);
+      const response = await api.post(`/task/shareTask/${taskId}`, {usersIds});
       return response;
     } catch (error) {
       console.error(error);
@@ -93,6 +103,33 @@ class Task {
   async getYearTime(id: number, year: number) {
     try {
       const response = await api.get(`/task/getTimeSpentMonthly/${id}/${year}`);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getHistoricTask(id: number) {
+    try {
+      const response = await api.get(`/task/getHistoricTask/${id}`);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getHistoricByUser(id: number) {
+    try {
+      const response = await api.get(`/task/getHistoricTaskByUser/${id}`);      
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getHistoricByOwner(id: number) {
+    try {
+      const response = await api.get(`/task/getHisotricTaskByOwner/${id}`);      
       return response.data;
     } catch (error) {
       console.log(error);

@@ -63,14 +63,14 @@ export const DropdownComponent = (props: IDropdown) => {
             onChange={(item) => {
                 setValue(item)
             }}
-            renderLeftIcon={() => (
+            renderLeftIcon={() => (props.showIcon ? (
                 <AntDesign
                     style={styles.icon}
                     color={props.iconColor || 'black'}
                     name={props.iconName || 'Safety'}
                     size={props.iconSize || 25}
                 />
-            )}
+            ) : null)}
             renderItem={renderItem}
         />
     );

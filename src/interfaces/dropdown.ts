@@ -19,6 +19,7 @@ export interface IDropdown {
     borderColor?: string,
     width?: number,
     onValueChange: (value: string) => void;
+    showIcon: boolean;
 }
 
 export interface IItem {

@@ -23,6 +23,7 @@ import { Divider } from '@rneui/base';
 import { Icon } from '@rneui/themed';
 import { ToastComponent } from '../../components/toast';
 import { TextInputSubmitEditingEventData } from 'react-native';
+import { useTheme } from 'styled-components';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -46,6 +47,8 @@ export default function CreateTask() {
     const [subtasks, setSubtasks] = useState<ICreateSubtasks[]>([]);
 
     const [newSubtask, setNewSubtask] = useState('');
+
+    const theme = useTheme()
 
     const handleCloseSubtask = () => {
         setNewSubtask('');
@@ -80,7 +83,7 @@ export default function CreateTask() {
         done: false,
         userId: id,
         customInterval: 0,
-        last_execution: '2023-02-02'
+        lastExecution: '2023-02-02'
     })
 
     const [errorMessage, setErrorMessage] = useState({
@@ -115,7 +118,7 @@ export default function CreateTask() {
             done: false,
             userId: id,
             customInterval: 0,
-            last_execution: '2023-02-02'
+            lastExecution: '2023-02-02'
         })
 
         setRecurrencyError(false)
@@ -193,7 +196,7 @@ export default function CreateTask() {
                     done: false,
                     userId: id,
                     customInterval: 0,
-                    last_execution: '2023-02-02'
+                    lastExecution: '2023-02-02'
                 })
 
                 setPriorities(undefined)
@@ -256,6 +259,7 @@ return (
                         iconColor='#de0300'
                         iconSize={28}
                         width={335}
+                        showIcon={true}
                     />
 
                     {prio ? <ErrorText>Prioridade é obrigatória</ErrorText> : null}
@@ -355,7 +359,7 @@ return (
                                     color='#fff'
                                     size={26}
                                 />
-                                <Text style={{ color: '#fff', fontSize: 20, marginLeft: 10 }}>Confirmar subtarefa</Text>
+                                <Text style={{ color: '#fff', fontSize: 20, marginLeft: 10, fontFamily: theme.FONTS.Poppins_400Regular }}>Confirmar subtarefa</Text>
                             </View>
                         </View>
                     ) :
@@ -365,7 +369,7 @@ return (
                                 color='#fff'
                                 size={30}
                             />
-                            <Text style={{ color: '#fff', fontSize: 20, marginLeft: 10 }}>Adicionar subtarefa</Text>
+                            <Text style={{ color: '#fff', fontSize: 20, marginLeft: 10, fontFamily: theme.FONTS.Poppins_400Regular }}>Adicionar subtarefa</Text>
                         </>
                     }
 

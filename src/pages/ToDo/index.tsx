@@ -160,7 +160,8 @@ export default function ToDo() {
                                 deadline={task.deadline}
                                 sharedUsersIds={task.sharedUsersIds as number[]}
                                 priority={task.priority}
-                                users={task.users}  
+                                users={task.users}
+                                userId={task.userId}  
                             />
                         )
                         )}
@@ -182,6 +183,7 @@ export default function ToDo() {
                                 id={task.id}
                                 key={task.id}
                                 task={task.name}
+                                userId={task.userId}
                                 statusEnum={task.status}
                                 descricao={task.description}
                                 status='warning'
@@ -214,6 +216,7 @@ export default function ToDo() {
                                 key={task.id}
                                 task={task.name}
                                 descricao={task.description}
+                                userId={task.userId}
                                 statusEnum={task.status}
                                 status='success'
                                 customInterval={task.customInterval}

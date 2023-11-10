@@ -537,17 +537,22 @@ export const Cards = (props: ICards) => {
                         <S.ViewCard>
                             <S.ViewIcons>
                                 <S.ViewIcon>
-                                    {openModal ?
-                                        <HidenMenu option={options} open={handleOpenModal} /> :
-                                        <IconModel
-
-                                            onPress={() => handleOpenModal()}
-                                            IconColor={"#000"}
-                                            IconSize={34}
-                                            icon='AntDesign'
-                                            iconName='ellipsis1'
-                                        />
-                                    }
+                                    {openModal ? (
+                                            <HidenMenu option={options} open={handleOpenModal} />
+                                        ) : (
+                                            options.map((option: any, index: any) => (
+                                                option.name === "trash-o" && props.userId !== id || option.name === "users" && props.userId !== id ? null : (
+                                                    <IconModel
+                                                        key={index}
+                                                        onPress={option.function} 
+                                                        IconColor={option.color}
+                                                        IconSize={option.size}
+                                                        icon={option.icon}
+                                                        iconName={option.name}
+                                                    />
+                                                )
+                                            ))
+                                        )}
                                     <IconModel
                                         style={{ marginTop: 3 }}
                                         onPress={ModalCloseFuncion}
@@ -573,7 +578,7 @@ export const Cards = (props: ICards) => {
                             <S.TaskDescT>{props.descricao}</S.TaskDescT>
                         </S.ViewData>
                         {
-                            props.users.length > 0 ?
+                            props.users?.length > 0 ?
                                 <>
                                     <Divider />
                                     <S.ViewComp>

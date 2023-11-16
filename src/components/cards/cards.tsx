@@ -172,7 +172,7 @@ export const Cards = (props: ICards) => {
 
     const handleDelete = async () => {
         try {
-            await serviceTask.deleteTask(props.id)
+            await serviceTask.deleteTask(props.id, id)
 
             ToastComponent({ type: 'error', title: 'Tarefa deletada!' })
 

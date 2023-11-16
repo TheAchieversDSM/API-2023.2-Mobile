@@ -24,7 +24,6 @@ export default function MyTasks() {
             try {
                 const request = await serviceTask.getHistoricByOwner(id)
                 if (request) setHistoric(request)
-                console.log("EDIT",request)
             } catch (error) {
                 console.log(error);
             }
@@ -34,7 +33,6 @@ export default function MyTasks() {
             try {
                 const request = await serviceTask.getHistoricDeleteByUser(id)
                 if (request) setDeleted(request)
-               console.log("DELETE",request)
             } catch (error) {
                 console.log(error);
             }

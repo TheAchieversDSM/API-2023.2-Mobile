@@ -13,7 +13,7 @@ export default function Collapse(props: IHistoricUpdate, margin?: number) {
             <ListItem.Accordion
                 content={
                     <ListItem.Content>
-                        <ListItem.Title style={{ fontSize: 18, fontFamily: "Poppins_400Regular" }}>{date.toLocaleString("pt-br")}</ListItem.Title>
+                        <ListItem.Title style={{ fontSize: 18, fontFamily: "Poppins_400Regular" }}>Editado - {date.toLocaleString("pt-br")}</ListItem.Title>
                         <ListItem.Subtitle style={{ fontSize: 16, fontFamily: "Poppins_300Light" }}>Ver mais detalhes</ListItem.Subtitle>
                     </ListItem.Content>
                 }

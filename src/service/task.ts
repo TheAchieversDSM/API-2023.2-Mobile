@@ -91,9 +91,10 @@ class Task {
     }
   }
 
-  async deleteTask(id: number) {
+  async deleteTask(id: number, userId: number) {
     try {
-      const response = await api.delete(`/task/delete/${id}`);
+      const response = await api.delete(`/task/delete/${id}/${userId}`);
+      console.log("Exclusão realizada com sucesso")
       return response;
     } catch (error) {
       console.error(error);
@@ -130,6 +131,15 @@ class Task {
   async getHistoricByOwner(id: number) {
     try {
       const response = await api.get(`/task/getHisotricTaskByOwner/${id}`);      
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getHistoricDeleteByUser(id: number) {
+    try {
+      const response = await api.get(`/task/getDeleteHistoricTaskByUser/${id}`);      
       return response.data;
     } catch (error) {
       console.log(error);

@@ -1,5 +1,6 @@
-import React, { NativeSyntheticEvent, TextInputChangeEventData, TouchableOpacity, Text, View, TextInputSubmitEditingEventData, ScrollView } from 'react-native';
+import React, { NativeSyntheticEvent, TextInputChangeEventData, TouchableOpacity, Text, View, TextInputSubmitEditingEventData, ScrollView, Image } from 'react-native';
 import { calculateDateWithTime, checkProgressSubTask, decodeJsonWebToken } from "../../utils/utils";
+import * as DocumentPicker from 'expo-document-picker';
 import { ICreateSubtasks, IGetSubtasks } from '../../interfaces/subtask';
 import { DropdownComponent } from '../dropdown/dropdown';
 import { Options } from '../../interfaces/hidenmenu';
@@ -13,7 +14,7 @@ import serviceTask from "../../service/task";
 import { TimerModal } from '../timecontroll';
 import { UpdateModal } from '../updateModal';
 import { CompModal } from '../compartilhado';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { DatePicker } from '../datepicker';
 import { useAuth } from "../../hooks/auth";
 import { ToastComponent } from '../toast';
@@ -24,6 +25,7 @@ import { ViewScroll } from './styled';
 import { IconModel } from '../icons';
 import Input from '../input/input';
 import * as S from './styled';
+import { File } from '../../interfaces/file';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -308,10 +310,59 @@ export const Cards = (props: ICards) => {
         setUpdateModal(!updateModal)
     }
 
+    const [files, setFiles] = useState<File[]>([]);
+
+    const [upload, setUplaod] = useState<boolean>(false)
+    const handlePickFile = async () => {
+        let result = await DocumentPicker.getDocumentAsync({ multiple: true });
+        if (result.assets) {
+            const uploadFiles: DocumentPicker.DocumentPickerAsset[] = result.assets;
+            const mapFilesAsync = async (): Promise<File[]> => {
+                const mappedFiles: File[] = await Promise.all(
+                    uploadFiles.map(async (file) => {
+                        try {
+                            const response = await fetch(file.uri);
+                            const blob = await response.blob();
+                            const mappedFile: File = {
+                                buffer: blob,
+                                mimetype: file.mimeType || '',
+                                originalname: file.name,
+                                size: file.size || 0,
+                            };
+                            return mappedFile;
+                        } catch (error) {
+                            console.error('Error mapping file:', error);
+                            throw error;
+                        }
+                    })
+                );
+
+                return mappedFiles;
+            };
+
+            const mappedFiles = await mapFilesAsync();
+            setFiles(prevFiles => {
+                const newFiles = [...prevFiles, ...mappedFiles];
+                return newFiles;
+            });
+            setUplaod(true)
+        }
+    };
+
+    useEffect(() => {
+        console.log(files, props.id)
+        const uploadFile = async () => {
+            await serviceTask.uploadFiles(props.id, files)
+        }
+        uploadFile()
+        setFiles([])
+        setUplaod(false)
+    }, [upload])
 
     const options: Options[] = [
         { color: "#bd1310", name: "trash-o", size: 27, function: ModalDeleteFuncition, icon: "FontAwesome" },
         { color: "#000", name: "history", size: 30, function: handleOpenUpdateModal, icon: "MaterialIcons" },
+        { color: "#000", name: "upload", size: 26, function: handlePickFile, icon: "AntDesign" },
         { color: "#000", name: "hourglass-o", size: 23, function: toggleTimerModal, icon: "FontAwesome" },
         { color: "#000", name: "edit-2", size: 23, function: ModalEditFunction, icon: "Feather" },
         { color: "#000", name: "users", size: 23, function: toggleCompModal, icon: "Feather" },
@@ -538,21 +589,21 @@ export const Cards = (props: ICards) => {
                             <S.ViewIcons>
                                 <S.ViewIcon>
                                     {openModal ? (
-                                            <HidenMenu option={options} open={handleOpenModal} />
-                                        ) : (
-                                            options.map((option: any, index: any) => (
-                                                option.name === "trash-o" && props.userId !== id || option.name === "users" && props.userId !== id ? null : (
-                                                    <IconModel
-                                                        key={index}
-                                                        onPress={option.function} 
-                                                        IconColor={option.color}
-                                                        IconSize={option.size}
-                                                        icon={option.icon}
-                                                        iconName={option.name}
-                                                    />
-                                                )
-                                            ))
-                                        )}
+                                        <HidenMenu option={options} open={handleOpenModal} />
+                                    ) : (
+                                        options.map((option: any, index: any) => (
+                                            option.name === "trash-o" && props.userId !== id || option.name === "users" && props.userId !== id ? null : (
+                                                <IconModel
+                                                    key={index}
+                                                    onPress={option.function}
+                                                    IconColor={option.color}
+                                                    IconSize={option.size}
+                                                    icon={option.icon}
+                                                    iconName={option.name}
+                                                />
+                                            )
+                                        ))
+                                    )}
                                     <IconModel
                                         style={{ marginTop: 3 }}
                                         onPress={ModalCloseFuncion}
@@ -576,6 +627,17 @@ export const Cards = (props: ICards) => {
                         <S.ViewData>
                             <S.TaskDescT>Descrição:</S.TaskDescT>
                             <S.TaskDescT>{props.descricao}</S.TaskDescT>
+
+                            {/* {files ?
+                                files.map((file) => {
+                                    return (
+                                        <>
+                                            <Image style={{ height: 200, width: 200 }} key={file.url} source={{ uri: file.url }} />
+                                        </>
+                                    )
+                                })
+                                : null
+                            } */}
                         </S.ViewData>
                         {
                             props.users?.length > 0 ?

@@ -6,9 +6,10 @@ import {
   IUpdateTask,
   IUpdateTimeSpent,
 } from "../interfaces/task";
-import {AxiosError, AxiosResponse} from "axios";
-import {comparePriority} from "../utils/utils";
-import {api} from "./api";
+import { AxiosError, AxiosResponse } from "axios";
+import { comparePriority } from "../utils/utils";
+import { api } from "./api";
+import { File } from "../interfaces/file";
 
 class Task {
   async createTask(data: ICreateTasks) {
@@ -19,16 +20,16 @@ class Task {
           if (res.status == 200) {
             const taskId = res.data.data.id;
 
-            return {taskId, erro: "", validacao: true};
+            return { taskId, erro: "", validacao: true };
           } else {
-            return {erro: "Erro desconhecido", validacao: false};
+            return { erro: "Erro desconhecido", validacao: false };
           }
         })
         .catch((err: AxiosError | any) => {
           if (err.response) {
             if (err.response.status === 409) {
               const authenticationError = err.response.data.error;
-              return {erro: authenticationError, validacao: false};
+              return { erro: authenticationError, validacao: false };
             }
           }
         });
@@ -62,9 +63,9 @@ class Task {
   }
 
   async updateTask(data: IUpdateTask) {
-    try {      
-      const update = await api.post(`/task/UpdateHistorico/${data.id}/${data.userId}`, data)      
-      const response = await api.put(`/task/update/${data.id}`, data);      
+    try {
+      const update = await api.post(`/task/UpdateHistorico/${data.id}/${data.userId}`, data)
+      const response = await api.put(`/task/update/${data.id}`, data);
       return { response, update };
     } catch (error) {
       console.error(error);
@@ -73,7 +74,7 @@ class Task {
 
   async shareTask(taskId: number, usersIds: number[]) {
     try {
-      const response = await api.post(`/task/shareTask/${taskId}`, {usersIds});
+      const response = await api.post(`/task/shareTask/${taskId}`, { usersIds });
       return response;
     } catch (error) {
       console.error(error);
@@ -120,7 +121,7 @@ class Task {
 
   async getHistoricByUser(id: number) {
     try {
-      const response = await api.get(`/task/getHistoricTaskByUser/${id}`);      
+      const response = await api.get(`/task/getHistoricTaskByUser/${id}`);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -129,10 +130,20 @@ class Task {
 
   async getHistoricByOwner(id: number) {
     try {
-      const response = await api.get(`/task/getHisotricTaskByOwner/${id}`);      
+      const response = await api.get(`/task/getHisotricTaskByOwner/${id}`);
       return response.data;
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async uploadFiles(id: number, data: any) {
+    try {      
+      const response = await api.post(`/task/fileUpload/${id}`, data);
+      return response.data;
+    } catch (error) {
+      console.error('Error uploading files:', error);
+      throw error;
     }
   }
 }

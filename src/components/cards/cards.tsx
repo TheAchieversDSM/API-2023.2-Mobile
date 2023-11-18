@@ -340,23 +340,28 @@ export const Cards = (props: ICards) => {
                 return mappedFiles;
             };
 
-            const mappedFiles = await mapFilesAsync();
-            setFiles(prevFiles => {
-                const newFiles = [...prevFiles, ...mappedFiles];
-                return newFiles;
+            await mapFilesAsync().then((files) => {
+                setFiles(prevFiles => {
+                    const newFiles = [...prevFiles, ...files];
+                    return newFiles;
+                });
             });
             setUplaod(true)
         }
     };
 
     useEffect(() => {
-        console.log(files, props.id)
         const uploadFile = async () => {
+            if (!upload && files.length === 0) {
+                return
+            }
             await serviceTask.uploadFiles(props.id, files)
         }
-        uploadFile()
         setFiles([])
         setUplaod(false)
+        return () => {
+            uploadFile()
+        }
     }, [upload])
 
     const options: Options[] = [

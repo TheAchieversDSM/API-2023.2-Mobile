@@ -6,12 +6,51 @@ import {
   IUpdateTask,
   IUpdateTimeSpent,
 } from "../interfaces/task";
-import { AxiosError, AxiosResponse } from "axios";
-import { comparePriority } from "../utils/utils";
-import { api } from "./api";
-import { File } from "../interfaces/file";
+import {AxiosError, AxiosResponse} from "axios";
+import {comparePriority} from "../utils/utils";
+import {api} from "./api";
+import {File, ISFile} from "../interfaces/file";
+import {
+  getDownloadURL,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+import {storage} from "./firebase";
 
 class Task {
+
+  private async generateFileName(file: File) {
+    const now = new Date();
+    const unixTime = Math.floor(now.getTime() / 1000);
+    const fileSplited = file.originalname.split(".");
+    return `${fileSplited[0]}${unixTime}.${fileSplited[1]}`;
+  }
+
+  private async uploadFile(file: File, name: string) {
+    const fileRef = ref(storage, name);
+    const uploadTask = uploadBytesResumable(fileRef, file.buffer);
+    return new Promise(async (resolve, reject) => {
+      try {
+        uploadTask.on(
+          "state_changed",
+          null,
+          (error) => reject(error),
+          async () => {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            resolve({
+              fileName: name,
+              fileSize: file.size,
+              fileType: name.split(".")[1],
+              url: downloadURL,
+            });
+          }
+        );
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
   async createTask(data: ICreateTasks) {
     try {
       return await api
@@ -20,16 +59,16 @@ class Task {
           if (res.status == 200) {
             const taskId = res.data.data.id;
 
-            return { taskId, erro: "", validacao: true };
+            return {taskId, erro: "", validacao: true};
           } else {
-            return { erro: "Erro desconhecido", validacao: false };
+            return {erro: "Erro desconhecido", validacao: false};
           }
         })
         .catch((err: AxiosError | any) => {
           if (err.response) {
             if (err.response.status === 409) {
               const authenticationError = err.response.data.error;
-              return { erro: authenticationError, validacao: false };
+              return {erro: authenticationError, validacao: false};
             }
           }
         });
@@ -64,9 +103,12 @@ class Task {
 
   async updateTask(data: IUpdateTask) {
     try {
-      const update = await api.post(`/task/UpdateHistorico/${data.id}/${data.userId}`, data)
+      const update = await api.post(
+        `/task/UpdateHistorico/${data.id}/${data.userId}`,
+        data
+      );
       const response = await api.put(`/task/update/${data.id}`, data);
-      return { response, update };
+      return {response, update};
     } catch (error) {
       console.error(error);
     }
@@ -74,7 +116,7 @@ class Task {
 
   async shareTask(taskId: number, usersIds: number[]) {
     try {
-      const response = await api.post(`/task/shareTask/${taskId}`, { usersIds });
+      const response = await api.post(`/task/shareTask/${taskId}`, {usersIds});
       return response;
     } catch (error) {
       console.error(error);
@@ -137,12 +179,25 @@ class Task {
     }
   }
 
-  async uploadFiles(id: number, data: any) {
-    try {      
-      const response = await api.post(`/task/fileUpload/${id}`, data);
+  async uploadFiles(id: number, data: File[]) {
+    try {
+      const files = await Promise.all(
+        data.map(async (file) => {
+          try {
+            const name = await this.generateFileName(file);
+            const uploadedFile = await this.uploadFile(file, name);
+            return uploadedFile;
+          } catch (error) {
+            console.error(`Error uploading file ${name}: ${error}`);
+            return null;
+          }
+        })
+      );
+      const filteredFiles = files.filter((file) => file !== null);
+      const response = await api.post(`/task/fileUpload/${id}`, filteredFiles);
       return response.data;
     } catch (error) {
-      console.error('Error uploading files:', error);
+      console.error("Error uploading files:", error);
       throw error;
     }
   }

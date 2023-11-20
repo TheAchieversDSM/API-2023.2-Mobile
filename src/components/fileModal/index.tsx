@@ -40,21 +40,21 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
         const fileUri = FileSystem.documentDirectory + name;
 
         try {
-          const downloadObject = FileSystem.createDownloadResumable(
-            url,
-            fileUri
-          );
-          const result = await downloadObject.downloadAsync();
-          if(!result) return
-          FileSystem.getContentUriAsync(result?.uri).then(cUri => {
-            console.log(cUri);
-            IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
-              data: cUri,
-              flags: 1,
+            const downloadObject = FileSystem.createDownloadResumable(
+                url,
+                fileUri
+            );
+            const result = await downloadObject.downloadAsync();
+            if (!result) return
+            FileSystem.getContentUriAsync(result?.uri).then(cUri => {
+                console.log(cUri);
+                IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
+                    data: cUri,
+                    flags: 1,
+                });
             });
-          });
         } catch (error) {
-          console.error('Erro ao baixar o arquivo:', error);
+            console.error('Erro ao baixar o arquivo:', error);
         }
     }
 
@@ -112,10 +112,13 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
 
     useEffect(() => {
         const uploadFile = async () => {
-            if (!upload && files.length === 0) {
+            if (!upload && files.length === 0 && !filesTask.id) {
                 return
             }
-            await serviceTask.uploadFiles(Number(props.id), files)
+            const response = await serviceTask.uploadFiles(Number(filesTask.id), files)
+            if (response) {
+                setReload(true)
+            }
         }
         setFiles([])
         setUplaod(false)
@@ -125,6 +128,7 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
     }, [upload])
 
     useEffect(() => {
+        setReload(false)
         async function fetchFile() {
             try {
                 const request = await serviceTask.getTaskUser(props.id)
@@ -182,35 +186,35 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
                                         return (
                                             <>
                                                 {imgTypes.includes(file.fileType) ?
-                                                        <Card containerStyle={{ width: 200, alignSelf: 'center', marginRight: 10 }} key={file.id}>
-                                                            <Card.Title style={{ fontFamily: theme.FONTS.Poppins_600SemiBold, fontSize: 16 }}>{file.fileName.split('.')[0]}</Card.Title>
+                                                    <Card containerStyle={{ width: 200, alignSelf: 'center', marginRight: 10 }} key={file.id}>
+                                                        <Card.Title style={{ fontFamily: theme.FONTS.Poppins_600SemiBold, fontSize: 16 }}>{file.fileName.split('.')[0]}</Card.Title>
 
-                                                            <Card.Divider />
+                                                        <Card.Divider />
 
-                                                            <Card.Image style={{ padding: 0, width: '100%', height: 100 }} source={{ uri: file.url }} />
+                                                        <Card.Image style={{ padding: 0, width: '100%', height: 100 }} source={{ uri: file.url }} />
 
-                                                            <Text style={{ marginBottom: 10, fontFamily: theme.FONTS.Poppins_600SemiBold }}>
-                                                                {file.fileType} | {(file.fileSize / (1024 * 1024)).toFixed(2)} MB
-                                                            </Text>
+                                                        <Text style={{ marginBottom: 10, fontFamily: theme.FONTS.Poppins_600SemiBold }}>
+                                                            {file.fileType} | {(file.fileSize / (1024 * 1024)).toFixed(2)} MB
+                                                        </Text>
 
-                                                            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
-                                                                <IconModel
-                                                                    onPress={() => handleDownloadFile(file.url, file.fileName)}
-                                                                    iconName={'download'}
-                                                                    icon={'Feather'}
-                                                                    IconColor={'black'}
-                                                                    IconSize={30}
-                                                                />
+                                                        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+                                                            <IconModel
+                                                                onPress={() => handleDownloadFile(file.url, file.fileName)}
+                                                                iconName={'download'}
+                                                                icon={'Feather'}
+                                                                IconColor={'black'}
+                                                                IconSize={30}
+                                                            />
 
-                                                                <IconModel
-                                                                    onPress={() => handleDeleteFile(props.idTask, file.id !== undefined ? file.id : 0)}
-                                                                    iconName={'trash-o'}
-                                                                    icon={'FontAwesome'}
-                                                                    IconColor={'#DE0300'}
-                                                                    IconSize={30}
-                                                                />
-                                                            </View>
-                                                        </Card>
+                                                            <IconModel
+                                                                onPress={() => handleDeleteFile(props.idTask, file.id !== undefined ? file.id : 0)}
+                                                                iconName={'trash-o'}
+                                                                icon={'FontAwesome'}
+                                                                IconColor={'#DE0300'}
+                                                                IconSize={30}
+                                                            />
+                                                        </View>
+                                                    </Card>
                                                     : null
                                                 }
                                             </>)
@@ -231,33 +235,33 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
                                         return (
                                             <>
                                                 {!imgTypes.includes(file.fileType) ?
-                                                        <Card containerStyle={{ width: 200, alignSelf: 'center', marginRight: 10 }} key={file.id}>
-                                                            <Card.Title style={{ fontFamily: 'Poppins_600Regular', fontSize: 16 }}>{file.fileName.split('.')[0]}</Card.Title>
+                                                    <Card containerStyle={{ width: 200, alignSelf: 'center', marginRight: 10 }} key={file.id}>
+                                                        <Card.Title style={{ fontFamily: 'Poppins_600Regular', fontSize: 16 }}>{file.fileName.split('.')[0]}</Card.Title>
 
-                                                            <Card.Divider />
+                                                        <Card.Divider />
 
-                                                            <Text style={{ marginBottom: 10, fontFamily: 'Poppins_600Regular' }}>
-                                                                {file.fileType} | {(file.fileSize / (1024 * 1024)).toFixed(2)} MB
-                                                            </Text>
+                                                        <Text style={{ marginBottom: 10, fontFamily: 'Poppins_600Regular' }}>
+                                                            {file.fileType} | {(file.fileSize / (1024 * 1024)).toFixed(2)} MB
+                                                        </Text>
 
-                                                            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
-                                                                <IconModel
-                                                                    onPress={() => handleDownloadFile(file.url, file.fileName)}
-                                                                    iconName={'download'}
-                                                                    icon={'Feather'}
-                                                                    IconColor={'black'}
-                                                                    IconSize={30}
-                                                                />
+                                                        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+                                                            <IconModel
+                                                                onPress={() => handleDownloadFile(file.url, file.fileName)}
+                                                                iconName={'download'}
+                                                                icon={'Feather'}
+                                                                IconColor={'black'}
+                                                                IconSize={30}
+                                                            />
 
-                                                                <IconModel
-                                                                    onPress={() => handleDeleteFile(props.idTask, file.id !== undefined ? file.id : 0)}
-                                                                    iconName={'trash-o'}
-                                                                    icon={'FontAwesome'}
-                                                                    IconColor={'#DE0300'}
-                                                                    IconSize={30}
-                                                                />
-                                                            </View>
-                                                        </Card>
+                                                            <IconModel
+                                                                onPress={() => handleDeleteFile(props.idTask, file.id !== undefined ? file.id : 0)}
+                                                                iconName={'trash-o'}
+                                                                icon={'FontAwesome'}
+                                                                IconColor={'#DE0300'}
+                                                                IconSize={30}
+                                                            />
+                                                        </View>
+                                                    </Card>
                                                     : null
                                                 }
                                             </>)

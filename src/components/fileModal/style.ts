@@ -11,12 +11,12 @@ export const Modal = styled(Overlay)`
 export const NoUpdate = styled(Text)`
   padding: 20px;
   font-size: 18px;
-  font-family: 'Poppins_400Regular';
+  font-family: '${(props) => props.theme.FONTS.Poppins_400Regular}';
 `
 
 export const Title = styled(Text)`
   margin-left: 15px;
   margin-top: 10px;
   font-size: 22px;
-  font-family: 'Poppins_600SemiBold';
+  font-family: '${(props) => props.theme.FONTS.Poppins_600SemiBold}';
 `

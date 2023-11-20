@@ -1,15 +1,18 @@
+import * as IntentLauncher from 'expo-intent-launcher';
 import * as DocumentPicker from 'expo-document-picker'
 import { ScrollView, Text, View } from 'react-native'
 import { IGetTaskFiles } from '../../interfaces/task'
 import { Card, Button, Icon } from '@rneui/themed'
 import { IGetUser } from '../../interfaces/user'
 import { Title, Modal, NoUpdate } from './style'
+import * as FileSystem from 'expo-file-system';
 import serviceTask from '../../service/task'
 import { File } from '../../interfaces/file'
 import { useEffect, useState } from 'react'
 import { ToastComponent } from '../toast'
 import { Divider } from '@rneui/base'
 import { IconModel } from '../icons'
+import { useTheme } from 'styled-components';
 
 interface IFileModal {
     id: IGetUser
@@ -26,10 +29,34 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
     const [upload, setUplaod] = useState<boolean>(false)
     const [reload, setReload] = useState(false)
 
+    const theme = useTheme()
+
     const toggleOverlay = () => {
         setVisible(!visible)
         onBackdropPress()
     };
+
+    const handleDownloadFile = async (url: string, name: string) => {
+        const fileUri = FileSystem.documentDirectory + name;
+
+        try {
+          const downloadObject = FileSystem.createDownloadResumable(
+            url,
+            fileUri
+          );
+          const result = await downloadObject.downloadAsync();
+          if(!result) return
+          FileSystem.getContentUriAsync(result?.uri).then(cUri => {
+            console.log(cUri);
+            IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
+              data: cUri,
+              flags: 1,
+            });
+          });
+        } catch (error) {
+          console.error('Erro ao baixar o arquivo:', error);
+        }
+    }
 
     const handleDeleteFile = async (idTask: number, idFile: number) => {
         try {
@@ -155,20 +182,20 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
                                         return (
                                             <>
                                                 {imgTypes.includes(file.fileType) ?
-                                                    <>
-                                                        <Card containerStyle={{ width: 200, alignSelf: 'center', marginRight: 10 }}>
-                                                            <Card.Title style={{fontFamily: 'Poppins_600Regular', fontSize: 16}}>{file.fileName.split('.')[0]}</Card.Title>
+                                                        <Card containerStyle={{ width: 200, alignSelf: 'center', marginRight: 10 }} key={file.id}>
+                                                            <Card.Title style={{ fontFamily: theme.FONTS.Poppins_600SemiBold, fontSize: 16 }}>{file.fileName.split('.')[0]}</Card.Title>
 
                                                             <Card.Divider />
 
                                                             <Card.Image style={{ padding: 0, width: '100%', height: 100 }} source={{ uri: file.url }} />
 
-                                                            <Text style={{ marginBottom: 10, fontFamily: 'Poppins_600Regular' }}>
+                                                            <Text style={{ marginBottom: 10, fontFamily: theme.FONTS.Poppins_600SemiBold }}>
                                                                 {file.fileType} | {(file.fileSize / (1024 * 1024)).toFixed(2)} MB
                                                             </Text>
 
                                                             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
                                                                 <IconModel
+                                                                    onPress={() => handleDownloadFile(file.url, file.fileName)}
                                                                     iconName={'download'}
                                                                     icon={'Feather'}
                                                                     IconColor={'black'}
@@ -184,7 +211,6 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
                                                                 />
                                                             </View>
                                                         </Card>
-                                                    </>
                                                     : null
                                                 }
                                             </>)
@@ -205,18 +231,18 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
                                         return (
                                             <>
                                                 {!imgTypes.includes(file.fileType) ?
-                                                    <>
-                                                        <Card containerStyle={{ width: 200, alignSelf: 'center', marginRight: 10 }}>
-                                                            <Card.Title style={{fontFamily: 'Poppins_600Regular', fontSize: 16}}>{file.fileName.split('.')[0]}</Card.Title>
+                                                        <Card containerStyle={{ width: 200, alignSelf: 'center', marginRight: 10 }} key={file.id}>
+                                                            <Card.Title style={{ fontFamily: 'Poppins_600Regular', fontSize: 16 }}>{file.fileName.split('.')[0]}</Card.Title>
 
                                                             <Card.Divider />
 
-                                                            <Text style={{ marginBottom: 10, fontFamily: 'Poppins_600Regular'  }}>
+                                                            <Text style={{ marginBottom: 10, fontFamily: 'Poppins_600Regular' }}>
                                                                 {file.fileType} | {(file.fileSize / (1024 * 1024)).toFixed(2)} MB
                                                             </Text>
 
                                                             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
                                                                 <IconModel
+                                                                    onPress={() => handleDownloadFile(file.url, file.fileName)}
                                                                     iconName={'download'}
                                                                     icon={'Feather'}
                                                                     IconColor={'black'}
@@ -232,7 +258,6 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
                                                                 />
                                                             </View>
                                                         </Card>
-                                                    </>
                                                     : null
                                                 }
                                             </>)

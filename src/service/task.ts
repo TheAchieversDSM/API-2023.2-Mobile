@@ -6,16 +6,16 @@ import {
   IUpdateTask,
   IUpdateTimeSpent,
 } from "../interfaces/task";
-import {AxiosError, AxiosResponse} from "axios";
-import {comparePriority} from "../utils/utils";
-import {api} from "./api";
-import {File, ISFile} from "../interfaces/file";
+import { AxiosError, AxiosResponse } from "axios";
+import { comparePriority } from "../utils/utils";
+import { api } from "./api";
+import { File, ISFile } from "../interfaces/file";
 import {
   getDownloadURL,
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import {storage} from "./firebase";
+import { storage } from "./firebase";
 
 class Task {
 
@@ -59,16 +59,16 @@ class Task {
           if (res.status == 200) {
             const taskId = res.data.data.id;
 
-            return {taskId, erro: "", validacao: true};
+            return { taskId, erro: "", validacao: true };
           } else {
-            return {erro: "Erro desconhecido", validacao: false};
+            return { erro: "Erro desconhecido", validacao: false };
           }
         })
         .catch((err: AxiosError | any) => {
           if (err.response) {
             if (err.response.status === 409) {
               const authenticationError = err.response.data.error;
-              return {erro: authenticationError, validacao: false};
+              return { erro: authenticationError, validacao: false };
             }
           }
         });
@@ -108,7 +108,7 @@ class Task {
         data
       );
       const response = await api.put(`/task/update/${data.id}`, data);
-      return {response, update};
+      return { response, update };
     } catch (error) {
       console.error(error);
     }
@@ -116,7 +116,7 @@ class Task {
 
   async shareTask(taskId: number, usersIds: number[]) {
     try {
-      const response = await api.post(`/task/shareTask/${taskId}`, {usersIds});
+      const response = await api.post(`/task/shareTask/${taskId}`, { usersIds });
       return response;
     } catch (error) {
       console.error(error);
@@ -188,7 +188,7 @@ class Task {
             const uploadedFile = await this.uploadFile(file, name);
             return uploadedFile;
           } catch (error) {
-            console.error(`Error uploading file ${name}: ${error}`);
+            console.error(`Error uploading file: ${error}`);
             return null;
           }
         })
@@ -199,6 +199,15 @@ class Task {
     } catch (error) {
       console.error("Error uploading files:", error);
       throw error;
+    }
+  }
+
+  async deleteFile(idTask: number, idFile: number) {
+    try {
+      const response = await api.delete(`/task/fileDelete/${idTask}/${idFile}`);
+      return response;
+    } catch (error) {
+      console.error(error);
     }
   }
 }

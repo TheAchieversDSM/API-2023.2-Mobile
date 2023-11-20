@@ -3,6 +3,7 @@ export interface File {
   originalname: string;
   mimetype: string;
   size: number;
+  id?: number;
 }
 
 export interface ISFile {
@@ -10,4 +11,5 @@ export interface ISFile {
   fileSize: number;
   fileType: string;
   url: string;
+  id?: number;
 }

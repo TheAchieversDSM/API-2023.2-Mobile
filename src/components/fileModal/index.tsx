@@ -1,18 +1,15 @@
 import * as DocumentPicker from 'expo-document-picker'
 import { ScrollView, Text, View } from 'react-native'
 import { IGetTaskFiles } from '../../interfaces/task'
-import { Options } from '../../interfaces/hidenmenu'
 import { Card, Button, Icon } from '@rneui/themed'
 import { IGetUser } from '../../interfaces/user'
 import { Title, Modal, NoUpdate } from './style'
 import serviceTask from '../../service/task'
+import { File } from '../../interfaces/file'
 import { useEffect, useState } from 'react'
+import { ToastComponent } from '../toast'
 import { Divider } from '@rneui/base'
 import { IconModel } from '../icons'
-import { File } from '../../interfaces/file'
-import { HidenMenu } from '../hidenmenu'
-import { ToastComponent } from '../toast'
-import serviceSubtask from '../../service/subtask'
 
 interface IFileModal {
     id: IGetUser
@@ -79,6 +76,9 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
                     return newFiles;
                 });
             });
+
+            ToastComponent({ type: 'success', title: 'Upload feito com sucesso!' })
+
             setUplaod(true)
         }
     };
@@ -157,13 +157,13 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
                                                 {imgTypes.includes(file.fileType) ?
                                                     <>
                                                         <Card containerStyle={{ width: 200, alignSelf: 'center', marginRight: 10 }}>
-                                                            <Card.Title>{file.fileName.split('.')[0]}</Card.Title>
+                                                            <Card.Title style={{fontFamily: 'Poppins_600Regular', fontSize: 16}}>{file.fileName.split('.')[0]}</Card.Title>
 
                                                             <Card.Divider />
 
                                                             <Card.Image style={{ padding: 0, width: '100%', height: 100 }} source={{ uri: file.url }} />
 
-                                                            <Text style={{ marginBottom: 10 }}>
+                                                            <Text style={{ marginBottom: 10, fontFamily: 'Poppins_600Regular' }}>
                                                                 {file.fileType} | {(file.fileSize / (1024 * 1024)).toFixed(2)} MB
                                                             </Text>
 
@@ -207,11 +207,11 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
                                                 {!imgTypes.includes(file.fileType) ?
                                                     <>
                                                         <Card containerStyle={{ width: 200, alignSelf: 'center', marginRight: 10 }}>
-                                                            <Card.Title>{file.fileName.split('.')[0]}</Card.Title>
+                                                            <Card.Title style={{fontFamily: 'Poppins_600Regular', fontSize: 16}}>{file.fileName.split('.')[0]}</Card.Title>
 
                                                             <Card.Divider />
 
-                                                            <Text style={{ marginBottom: 10 }}>
+                                                            <Text style={{ marginBottom: 10, fontFamily: 'Poppins_600Regular'  }}>
                                                                 {file.fileType} | {(file.fileSize / (1024 * 1024)).toFixed(2)} MB
                                                             </Text>
 

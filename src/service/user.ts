@@ -72,6 +72,3 @@ class User {
 const serviceUser = new User();
 
 export default serviceUser;
-
-
-//easter egg

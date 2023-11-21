@@ -2,17 +2,19 @@ import * as IntentLauncher from 'expo-intent-launcher';
 import * as DocumentPicker from 'expo-document-picker'
 import { ScrollView, Text, View } from 'react-native'
 import { IGetTaskFiles } from '../../interfaces/task'
+import { File, ISFile } from '../../interfaces/file'
 import { Card, Button, Icon } from '@rneui/themed'
+import * as SecureStore from 'expo-secure-store';
 import { IGetUser } from '../../interfaces/user'
 import { Title, Modal, NoUpdate } from './style'
 import * as FileSystem from 'expo-file-system';
+import { useTheme } from 'styled-components';
+import { shareAsync } from "expo-sharing"
 import serviceTask from '../../service/task'
-import { File } from '../../interfaces/file'
 import { useEffect, useState } from 'react'
 import { ToastComponent } from '../toast'
 import { Divider } from '@rneui/base'
 import { IconModel } from '../icons'
-import { useTheme } from 'styled-components';
 
 interface IFileModal {
     id: IGetUser
@@ -28,7 +30,7 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
     const [files, setFiles] = useState<File[]>([]);
     const [upload, setUplaod] = useState<boolean>(false)
     const [reload, setReload] = useState(false)
-
+    const [isDownloading, setIsDownloading] = useState(false);
     const theme = useTheme()
 
     const toggleOverlay = () => {
@@ -36,25 +38,41 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
         onBackdropPress()
     };
 
-    const handleDownloadFile = async (url: string, name: string) => {
-        const fileUri = FileSystem.documentDirectory + name;
-
+    const handleDownloadFile = async (file: ISFile) => {
+        if (isDownloading) {
+            return;
+        }
+        await SecureStore.setItemAsync('activityInProgress', 'true');
+        setIsDownloading(true);
+        const fileUri = FileSystem.documentDirectory + file.fileName;
         try {
-            const downloadObject = FileSystem.createDownloadResumable(
-                url,
+            const result = await FileSystem.downloadAsync(
+                file.url,
                 fileUri
             );
-            const result = await downloadObject.downloadAsync();
-            if (!result) return
-            FileSystem.getContentUriAsync(result?.uri).then(cUri => {
-                console.log(cUri);
-                IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
-                    data: cUri,
-                    flags: 1,
-                });
-            });
+            if (result) {
+                const permission = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync()
+                if (permission.granted) {
+                    const base64 = await FileSystem.readAsStringAsync(fileUri, { encoding: FileSystem.EncodingType.Base64 })
+                    await FileSystem.StorageAccessFramework
+                        .createFileAsync(permission.directoryUri, file.fileName, file.fileType)
+                        .then(async (uri) => {
+                            await FileSystem.writeAsStringAsync(uri, base64)
+                        })
+                        .catch((e: any) => {
+                            console.error(e)
+                        })
+                } else {
+                    shareAsync(file.url)
+                }
+            } else {
+                console.error('Erro ao baixar o arquivo. Resultado:', result);
+            }
         } catch (error) {
             console.error('Erro ao baixar o arquivo:', error);
+        } finally {
+            setIsDownloading(false);
+            await SecureStore.setItemAsync('activityInProgress', 'false');
         }
     }
 
@@ -199,7 +217,7 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
 
                                                         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
                                                             <IconModel
-                                                                onPress={() => handleDownloadFile(file.url, file.fileName)}
+                                                                onPress={() => handleDownloadFile(file)}
                                                                 iconName={'download'}
                                                                 icon={'Feather'}
                                                                 IconColor={'black'}
@@ -246,7 +264,7 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
 
                                                         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
                                                             <IconModel
-                                                                onPress={() => handleDownloadFile(file.url, file.fileName)}
+                                                                onPress={() => handleDownloadFile(file)}
                                                                 iconName={'download'}
                                                                 icon={'Feather'}
                                                                 IconColor={'black'}

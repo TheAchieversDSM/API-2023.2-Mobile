@@ -1,3 +1,5 @@
+import { ISFile } from "./file";
+
 export interface ICreateTasks {
   name: string;
   description: string;
@@ -26,7 +28,14 @@ export interface IGetTasksUserResp {
   customInterval: number;
   timeSpent: number;
   sharedUsersIds?: number[];
+  files?: ISFile[];
   userId: number;
+}
+
+export interface IGetTaskFiles {
+  id: number,
+  files: ISFile[],
+  userId: number
 }
 
 export interface IHomeReturn {

@@ -1,10 +1,11 @@
-import React, { NativeSyntheticEvent, TextInputChangeEventData, TouchableOpacity, Text, View, TextInputSubmitEditingEventData, ScrollView } from 'react-native';
+import React, { NativeSyntheticEvent, TextInputChangeEventData, TouchableOpacity, Text, View, TextInputSubmitEditingEventData, ScrollView, Image } from 'react-native';
 import { calculateDateWithTime, checkProgressSubTask, decodeJsonWebToken } from "../../utils/utils";
 import { ICreateSubtasks, IGetSubtasks } from '../../interfaces/subtask';
 import { DropdownComponent } from '../dropdown/dropdown';
 import { Options } from '../../interfaces/hidenmenu';
 import { IUpdateTask } from "../../interfaces/task";
 import serviceSubtask from '../../service/subtask';
+import { IGetUser } from '../../interfaces/user';
 import { ICards } from '../../interfaces/cards';
 import { Checkbox } from '../checkbox/checkbox';
 import { Icon, ListItem } from '@rneui/themed';
@@ -18,6 +19,7 @@ import { DatePicker } from '../datepicker';
 import { useAuth } from "../../hooks/auth";
 import { ToastComponent } from '../toast';
 import { HidenMenu } from '../hidenmenu';
+import { FileModal } from '../fileModal';
 import { Priority } from './priorities';
 import { Divider } from '@rneui/base';
 import { ViewScroll } from './styled';
@@ -308,10 +310,18 @@ export const Cards = (props: ICards) => {
         setUpdateModal(!updateModal)
     }
 
+    const [fileModal, setFileModal] = useState(false)
+
+    const handleOpenFileModal = () => {
+        setFileModal(!fileModal)
+    }
+
+    const [idProps, setIProps] = useState<IGetUser>({ userId: id })
 
     const options: Options[] = [
         { color: "#bd1310", name: "trash-o", size: 27, function: ModalDeleteFuncition, icon: "FontAwesome" },
         { color: "#000", name: "history", size: 30, function: handleOpenUpdateModal, icon: "MaterialIcons" },
+        { color: "#000", name: "files-o", size: 26, function: handleOpenFileModal, icon: "FontAwesome" },
         { color: "#000", name: "hourglass-o", size: 23, function: toggleTimerModal, icon: "FontAwesome" },
         { color: "#000", name: "edit-2", size: 23, function: ModalEditFunction, icon: "Feather" },
         { color: "#000", name: "users", size: 23, function: toggleCompModal, icon: "Feather" },
@@ -506,8 +516,14 @@ export const Cards = (props: ICards) => {
                 </S.CardTask>
             </TouchableOpacity>
 
-            {updateModal ?
+            { updateModal ?
                 <UpdateModal id={props.id} view={updateModal} onBackdropPress={handleOpenUpdateModal} />
+                :
+                <></>
+            }
+
+            { fileModal ?
+                <FileModal id={idProps} idTask={props.id} view={fileModal} onBackdropPress={handleOpenFileModal} />
                 :
                 <></>
             }
@@ -538,21 +554,21 @@ export const Cards = (props: ICards) => {
                             <S.ViewIcons>
                                 <S.ViewIcon>
                                     {openModal ? (
-                                            <HidenMenu option={options} open={handleOpenModal} />
-                                        ) : (
-                                            options.map((option: any, index: any) => (
-                                                option.name === "trash-o" && props.userId !== id || option.name === "users" && props.userId !== id ? null : (
-                                                    <IconModel
-                                                        key={index}
-                                                        onPress={option.function} 
-                                                        IconColor={option.color}
-                                                        IconSize={option.size}
-                                                        icon={option.icon}
-                                                        iconName={option.name}
-                                                    />
-                                                )
-                                            ))
-                                        )}
+                                        <HidenMenu option={options} open={handleOpenModal} />
+                                    ) : (
+                                        options.map((option: any, index: any) => (
+                                            option.name === "trash-o" && props.userId !== id || option.name === "users" && props.userId !== id ? null : (
+                                                <IconModel
+                                                    key={index}
+                                                    onPress={option.function}
+                                                    IconColor={option.color}
+                                                    IconSize={option.size}
+                                                    icon={option.icon}
+                                                    iconName={option.name}
+                                                />
+                                            )
+                                        ))
+                                    )}
                                     <IconModel
                                         style={{ marginTop: 3 }}
                                         onPress={ModalCloseFuncion}
@@ -576,6 +592,17 @@ export const Cards = (props: ICards) => {
                         <S.ViewData>
                             <S.TaskDescT>Descrição:</S.TaskDescT>
                             <S.TaskDescT>{props.descricao}</S.TaskDescT>
+
+                            {/* {files ?
+                                files.map((file) => {
+                                    return (
+                                        <>
+                                            <Image style={{ height: 200, width: 200 }} key={file.url} source={{ uri: file.url }} />
+                                        </>
+                                    )
+                                })
+                                : null
+                            } */}
                         </S.ViewData>
                         {
                             props.users?.length > 0 ?

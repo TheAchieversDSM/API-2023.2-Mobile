@@ -12,7 +12,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         userToken: null,
     })
 
-
     useEffect(() => {
         const initState = async () => {
             try {
@@ -47,7 +46,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 }
             },
             signOut: async () => {
-                await removeToken() // TODO: use Vars
+                await removeToken()
                 dispatch({ type: 'SIGN_OUT' })
             },
         }),

@@ -318,14 +318,23 @@ export const Cards = (props: ICards) => {
 
     const [idProps, setIProps] = useState<IGetUser>({ userId: id })
 
-    const options: Options[] = [
-        { color: "#bd1310", name: "trash-o", size: 27, function: ModalDeleteFuncition, icon: "FontAwesome" },
-        { color: "#000", name: "history", size: 30, function: handleOpenUpdateModal, icon: "MaterialIcons" },
-        { color: "#000", name: "files-o", size: 26, function: handleOpenFileModal, icon: "FontAwesome" },
-        { color: "#000", name: "hourglass-o", size: 23, function: toggleTimerModal, icon: "FontAwesome" },
-        { color: "#000", name: "edit-2", size: 23, function: ModalEditFunction, icon: "Feather" },
-        { color: "#000", name: "users", size: 23, function: toggleCompModal, icon: "Feather" },
-    ]
+    let options: Options[] = []
+
+    if (props.userId !== id){
+        options= [
+            { color: "#000", name: "history", size: 30, function: handleOpenUpdateModal, icon: "MaterialIcons" },
+            { color: "#000", name: "hourglass-o", size: 23, function: toggleTimerModal, icon: "FontAwesome" },
+            { color: "#000", name: "edit-2", size: 23, function: ModalEditFunction, icon: "Feather" },
+        ]
+    } else {
+        options= [
+            { color: "#bd1310", name: "trash-o", size: 27, function: ModalDeleteFuncition, icon: "FontAwesome" },
+            { color: "#000", name: "history", size: 30, function: handleOpenUpdateModal, icon: "MaterialIcons" },
+            { color: "#000", name: "hourglass-o", size: 23, function: toggleTimerModal, icon: "FontAwesome" },
+            { color: "#000", name: "edit-2", size: 23, function: ModalEditFunction, icon: "Feather" },
+            { color: "#000", name: "users", size: 23, function: toggleCompModal, icon: "Feather" },
+        ]
+    }
 
     return edit ? (
         <View>
@@ -553,22 +562,17 @@ export const Cards = (props: ICards) => {
                         <S.ViewCard>
                             <S.ViewIcons>
                                 <S.ViewIcon>
-                                    {openModal ? (
-                                        <HidenMenu option={options} open={handleOpenModal} />
-                                    ) : (
-                                        options.map((option: any, index: any) => (
-                                            option.name === "trash-o" && props.userId !== id || option.name === "users" && props.userId !== id ? null : (
-                                                <IconModel
-                                                    key={index}
-                                                    onPress={option.function}
-                                                    IconColor={option.color}
-                                                    IconSize={option.size}
-                                                    icon={option.icon}
-                                                    iconName={option.name}
-                                                />
-                                            )
-                                        ))
-                                    )}
+                                {openModal ?
+                                        <HidenMenu option={options} open={handleOpenModal} /> :
+                                        <IconModel
+
+                                            onPress={() => handleOpenModal()}
+                                            IconColor={"#000"}
+                                            IconSize={34}
+                                            icon='AntDesign'
+                                            iconName='ellipsis1'
+                                        />
+                                    }
                                     <IconModel
                                         style={{ marginTop: 3 }}
                                         onPress={ModalCloseFuncion}

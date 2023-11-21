@@ -22,8 +22,9 @@ export const ViewCards = ({ reloadTasksData, ...task }: any) => {
                     deadline={task.deadline}
                     sharedUsersIds={task.sharedUsersIds as number[]}
                     priority={task.priority}
-                    users={task.users}                 
-                />
+                    users={task.users} 
+                    userId={task.userId}                
+                    />
             )
         case "DOING":
             return (
@@ -42,7 +43,8 @@ export const ViewCards = ({ reloadTasksData, ...task }: any) => {
                     deadline={task.deadline}
                     sharedUsersIds={task.sharedUsersIds as number[]}
                     priority={task.priority}
-                    users={task.users}     
+                    users={task.users}
+                    userId={task.userId}      
                 />
             )
         case "DONE":
@@ -63,6 +65,7 @@ export const ViewCards = ({ reloadTasksData, ...task }: any) => {
                     sharedUsersIds={task.sharedUsersIds as number[]}
                     priority={task.priority} 
                     users={task.users}     
+                    userId={task.userId} 
                 />
             )
     }

@@ -587,6 +587,8 @@ export const Cards = (props: ICards) => {
                                 <S.TaskTitle>{props.task}</S.TaskTitle>
                             </S.ViewName>
                         </S.ViewCard>
+                        <S.TaskDescT>Dono da tarefa:</S.TaskDescT>
+                        <S.TaskDescT>{props.userOwner?.email}</S.TaskDescT>
                         <S.TaskDescT>Tempo Gasto: {calculateDateWithTime(props.timeSpent)}</S.TaskDescT>
                         <S.TaskDescT>Status: {props.value}</S.TaskDescT>
                         <Priority priority={props.priority} />

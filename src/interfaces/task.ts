@@ -30,6 +30,7 @@ export interface IGetTasksUserResp {
   sharedUsersIds?: number[];
   files?: ISFile[];
   userId: number;
+  userOwner: any;
 }
 
 export interface IGetTaskFiles {

@@ -32,6 +32,7 @@ export default function ToDo() {
                     const response = await serviceTask.getTaskUser({ userId: id });
                     if (response) {
                         setUserTasks(response);
+                        console.log(response.forEach(data => {console.log(data.users)}))
                     } else {
                         console.error("Erro ao buscar tarefas do usuário");
                     }
@@ -161,8 +162,9 @@ export default function ToDo() {
                                 sharedUsersIds={task.sharedUsersIds as number[]}
                                 priority={task.priority}
                                 users={task.users}
-                                userId={task.userId}  
-                            />
+                                userId={task.userId} 
+                                userOwner={task.userOwner}                            
+                                />
                         )
                         )}
 
@@ -193,7 +195,8 @@ export default function ToDo() {
                                 deadline={task.deadline}
                                 sharedUsersIds={task.sharedUsersIds as number[]}
                                 priority={task.priority}
-                                users={task.users}  
+                                users={task.users}
+                                userOwner={task.userOwner}  
                             />
                         )
                         )}
@@ -225,7 +228,8 @@ export default function ToDo() {
                                 deadline={task.deadline}
                                 sharedUsersIds={task.sharedUsersIds as number[]}
                                 priority={task.priority} 
-                                users={task.users}                            
+                                users={task.users}  
+                                userOwner={task.userOwner}                          
                             />
                         )
                         )}

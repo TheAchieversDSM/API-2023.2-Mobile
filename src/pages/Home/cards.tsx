@@ -23,7 +23,8 @@ export const ViewCards = ({ reloadTasksData, ...task }: any) => {
                     sharedUsersIds={task.sharedUsersIds as number[]}
                     priority={task.priority}
                     users={task.users} 
-                    userId={task.userId}                
+                    userId={task.userId}  
+                    userOwner={task.userOwner}              
                     />
             )
         case "DOING":
@@ -44,7 +45,8 @@ export const ViewCards = ({ reloadTasksData, ...task }: any) => {
                     sharedUsersIds={task.sharedUsersIds as number[]}
                     priority={task.priority}
                     users={task.users}
-                    userId={task.userId}      
+                    userId={task.userId}  
+                    userOwner={task.userOwner}    
                 />
             )
         case "DONE":
@@ -66,6 +68,7 @@ export const ViewCards = ({ reloadTasksData, ...task }: any) => {
                     priority={task.priority} 
                     users={task.users}     
                     userId={task.userId} 
+                    userOwner={task.userOwner}
                 />
             )
     }

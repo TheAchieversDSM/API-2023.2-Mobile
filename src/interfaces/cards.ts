@@ -15,6 +15,7 @@ export interface ICards {
   users: any[];
   reloadTasksData: () => void;
   userId: number;
+  userOwner: any;
 }
 
 export interface IPriority {

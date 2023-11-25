@@ -134,13 +134,20 @@ class Task {
     }
   }
 
-  async deleteTask(id: number, userId: number) {
+  async deleteTask(id: number, userId: number, deleteMessage: string) {
     try {
-      const response = await api.delete(`/task/delete/${id}/${userId}`);
-      console.log("Exclusão realizada com sucesso")
+      const response = await api.post(`/task/delete/${id}/${userId}`,
+        {
+          deleteMessage: deleteMessage
+        }
+      );
+      console.log("Mensagem de exclusão enviada com sucesso")
       return response;
     } catch (error) {
-      console.error(error);
+      console.error("isso aqui", error);
+    } finally{
+      const response = await api.delete(`/task/delete/${id}/${userId}`)
+      console.log("Exclusão realizada com sucesso")
     }
   }
 

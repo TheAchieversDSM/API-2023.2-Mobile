@@ -26,6 +26,7 @@ import { ViewScroll } from './styled';
 import { IconModel } from '../icons';
 import Input from '../input/input';
 import * as S from './styled';
+import { DeleteModal } from '../deleteModal/deleteModal';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -86,6 +87,8 @@ export const Cards = (props: ICards) => {
     const [dateError, setDateError] = useState(false)
 
     const [expanded, setExpanded] = useState(false);
+
+    const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
 
     async function fetchTaskSubtasks() {
         try {
@@ -174,7 +177,7 @@ export const Cards = (props: ICards) => {
 
     const handleDelete = async () => {
         try {
-            await serviceTask.deleteTask(props.id, id)
+            await serviceTask.deleteTask(props.id, id, '')
 
             ToastComponent({ type: 'error', title: 'Tarefa deletada!' })
 
@@ -279,12 +282,21 @@ export const Cards = (props: ICards) => {
         if (reload) props.reloadTasksData()
     }, [props, reload])
 
+    const handleDeletePress = () => {
+        setDeleteModalVisible(true);
+      };
+    
+      const closeDeleteModal = () => {
+        setDeleteModalVisible(false);
+      };
+
     const reloadTasksData = () => {
         setReload(!reload);
     };
 
     const ModalDeleteFuncition = () => {
-        handleDelete()
+        setDeleteModalVisible(true)
+        //handleDelete()
         setEditingSubtaskId(null)
     }
 
@@ -534,6 +546,11 @@ export const Cards = (props: ICards) => {
             { fileModal ?
                 <FileModal id={idProps} idTask={props.id} view={fileModal} onBackdropPress={handleOpenFileModal} />
                 :
+                <></>
+            }
+
+            {
+                isDeleteModalVisible ? <DeleteModal id={props.id} view={isDeleteModalVisible} onBackdropPress={ModalCloseFuncion} /> : 
                 <></>
             }
 

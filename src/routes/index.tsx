@@ -4,6 +4,7 @@ import { StackRoutes } from "./stack.routes";
 import { AuthRoutes } from "./auth.routes";
 import React, { useEffect } from "react";
 import { useAuth } from "../hooks/auth";
+import { api } from "../service/api";
 
 export function Routes() {
     const { userToken, signOut } = useAuth();
@@ -29,6 +30,15 @@ export function Routes() {
             clearInterval(intervalId);
         };
     }, [userToken])
+
+    useEffect(() => {
+        if (userToken) {
+            api.interceptors.request.use((config) => {
+                config.headers.Authorization = `Bearer ${userToken}`;
+                return config;
+            });
+        }
+    }, [userToken]);
 
     return (
         <NavigationContainer>

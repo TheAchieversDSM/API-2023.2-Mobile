@@ -215,7 +215,6 @@ export const Cards = (props: ICards) => {
 
     const handleCloseSubtask = () => {
         setNewSubtask('');
-
         setIsInputVisible(false);
     }
 
@@ -316,6 +315,11 @@ export const Cards = (props: ICards) => {
         setOpenModal(!openModal)
     }
 
+    const handleOpenDeleteModal = () => {
+        setDeleteModalVisible(!isDeleteModalVisible)
+        setVisible(false)
+    }
+
     const [updateModal, setUpdateModal] = useState(false)
 
     const handleOpenUpdateModal = () => {
@@ -340,7 +344,7 @@ export const Cards = (props: ICards) => {
         ]
     } else {
         options= [
-            { color: "#bd1310", name: "trash-o", size: 27, function: ModalDeleteFuncition, icon: "FontAwesome" },
+            { color: "#bd1310", name: "trash-o", size: 27, function: handleOpenDeleteModal, icon: "FontAwesome" },
             { color: "#000", name: "history", size: 30, function: handleOpenUpdateModal, icon: "MaterialIcons" },
             { color: "#000", name: "hourglass-o", size: 23, function: toggleTimerModal, icon: "FontAwesome" },
             { color: "#000", name: "edit-2", size: 23, function: ModalEditFunction, icon: "Feather" },
@@ -550,7 +554,7 @@ export const Cards = (props: ICards) => {
             }
 
             {
-                isDeleteModalVisible ? <DeleteModal id={props.id} view={isDeleteModalVisible} onBackdropPress={ModalCloseFuncion} /> : 
+                isDeleteModalVisible ? <DeleteModal id={props.id} view={isDeleteModalVisible} reloadTasksData={reloadTasksData} onBackdropPress={handleOpenDeleteModal} /> : 
                 <></>
             }
 
@@ -624,6 +628,7 @@ export const Cards = (props: ICards) => {
                                 })
                                 : null
                             } */}
+
                         </S.ViewData>
                         {
                             props.users?.length > 0 ?

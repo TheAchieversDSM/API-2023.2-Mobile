@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-import { Modal, TextInput, TouchableOpacity, Text, View } from "react-native";
+import { Modal, TextInput, TouchableOpacity, Text, View, KeyboardAvoidingView, Platform } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { api } from "../../service/api";
 import { decodeJsonWebToken } from "../../utils/utils";
 import { useAuth } from "../../hooks/auth";
-import { styles } from "./styled"; 
+import { Button } from "../button/button";
+import * as S from "./styled";
+
 
 interface IDeleteTask {
   id: number;
   view: boolean;
   onBackdropPress: () => void;
+  reloadTasksData: () => void;
 }
 
 const stringToHash = (str: string): number => {
@@ -22,17 +25,21 @@ const stringToHash = (str: string): number => {
   return hash;
 };
 
-export const DeleteModal: React.FC<IDeleteTask> = ({ id: taskId, view, onBackdropPress }) => {
+export const DeleteModal: React.FC<IDeleteTask> = ({
+  id: taskId,
+  view,
+  onBackdropPress,
+  reloadTasksData,
+}) => {
   const [visible, setVisible] = useState(view);
-  const [deleteReason, setDeleteReason] = useState('');
+  const [deleteReason, setDeleteReason] = useState("");
   const { userToken } = useAuth();
   const { id } = decodeJsonWebToken(String(userToken));
+  const [disable, setDisable] = useState(true);
 
   const toggleOverlay = () => {
     setVisible(!visible);
-    if (onBackdropPress) {
-      onBackdropPress();
-    }
+    onBackdropPress();
   };
 
   const handleDelete = async () => {
@@ -41,35 +48,59 @@ export const DeleteModal: React.FC<IDeleteTask> = ({ id: taskId, view, onBackdro
       await api.post(`/task/delete/${taskId}/${id}`, {
         deleteMessage: deleteReason,
       });
-
-      await api.delete(`/task/delete/${taskId}/${id}`);
       toggleOverlay();
+      reloadTasksData();
+      console.log("Mensagem de exclusão enviada com sucesso!");
     } catch (error) {
       console.error("Erro ao enviar mensagem de exclusão:", error);
-      toggleOverlay();
     }
+  };
+  const handleTextChange = (text: string) => {
+    text.length > 0 ? setDisable(false)  : setDisable(true);
+    setDeleteReason(text);
   };
 
   return (
-    <Modal visible={visible} onRequestClose={toggleOverlay} transparent>
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <TouchableOpacity onPress={toggleOverlay} style={styles.closeButton}>
-            <Feather name="x" size={24} color="#000" />
-          </TouchableOpacity>
-          <Text style={styles.text}>Realmente deseja excluir?</Text>
-          <TextInput
-            placeholder="Digite o motivo da exclusão"
-            value={deleteReason}
-            onChangeText={(text) => setDeleteReason(text)}
-            style={{ borderBottomWidth: 1, marginBottom: 20, width: "70%" }}
+
+    <S.Modal isVisible={visible} onBackdropPress={toggleOverlay} transparent>
+        <TouchableOpacity onPress={toggleOverlay} style={S.styles.closeButton} >
+          <Feather name="x" size={24} color="#000" />
+        </TouchableOpacity>
+      <View style={S.styles.modalView}>
+        <Text style={S.styles.text}>Realmente deseja excluir?</Text>
+        <TextInput
+          placeholder="Digite o motivo da exclusão"
+          value={deleteReason}
+          onChangeText={(text) => handleTextChange(text)}
+          style={{  borderWidth: 1, borderRadius: 10 , marginBottom: 10, width: "83%", height: 70, paddingLeft: 10, borderColor: "#000"}}
+          />  
+       <View style={S.styles.buttonView}> 
+        <Button
+          width={100}
+          title="Excluir"
+          onPress={handleDelete}
+          type="solid"
+          borderColor="transparent"
+          backgroundColor="#bd1310"
+          color="#ffff"
+          disable={disable}
           />
-          <TouchableOpacity onPress={handleDelete}>
-            <Text style={styles.text}>Excluir</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={{ marginLeft: 5 }}>
+
+        <Button
+          width={100}
+          title="Cancelar"
+          onPress={toggleOverlay}
+          type="clear"
+          borderColor="transparent"
+          backgroundColor="transparent"
+          color="#000"
+          />
+          </View>
+          </View>
+
       </View>
-    </Modal>
+    </S.Modal>
   );
 };
 

@@ -1,12 +1,12 @@
-import { ListItem, SearchBar } from "@rneui/themed"
-import { useEffect, useState } from "react"
-import { useTheme } from "styled-components"
-import serviceUser from "../../service/user"
-import serviceTask from "../../service/task"
-import { ICompModal } from "../../interfaces/compmodal"
-import * as S from "./styled"
+import { ListItem, SearchBar } from "@rneui/themed";
+import { useEffect, useState } from "react";
+import { useTheme } from "styled-components";
+import serviceUser from "../../service/user";
+import serviceTask from "../../service/task";
+import { ICompModal } from "../../interfaces/compmodal";
+import * as S from "./styled";
 import { useAuth } from "../../hooks/auth";
-import { ScrollView } from "react-native"
+import { ScrollView } from "react-native";
 import { Button } from "../button/button";
 import { decodeJsonWebToken } from "../../utils/utils";
 
@@ -65,7 +65,7 @@ export const CompModal = ({view, onBackdropPress, reloadTasksData, taskid, useri
     }
     
     return(
-        <S.Modal isVisible={view} onBackdropPress={handleCloseModal}>
+        <S.Modal isVisible={view} onBackdropPress={handleCloseModal} >
         <S.Container>
             <SearchBar
                 placeholder="Pesquisar usuário..."

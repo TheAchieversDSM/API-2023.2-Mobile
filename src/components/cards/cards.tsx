@@ -26,6 +26,7 @@ import { ViewScroll } from './styled';
 import { IconModel } from '../icons';
 import Input from '../input/input';
 import * as S from './styled';
+import { DeleteModal } from '../deleteModal/deleteModal';
 
 const priority = [
     { label: 'Alta', value: 'High' },
@@ -86,6 +87,8 @@ export const Cards = (props: ICards) => {
     const [dateError, setDateError] = useState(false)
 
     const [expanded, setExpanded] = useState(false);
+
+    const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
 
     async function fetchTaskSubtasks() {
         try {
@@ -174,7 +177,7 @@ export const Cards = (props: ICards) => {
 
     const handleDelete = async () => {
         try {
-            await serviceTask.deleteTask(props.id, id)
+            await serviceTask.deleteTask(props.id, id, '')
 
             ToastComponent({ type: 'error', title: 'Tarefa deletada!' })
 
@@ -212,7 +215,6 @@ export const Cards = (props: ICards) => {
 
     const handleCloseSubtask = () => {
         setNewSubtask('');
-
         setIsInputVisible(false);
     }
 
@@ -279,12 +281,21 @@ export const Cards = (props: ICards) => {
         if (reload) props.reloadTasksData()
     }, [props, reload])
 
+    const handleDeletePress = () => {
+        setDeleteModalVisible(true);
+      };
+    
+      const closeDeleteModal = () => {
+        setDeleteModalVisible(false);
+      };
+
     const reloadTasksData = () => {
         setReload(!reload);
     };
 
     const ModalDeleteFuncition = () => {
-        handleDelete()
+        setDeleteModalVisible(true)
+        //handleDelete()
         setEditingSubtaskId(null)
     }
 
@@ -302,6 +313,11 @@ export const Cards = (props: ICards) => {
 
     const handleOpenModal = () => {
         setOpenModal(!openModal)
+    }
+
+    const handleOpenDeleteModal = () => {
+        setDeleteModalVisible(!isDeleteModalVisible)
+        setVisible(false)
     }
 
     const [updateModal, setUpdateModal] = useState(false)
@@ -328,7 +344,7 @@ export const Cards = (props: ICards) => {
         ]
     } else {
         options= [
-            { color: "#bd1310", name: "trash-o", size: 27, function: ModalDeleteFuncition, icon: "FontAwesome" },
+            { color: "#bd1310", name: "trash-o", size: 27, function: handleOpenDeleteModal, icon: "FontAwesome" },
             { color: "#000", name: "history", size: 30, function: handleOpenUpdateModal, icon: "MaterialIcons" },
             { color: "#000", name: "hourglass-o", size: 23, function: toggleTimerModal, icon: "FontAwesome" },
             { color: "#000", name: "edit-2", size: 23, function: ModalEditFunction, icon: "Feather" },
@@ -537,6 +553,11 @@ export const Cards = (props: ICards) => {
                 <></>
             }
 
+            {
+                isDeleteModalVisible ? <DeleteModal id={props.id} view={isDeleteModalVisible} reloadTasksData={reloadTasksData} onBackdropPress={handleOpenDeleteModal} /> : 
+                <></>
+            }
+
             <TimerModal
                 view={timer}
                 onBackdropPress={toggleTimerModal}
@@ -609,6 +630,7 @@ export const Cards = (props: ICards) => {
                                 })
                                 : null
                             } */}
+
                         </S.ViewData>
                         {
                             props.users?.length > 0 ?

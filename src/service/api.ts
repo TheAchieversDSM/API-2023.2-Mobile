@@ -4,7 +4,7 @@ import {URL_API, APP_MODE, AZURE_API} from "@env";
 const url: string = APP_MODE == "main" ? AZURE_API : URL_API;
 
 const api: AxiosInstance = axios.create({
-  baseURL: url,
+  baseURL: "http://192.168.1.11:5000",
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",

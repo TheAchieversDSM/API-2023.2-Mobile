@@ -341,6 +341,7 @@ export const Cards = (props: ICards) => {
             { color: "#000", name: "history", size: 30, function: handleOpenUpdateModal, icon: "MaterialIcons" },
             { color: "#000", name: "hourglass-o", size: 23, function: toggleTimerModal, icon: "FontAwesome" },
             { color: "#000", name: "edit-2", size: 23, function: ModalEditFunction, icon: "Feather" },
+            { color: "#000", name: "files-o", size: 26, function: handleOpenFileModal, icon: "FontAwesome" }
         ]
     } else {
         options= [
@@ -349,6 +350,7 @@ export const Cards = (props: ICards) => {
             { color: "#000", name: "hourglass-o", size: 23, function: toggleTimerModal, icon: "FontAwesome" },
             { color: "#000", name: "edit-2", size: 23, function: ModalEditFunction, icon: "Feather" },
             { color: "#000", name: "users", size: 23, function: toggleCompModal, icon: "Feather" },
+            { color: "#000", name: "files-o", size: 26, function: handleOpenFileModal, icon: "FontAwesome" }
         ]
     }
 

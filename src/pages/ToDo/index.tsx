@@ -32,7 +32,6 @@ export default function ToDo() {
                     const response = await serviceTask.getTaskUser({ userId: id });
                     if (response) {
                         setUserTasks(response);
-                        console.log(response.forEach(data => {console.log(data.users)}))
                     } else {
                         console.error("Erro ao buscar tarefas do usuário");
                     }

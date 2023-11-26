@@ -11,13 +11,13 @@ import {initializeApp} from "firebase/app";
 import {getStorage} from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: FIREBASE_KEY,
-  authDomain: FIREBASE_AUTH,
-  projectId: FIREBASE_PROJECT_ID,
-  storageBucket: FIREBASE_BUCKET,
-  messagingSenderId: FIREBASE_MSGID,
-  appId: FIREBASE_APPID,
-  measurementId: FIREBASE_MEASUREMENTID,
+  apiKey: `${FIREBASE_KEY}`,
+  authDomain: `${FIREBASE_AUTH}`,
+  projectId: `${FIREBASE_PROJECT_ID}`,
+  storageBucket: `${FIREBASE_BUCKET}`,
+  messagingSenderId: `${FIREBASE_MSGID}`,
+  appId: `${FIREBASE_APPID}`,
+  measurementId: `${FIREBASE_MEASUREMENTID}`,
 };
 
 export const app = initializeApp(firebaseConfig);

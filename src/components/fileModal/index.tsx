@@ -1,20 +1,19 @@
-import * as IntentLauncher from 'expo-intent-launcher';
-import * as DocumentPicker from 'expo-document-picker'
-import { ScrollView, Text, View } from 'react-native'
-import { IGetTaskFiles } from '../../interfaces/task'
-import { File, ISFile } from '../../interfaces/file'
-import { Card, Button, Icon } from '@rneui/themed'
+import { ScrollView, Text, View, Alert } from 'react-native';
+import * as DocumentPicker from 'expo-document-picker';
+import { IGetTaskFiles } from '../../interfaces/task';
+import { File, ISFile } from '../../interfaces/file';
+import * as MediaLibrary from 'expo-media-library';
 import * as SecureStore from 'expo-secure-store';
-import { IGetUser } from '../../interfaces/user'
-import { Title, Modal, NoUpdate } from './style'
+import { IGetUser } from '../../interfaces/user';
+import { Title, Modal, NoUpdate } from './style';
 import * as FileSystem from 'expo-file-system';
 import { useTheme } from 'styled-components';
-import { shareAsync } from "expo-sharing"
-import serviceTask from '../../service/task'
-import { useEffect, useState } from 'react'
-import { ToastComponent } from '../toast'
-import { Divider } from '@rneui/base'
-import { IconModel } from '../icons'
+import serviceTask from '../../service/task';
+import { useEffect, useState } from 'react';
+import { ToastComponent } from '../toast';
+import { Divider } from '@rneui/base';
+import { IconModel } from '../icons';
+import { Card } from '@rneui/themed';
 
 interface IFileModal {
     id: IGetUser
@@ -24,13 +23,13 @@ interface IFileModal {
 }
 
 export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
-    const [visible, setVisible] = useState(props.view);
-    const [imgTypes, setImgTypes] = useState(['png', 'jpeg', 'jpg', 'gif', 'svg'])
     const [filesTask, setFilesTask] = useState<IGetTaskFiles>({ id: props.idTask, userId: props.id.userId, files: [] })
-    const [files, setFiles] = useState<File[]>([]);
-    const [upload, setUplaod] = useState<boolean>(false)
-    const [reload, setReload] = useState(false)
+    const [imgTypes, _] = useState(['png', 'jpeg', 'jpg', 'gif', 'svg'])
     const [isDownloading, setIsDownloading] = useState(false);
+    const [upload, setUplaod] = useState<boolean>(false)
+    const [visible, setVisible] = useState(props.view);
+    const [files, setFiles] = useState<File[]>([]);
+    const [reload, setReload] = useState(false)
     const theme = useTheme()
 
     const toggleOverlay = () => {
@@ -42,31 +41,32 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
         if (isDownloading) {
             return;
         }
-        await SecureStore.setItemAsync('activityInProgress', 'true');
-        setIsDownloading(true);
-        const fileUri = FileSystem.documentDirectory + file.fileName;
         try {
-            const result = await FileSystem.downloadAsync(
-                file.url,
-                fileUri
-            );
-            if (result) {
-                const permission = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync()
-                if (permission.granted) {
-                    const base64 = await FileSystem.readAsStringAsync(fileUri, { encoding: FileSystem.EncodingType.Base64 })
-                    await FileSystem.StorageAccessFramework
-                        .createFileAsync(permission.directoryUri, file.fileName, file.fileType)
-                        .then(async (uri) => {
-                            await FileSystem.writeAsStringAsync(uri, base64)
-                        })
-                        .catch((e: any) => {
-                            console.error(e)
-                        })
-                } else {
-                    shareAsync(file.url)
-                }
-            } else {
-                console.error('Erro ao baixar o arquivo. Resultado:', result);
+            await SecureStore.setItemAsync('activityInProgress', 'true');
+            const { status } = await MediaLibrary.requestPermissionsAsync()
+            if (status !== "granted") {
+                Alert.alert(
+                    'Permissão Necessária',
+                    'Por favor, conceda a permissão necessária para o aplicativo salvar em seu dispositivo.'
+                );
+                return;
+            }
+            const fileUri = FileSystem.cacheDirectory + file.fileName
+            const result = await FileSystem.downloadAsync(file.url, fileUri)
+            if (!result) return
+            const assert = await MediaLibrary.createAssetAsync(result?.uri)
+            if (assert) {
+                Alert.alert(
+                    'Download Concluído',
+                    `${file.fileName.split(".")[0]} foi salvo em seu dispositivo.`,
+                    [
+                        {
+                            text: 'OK',
+                            style: 'default', // ou 'cancel' ou 'destructive'
+                        },
+                    ]
+                );
+                return;
             }
         } catch (error) {
             console.error('Erro ao baixar o arquivo:', error);

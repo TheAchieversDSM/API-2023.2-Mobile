@@ -196,6 +196,15 @@ class Task {
     }
   }
 
+  async getHistoricSharedtasks(id: number) {
+    try {
+      const response = await api.get(`/task/getHistoricSharedTasks/${id}`);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async uploadFiles(id: number, data: File[]) {
     try {
       const files = await Promise.all(

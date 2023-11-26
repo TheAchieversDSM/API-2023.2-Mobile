@@ -141,13 +141,11 @@ class Task {
           deleteMessage: deleteMessage
         }
       );
-      console.log("Mensagem de exclusão enviada com sucesso")
       return response;
     } catch (error) {
       console.error("isso aqui", error);
     } finally{
       const response = await api.delete(`/task/delete/${id}/${userId}`)
-      console.log("Exclusão realizada com sucesso")
     }
   }
 
@@ -190,6 +188,15 @@ class Task {
   async getHistoricDeleteByUser(id: number) {
     try {
       const response = await api.get(`/task/getDeleteHistoricTaskByUser/${id}`);      
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getHistoricSharedtasks(id: number) {
+    try {
+      const response = await api.get(`/task/getHistoricSharedTasks/${id}`);
       return response.data;
     } catch (error) {
       console.log(error);

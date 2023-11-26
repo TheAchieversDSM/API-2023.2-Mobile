@@ -50,7 +50,6 @@ export const DeleteModal: React.FC<IDeleteTask> = ({
       });
       toggleOverlay();
       reloadTasksData();
-      console.log("Mensagem de exclusão enviada com sucesso!");
     } catch (error) {
       console.error("Erro ao enviar mensagem de exclusão:", error);
     }

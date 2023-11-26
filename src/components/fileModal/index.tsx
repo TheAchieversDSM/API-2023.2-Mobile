@@ -31,6 +31,7 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
     const [files, setFiles] = useState<File[]>([]);
     const [reload, setReload] = useState(false)
     const theme = useTheme()
+    console.log(props)
 
     const toggleOverlay = () => {
         setVisible(!visible)
@@ -149,16 +150,15 @@ export const FileModal = ({ onBackdropPress, ...props }: IFileModal) => {
         setReload(false)
         async function fetchFile() {
             try {
-                const request = await serviceTask.getTaskUser(props.id)
-                if (request !== undefined) {
-                    request.map((task) => {
+                let task = await serviceTask.getTaskById(props.idTask)
+                if (task !== undefined) {       
                         if (task.id == filesTask.id) {
                             setFilesTask((prevState) => ({
                                 ...prevState,
                                 files: task.files || []
                             }))
                         }
-                    })
+            
                 }
             } catch (error) {
                 console.log(error);

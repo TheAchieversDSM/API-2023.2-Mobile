@@ -90,6 +90,15 @@ class Task {
     }
   }
 
+  async getTaskById(id: number) {
+    try {
+      const response = await api.get(`/task/getById/${id}`);
+      return response.data.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async getTaskUserDate(data: IGetTasksUserDate) {
     try {
       const response = await api.get(

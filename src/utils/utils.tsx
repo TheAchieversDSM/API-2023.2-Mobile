@@ -6,7 +6,7 @@ import { APP_SECRET } from "@env";
 import jwt_decode from 'jwt-decode';
 import { IDashboardDivider, ITaskCheck, ITimeCaculate } from '../interfaces/functions';
 import { IGetSubtasks } from '../interfaces/subtask';
-import { apiStatus } from '../service/api';
+import { api, apiStatus } from '../service/api';
 import { IMonthly, IMonthlyArray, IMonthlyCalculated } from '../interfaces/dashboard';
 
 export async function getItem(key: string): Promise<string | null> {
@@ -22,8 +22,15 @@ export async function removeItem(key: string): Promise<void> {
 }
 
 export const getToken = () => getItem(APP_SECRET)
-export const removeToken = () => removeItem(APP_SECRET)
-export const setToken = (value: string) => setItem(APP_SECRET, value)
+export const removeToken = () => {
+  removeItem(APP_SECRET);
+  api.defaults.headers.common["Authorization"] = null
+}
+
+export const setToken = (value: string) => {
+  setItem(APP_SECRET, value)
+  api.defaults.headers.common["Authorization"] = value
+}
 
 
 export const verifyPasswordMatch = ({ password, rPassword }: ICreateUser) => {

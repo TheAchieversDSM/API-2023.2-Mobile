@@ -9,7 +9,7 @@ import { apiStatus } from './src/service/api';
 import { Text } from '@rneui/themed';
 import { NotFound } from './src/pages/NotFound';
 import Toast from 'react-native-toast-message';
-
+import "./src/service/firebase"
 LogBox.ignoreAllLogs()
 
 export default function App() {

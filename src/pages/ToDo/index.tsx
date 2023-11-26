@@ -161,8 +161,9 @@ export default function ToDo() {
                                 sharedUsersIds={task.sharedUsersIds as number[]}
                                 priority={task.priority}
                                 users={task.users}
-                                userId={task.userId}  
-                            />
+                                userId={task.userId} 
+                                userOwner={task.userOwner}                            
+                                />
                         )
                         )}
 
@@ -193,7 +194,8 @@ export default function ToDo() {
                                 deadline={task.deadline}
                                 sharedUsersIds={task.sharedUsersIds as number[]}
                                 priority={task.priority}
-                                users={task.users}  
+                                users={task.users}
+                                userOwner={task.userOwner}  
                             />
                         )
                         )}
@@ -225,7 +227,8 @@ export default function ToDo() {
                                 deadline={task.deadline}
                                 sharedUsersIds={task.sharedUsersIds as number[]}
                                 priority={task.priority} 
-                                users={task.users}                            
+                                users={task.users}  
+                                userOwner={task.userOwner}                          
                             />
                         )
                         )}

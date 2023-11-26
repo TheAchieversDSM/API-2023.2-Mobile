@@ -11,6 +11,15 @@ export interface IHistoricUpdate {
     campo: { [key: string]: { old: string; new: string; }; };
 }
 
+export interface IHistoricDelete{
+    id?: string;
+    taskId: number;
+    date: string;
+    user: { id: number; name: string; };
+    message: string;
+    taskName: string;
+}
+
 export interface IDynamicHistoric {
     [key: string]: IHistoricUpdate[]
 }

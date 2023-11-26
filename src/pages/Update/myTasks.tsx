@@ -1,4 +1,4 @@
-import { IDynamicHistoric, IHistoricUpdate, IUpdate } from '../../interfaces/updatemodal';
+import { IDynamicHistoric, IHistoricDelete, IHistoricUpdate, IUpdate } from '../../interfaces/updatemodal';
 import { Container, NoUpdate, TaskName } from './style';
 import { decodeJsonWebToken } from '../../utils/utils';
 import Collapse from '../../components/collapse';
@@ -7,6 +7,7 @@ import serviceTask from '../../service/task';
 import { useState, useEffect } from 'react';
 import { useAuth } from "../../hooks/auth";
 import { Divider } from '@rneui/base';
+import CollapseD from '../../components/collapse/deleted';
 
 export default function MyTasks() {
     const { userToken } = useAuth();
@@ -14,6 +15,9 @@ export default function MyTasks() {
 
     const [historic, setHistoric] = useState<IDynamicHistoric>({} as IDynamicHistoric)
     const [names, setNames] = useState<Array<string>>()
+    const [deleted, setDeleted] = useState<IHistoricDelete[]>([]);
+    const [groupDeleted, setGroupDeleted] = useState<IHistoricDelete[]>([]);
+
 
     useEffect(() => {
         async function fetchUpdate() {
@@ -25,6 +29,16 @@ export default function MyTasks() {
             }
         }
 
+        async function fetchDelete() {
+            try {
+                const request = await serviceTask.getHistoricDeleteByUser(id)
+                if (request) setDeleted(request)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        fetchDelete()
         fetchUpdate()
     }, [id])
 
@@ -42,6 +56,7 @@ export default function MyTasks() {
                 }
             });
         }
+
     }, [historic])
 
     return (
@@ -62,12 +77,86 @@ export default function MyTasks() {
                                         </Container>
                                     )
                                 })}
+
+                               {deleted.map(del =>{
+                                    return(
+                                del.taskName === tasks ? 
+                                        <>
+                                 <Container style={{ margin: 0 }}>
+                                    <CollapseD 
+                                        taskId={del.taskId}
+                                        date={del.date}
+                                        user={{
+                                            id: del.user.id,
+                                            name: del.user.name
+                                        }}
+                                        message={del.message } 
+                                        taskName={''}                                    
+                                        />
+                                    <Divider style={{ marginBottom: 10 }} />
+                                </Container>
+                            </>
+                        :   
+                        
+                        <>
+                        </>
+                    
+                     
+                    )
+                    
+                })}
+            
+                                
                             </>
                         )
                     })
                     :
                     <NoUpdate>Não há histórico de atualização para as minhas tarefas.</NoUpdate>
                 }
+                    {deleted.map(del =>{
+                                    return(
+                                        !names?.includes(del.taskName ) ? 
+                                        <>
+                                        <TaskName>{del.taskName}</TaskName>
+                                 <Container style={{ margin: 0 }}>
+                                    <CollapseD 
+                                        taskId={del.taskId}
+                                        date={del.date}
+                                        user={{
+                                            id: del.user.id,
+                                            name: del.user.name
+                                        }}
+                                        message={del.message } 
+                                        taskName={''}                                    
+                                        />
+                                    <Divider style={{ marginBottom: 10 }} />
+                                </Container>
+                            </>       :
+                            <></>            
+                    )
+                    
+                })}
+                {/* {deleted ?
+                    deleted?.map((del) => {
+                        return(
+                            <>
+                                <Container style={{ margin: 0 }}>
+                                    <CollapseD 
+                                        taskId={del.taskId}
+                                        date={del.date}
+                                        user={{
+                                            id: del.user.id,
+                                            name: del.user.name
+                                        }}
+                                        message={del.message} 
+                                        taskName={''}                                    
+                                    />
+                                    <Divider style={{ marginBottom: 10 }} />
+                                </Container>
+                            </>
+                        )
+                    })  : null  
+                } */}
             </ScrollView>
         </>
     )

@@ -4,6 +4,7 @@ import { View, Text } from "react-native";
 import { useState } from "react";
 import MyTasks from "./myTasks";
 import CreatedByMe from "./createdByMe";
+import SharedWithMe from "./sharedWithMe";
 
 export default function UpdateHistoric() {
     const [index, setIndex] = useState(0);
@@ -21,6 +22,9 @@ export default function UpdateHistoric() {
             >
                 <Tab.Item titleStyle={{ color: '#DE0300', fontSize: 17, fontFamily: "Poppins_400Regular" }}>Minhas Tasks</Tab.Item>
                 <Tab.Item titleStyle={{ color: '#DE0300', fontSize: 17, fontFamily: "Poppins_400Regular" }}>Minhas Alterações</Tab.Item>
+                <Tab.Item titleStyle={{ color: '#DE0300', fontSize: 17, fontFamily: "Poppins_400Regular" }}>Compartilhadas Comigo</Tab.Item>
+
+
             </Tab>
 
             <TabView value={index} onChange={setIndex} containerStyle={{ backgroundColor: '#222328' }}>
@@ -31,6 +35,9 @@ export default function UpdateHistoric() {
                 </TabView.Item>
                 <TabView.Item>
                     <CreatedByMe />
+                </TabView.Item>
+                <TabView.Item>
+                    <SharedWithMe />
                 </TabView.Item>
             </TabView>
         </>
